@@ -1,5 +1,6 @@
 form {
-  min-width: 500px;
+  max-width: 500px;
+  width: 100%;
   margin-top: 2.5rem;
 }
 
@@ -52,24 +53,87 @@ form {
 }
 
 /* Material UI */
+.MuiFormControl-root {
+  width: 100%;
+}
+
 .MuiFormLabel-colorSecondary.Mui-focused {
   color: #fff !important;
 }
 
 .MuiOutlinedInput-colorSecondary.Mui-focused .MuiOutlinedInput-notchedOutline {
-  border-color: #fff !important;
+  border-color: rgba(255,255,255,0.25) !important;
 }
 
 .MuiOutlinedInput-input {
   color: #fff !important;
   box-shadow: 0px 14px 24px rgba(0, 0, 0, 0.7);
-  background: rgba(0,0,0,0.5);
+  background: rgba(0,0,0,0.5) !important;
 }
 
 .MuiOutlinedInput-notchedOutline {
-  border-color: #fff !important;
+  border-color: rgba(255,255,255,0.25) !important;
 }
 
 .MuiInputLabel-outlined {
   color: rgba(255,255,255,0.5) !important;
+}
+
+/* Chip input */
+.WAMuiChipInput-chipContainer-8 {
+  color: #fff !important;
+  box-shadow: 0px 14px 24px rgba(0, 0, 0, 0.7);
+  background: rgba(0,0,0,0.5) !important;
+  border-radius: 6px;
+  border: 1px solid rgba(255,255,255,0.25) !important;
+  border-color: rgba(255,255,255,0.25) !important;
+  align-items: center !important;
+}
+
+.WAMuiChipInput-chip-20 {
+  margin-left: 0.5rem !important;
+  margin-right: 0 !important;
+  margin-top: 0.5rem !important;
+  background: #000 !important;
+  color: #fff !important;
+}
+
+.WAMuiChipInput-input-7 {
+  padding: 18.5px 14px !important;
+}
+
+.WAMuiChipInput-inputRoot-6 {
+  margin-left: 0.5rem !important;
+}
+
+.MuiChip-deletable:focus {
+  background-color: #000;
+  color: #fff;
+}
+
+.MuiChip-deleteIcon {
+  color: #fff !important;
+}
+
+.WAMuiChipInput-underline-18:after {
+  border-bottom: 2px solid transparent !important;
+}
+
+.MuiInputBase-input {
+  color: #fff !important;
+}
+
+/* Textarea */
+textarea {
+  font-family: "Roboto" ,sans-serif;
+  font-size: 1rem;
+  font-weight: 300;
+  width: 100%;
+  padding: 18.5px 14px;
+  color: #fff !important;
+  box-shadow: 0px 14px 24px rgba(0, 0, 0, 0.7);
+  background: rgba(0,0,0,0.5) !important;
+  border-radius: 6px;
+  border: 1px solid rgba(255,255,255,0.25) !important;
+  border-color: rgba(255,255,255,0.25) !important;
 }

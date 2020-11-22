@@ -12,6 +12,7 @@
 .modal .ReactModal__Content {
   background: transparent !important;
   border: none !important;
+  width: 95%;
 }
 
 .modal .modal-close {
@@ -30,7 +31,7 @@
 
 .detail-container .poster-image {
   margin-right: 3rem;
-  width: 140%;
+  width: 65%;
 }
 
 .detail-container .poster-image img {

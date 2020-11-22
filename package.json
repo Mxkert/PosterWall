@@ -10,6 +10,7 @@
     "axios": "^0.20.0",
     "firebase": "^7.21.0",
     "firebase-app": "0.0.1",
+    "material-ui-chip-input": "^1.1.0",
     "moment": "^2.29.1",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",

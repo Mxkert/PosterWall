@@ -9,8 +9,11 @@ import 'moment/locale/nl';
 import '../../Typography.css';
 import '../Form.css';
 
+import Grid from '@material-ui/core/Grid';
+
 import TextField from "@material-ui/core/TextField";
-import { makeStyles } from "@material-ui/core/styles";
+import TextareaAutosize from '@material-ui/core/TextareaAutosize';
+import ChipInput from 'material-ui-chip-input';
 
 export const Form = () => {
 
@@ -20,6 +23,7 @@ export const Form = () => {
     <>
 
       <div className="header">
+
         <h2>Submit a poster</h2>
         <p>
           For each project we establish relationships with partners who we know will help us create added value for your project.
@@ -27,36 +31,104 @@ export const Form = () => {
       </div>
 
       <form noValidate autoComplete="off">
-        <TextField
-          id="email"
-          label="Type here"
-          variant="outlined"
-          color="secondary"
-        />
-        <TextField
-          id="email"
-          label="Type here"
-          variant="outlined"
-          color="secondary"
-        />
+        <Grid container spacing={3} justify="center">
+          <Grid item xs={12}>
+            <TextField 
+              id="email"
+              type="email"
+              label="E-mail address"
+              variant="outlined"
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField 
+              id="password"
+              type="password"
+              label="Password"
+              variant="outlined"
+            />
+          </Grid>
+        </Grid>
       </form>
 
-      <form onSubmit={handleSubmit()}>
+      <form noValidate autoComplete="off" onSubmit={handleSubmit()}>
+        <Grid container spacing={3} justify="center">
+          <Grid item xs={12}>
+            <TextField 
+              id="title"
+              type="text"
+              label="Title"
+              variant="outlined"
+            />
+          </Grid>
 
-        <div className="form-group">
-          <input className="form-control" type="text" name="title" ref={register()} placeholder="Title" />
-        </div>
-        <div className="form-group">
-          <input className="form-control" type="text" name="genre" ref={register()} placeholder="Genre" />
-        </div>
-        <div className="form-group">
-          <textarea className="form-control" name="description" ref={register()} placeholder="Description"></textarea>
-        </div>
-        <div className="form-group">
-          <input className="form-control" type="number" name="price" ref={register()} placeholder="Price" />
-        </div>
+          <Grid item xs={6}>
+            <TextField 
+              id="date"
+              type="date"
+              label="Date"
+              variant="outlined"
+              InputLabelProps={{ shrink: true }}
+            />
+          </Grid>
+          <Grid item xs={3}>
+            <TextField 
+              id="time"
+              type="time"
+              label="Start time"
+              variant="outlined"
+              InputLabelProps={{ shrink: true }}
+            />
+          </Grid>
+          <Grid item xs={3}>
+            <TextField 
+              id="time"
+              type="time"
+              label="End time"
+              variant="outlined"
+              InputLabelProps={{ shrink: true }}
+            />
+          </Grid>
 
-        <button className="btn" type="submit">Submit poster</button>
+          <Grid item xs={4}>
+            <TextField 
+              id="genre"
+              type="text"
+              label="Genre"
+              variant="outlined"
+            />
+          </Grid>
+          <Grid item xs={4}>
+            <TextField 
+              id="price"
+              type="number"
+              label="Price"
+              variant="outlined"
+            />
+          </Grid>
+          <Grid item xs={4}>
+            <TextField 
+              id="location"
+              type="text"
+              label="Location"
+              variant="outlined"
+            />
+          </Grid>
+
+          <Grid item xs={12}>
+            <ChipInput defaultValue={['Rammstein']} fullWidth />
+          </Grid>
+
+          <Grid item xs={12}>
+            <TextareaAutosize 
+              id="description"
+              aria-label="description" 
+              rowsMin={3} 
+              placeholder="Description" 
+            />
+          </Grid>
+
+        </Grid>
       </form>
 
     </>

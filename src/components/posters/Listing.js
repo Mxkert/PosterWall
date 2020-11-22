@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Redirect } from 'react-router-dom';
 import { Link } from 'react-router-dom';
+import { useForm, useFieldArray } from "react-hook-form";
 import { FaCloudUploadAlt, FaTools, FaFileArchive, FileSignature, FaFileSignature, FaTimes } from 'react-icons/fa';
 import axios from 'axios';
+import moment from "moment";
+import 'moment/locale/nl';
 
 // Modal
 import Modal from 'react-modal';
@@ -10,9 +13,19 @@ import '../Modal.css';
 
 import './Listing.css';
 
+import Grid from '@material-ui/core/Grid';
+import '../Form.css';
+
+import TextField from "@material-ui/core/TextField";
+import TextareaAutosize from '@material-ui/core/TextareaAutosize';
+import ChipInput from 'material-ui-chip-input';
+
 export const Listing = () => {
 
+  const { register, handleSubmit } = useForm();
+
   const [posters, setPosters] = useState([]);
+  const [acts, setActs] = useState([]);
 
   useEffect(() => {
     axios.get(`/api/posters/`) 
@@ -83,6 +96,40 @@ export const Listing = () => {
     setSubmitModalOpen(false);
   }
 
+  // Add poster to the database
+  const addPoster = (data) => {
+
+    console.log(data);
+    
+    var currentDate =  moment().locale('nl').add(1, 'hours').format("YYYY-MM-DD HH:mm:ss");
+    // var posterDate = moment(data.date + ' ' + data.time).locale('nl').add(1, 'hours').format('YYYY-MM-DD HH:mm:ss');
+
+    const newPoster = {
+      title: data.title,
+      genre: data.genre,
+      acts: acts,
+      description: data.description,
+      price: data.price,
+      date: data.date,
+      start_time: data.start_time,
+      end_time: data.end_time,
+      creation_date: currentDate,
+      accepted: false,
+      rejected: false
+    };
+
+    axios.post(`http://localhost:5000/api/posters/add`, newPoster)
+    .then(res => {
+      // getPosters();
+      console.log(res.data);
+    });
+
+  }
+
+  const handleChange = (data) => {
+    setActs(data);
+  }
+
   return (
     <>
       
@@ -144,21 +191,112 @@ export const Listing = () => {
               <img className="submitImg" src={picture} />
             </div>
             <div className="poster-content">
-              <h2>Event title</h2>
-              <div className="meta">
-                <span>20 March</span>
-                <div className="event-time">
-                  <span>20:00</span>
-                  <span>03:00</span>
-                </div>
-                <div className="event-location">
-                  <span>Konzerthaus</span>
-                  <span>Berlin</span>
-                </div>
-              </div>
-              <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-              </p>
+              <form noValidate onSubmit={handleSubmit(addPoster)}>
+                <Grid container spacing={3} justify="center">
+                  <Grid item xs={12}>
+                    <TextField 
+                      id="title"
+                      name="title"
+                      type="text"
+                      label="Title"
+                      variant="outlined"
+                      inputRef={register}
+                    />
+                  </Grid>
+
+                  <Grid item xs={6}>
+                    <TextField 
+                      id="date"
+                      name="date"
+                      type="date"
+                      label="Date"
+                      variant="outlined"
+                      InputLabelProps={{ shrink: true }}
+                      inputRef={register}
+                    />
+                  </Grid>
+                  <Grid item xs={3}>
+                    <TextField 
+                      id="end_time"
+                      name="end_time"
+                      type="time"
+                      label="Start time"
+                      variant="outlined"
+                      InputLabelProps={{ shrink: true }}
+                      inputRef={register}
+                    />
+                  </Grid>
+                  <Grid item xs={3}>
+                    <TextField 
+                      id="start_time"
+                      name="start_time"
+                      type="time"
+                      label="End time"
+                      variant="outlined"
+                      InputLabelProps={{ shrink: true }}
+                      inputRef={register}
+                    />
+                  </Grid>
+
+                  <Grid item xs={4}>
+                    <TextField 
+                      id="genre"
+                      name="genre"
+                      type="text"
+                      label="Genre"
+                      variant="outlined"
+                      inputRef={register}
+                    />
+                  </Grid>
+                  <Grid item xs={4}>
+                    <TextField 
+                      id="price"
+                      name="price"
+                      type="number"
+                      label="Price"
+                      variant="outlined"
+                      inputRef={register}
+                    />
+                  </Grid>
+                  <Grid item xs={4}>
+                    <TextField 
+                      id="location"
+                      name="location"
+                      type="text"
+                      label="Location"
+                      variant="outlined"
+                      inputRef={register}
+                    />
+                  </Grid>
+
+                  <Grid item xs={12}>
+                    <ChipInput 
+                      id="acts" 
+                      name="acts" 
+                      placeholder="Acts"
+                      inputRef={register}
+                      fullWidth
+                      onChange={(chips) => handleChange(chips)}
+                    />
+                  </Grid>
+
+                  <Grid item xs={12}>
+                    <TextareaAutosize 
+                      id="description"
+                      name="description"
+                      aria-label="description" 
+                      rowsMin={3} 
+                      placeholder="Description" 
+                      inputRef={register}
+                    />
+                  </Grid>
+
+                  <Grid item xs={12}>
+                    <button type="submit">Submit</button>
+                  </Grid>
+
+                </Grid>
+              </form>
             </div>
           </div>
         </div>
