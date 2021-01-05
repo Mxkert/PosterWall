@@ -1,0 +1,106 @@
+.modal {
+  position: relative;
+  z-index: 1;
+}
+
+.modal .ReactModal__Overlay {
+  background-color: rgba(0, 0, 0, 0.6) !important;
+  backdrop-filter: blur(3.5px);
+  transition: all 1s;
+}
+
+.modal .ReactModal__Content {
+  background: transparent !important;
+  border: none !important;
+  width: 95%;
+}
+
+.ReactModal__Content--after-open {
+  background: transparent !important;
+  border: none !important;
+  width: 100vw;
+  height: 100vw;
+  overflow: hidden !important;
+  padding: 0;
+  inset: unset !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+.ReactModal__Overlay {
+  background-color: transparent !important;
+}
+
+.blurred-bg {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.35);
+  backdrop-filter: blur(4px);
+  z-index: -1;
+}
+
+.modal .modal-close {
+  position: absolute;
+  top: 0;
+  right: 0;
+  color: #fff;
+  font-size: 32px;
+  cursor: pointer;
+}
+
+.detail-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.detail-container .poster-image {
+  margin-right: 3rem;
+  width: 35%;
+  position: relative;
+}
+
+.detail-container .poster-image img {
+  filter: drop-shadow(0px 14px 6px rgba(0, 0, 0, 0.7));
+  margin-right: 2rem;
+  max-height: 625px;
+  width: auto;
+  max-width: 100%;
+}
+
+.detail-container .poster-content {
+  color: #fff;
+  max-width: 500px;
+  width: 100%;
+}
+
+.detail-container .poster-content .meta {
+  display: flex;
+}
+
+.detail-container .poster-content p {
+  font-family: 'Roboto', sans-serif;
+  line-height: 35px;
+}
+
+.detail-container .poster-content .meta > span {
+  font-size: 42px;
+  text-transform: uppercase;
+  font-weight: 300;
+  line-height: 1.25;
+  margin-right: 1rem;
+}
+
+.detail-container .poster-content .event-time {
+  margin-right: 1rem;
+}
+
+.detail-container .poster-content .event-time, .detail-container .poster-content .event-location {
+  display: flex;
+  flex-direction: column;
+}

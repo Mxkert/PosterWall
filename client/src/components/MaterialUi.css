@@ -1,0 +1,8 @@
+.MuiAlert-standardError .MuiAlert-icon {
+  color: #fff !important;
+}
+
+.MuiAlert-standardError {
+  color: #fff !important;
+  background-color: #f44336 !important;
+}

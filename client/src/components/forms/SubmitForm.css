@@ -1,0 +1,56 @@
+input#poster {
+  display: none;
+}
+
+.upload-btn {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+
+.filelabel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 3rem;
+  height: 100%;
+  width: 100%;
+}
+
+.filelabel svg {
+  font-size: 52px;
+}
+
+/* Datepicker */
+.date-picker {
+  margin: 0 !important;
+}
+
+.date-picker svg {
+  fill: #fff;
+}
+
+.date-picker .MuiInput-formControl {
+  color: rgba(0, 0, 0, 0.87);
+  cursor: text;
+  display: inline-flex;
+  position: relative;
+  font-size: 1rem;
+  box-sizing: border-box;
+  align-items: center;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  font-weight: 400;
+  line-height: 1.1876em;
+  letter-spacing: 0.00938em;
+  margin-top: 0;
+  box-shadow: 0px 14px 24px rgba(0, 0, 0, 0.7);
+  background: rgba(0,0,0,0.75) !important;
+  border-radius: 6px;
+  padding: 12px 14px;
+  border: 1px solid rgba(255,255,255,0.25);
+}
