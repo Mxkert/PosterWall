@@ -8,7 +8,7 @@ const port = process.env.PORT || 5000;
 
 // MongoDB Database using Mongoose
 const mongoose = require('mongoose');
-mongoose.connect(process.env.MONGO_DB, { useNewUrlParser: true });
+mongoose.connect('mongodb+srv://Mxkert:testtest@cluster0.jmfjg.mongodb.net/Posterwall?retryWrites=true&w=majority', {useNewUrlParser: true, useUnifiedTopology: true});
 const connection = mongoose.connection;
 connection.once('open', function() {
     console.log("MongoDB database connection established successfully");
@@ -20,7 +20,7 @@ const posters = require('./routes/posters');
 
 app.use(volleyball);
 app.use(cors({
-  origin: 'http://localhost:3000'
+  origin: ['https://posterwall.hostman.site/, http://localhost:3000']
 }));
 app.use(express.json());
 
