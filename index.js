@@ -1,3 +1,5 @@
+console.log('testing');
+
 require('dotenv').config();
 const express = require('express');
 const volleyball = require('volleyball');
