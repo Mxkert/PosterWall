@@ -20,8 +20,7 @@ const posters = require('./routes/posters');
 
 app.use(volleyball);
 app.use(cors({
-  // origin: ['https://posterwall.hostman.site/, http://localhost:3000']
-  origin: '*'
+  origin: ['https://posterwall.hostman.site/', 'http://localhost:3000']
 }));
 app.use(express.json());
 
