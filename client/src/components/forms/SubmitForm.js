@@ -60,6 +60,27 @@ export const SubmitForm = (props) => {
     setIsOpen(props.open);
   }, [props.open]);
 
+  const testGet = () => {
+    axios.get(`/api/status`)
+    .then(res => {
+      console.log(res);
+    });
+  }
+
+  const testGet = () => {
+    axios.get(`/api/status`)
+    .then(res => {
+      console.log(res);
+    });
+  }
+
+  const testGet2 = () => {
+    axios.get('https://posterwall.hostman.site/api/status')
+    .then(res => {
+      console.log(res);
+    });
+  }
+
   // Add poster to the database
   const addPoster = async (data) => {
 
@@ -291,6 +312,8 @@ export const SubmitForm = (props) => {
                       :
                         <button className="btn" disabled type="submit" style={{ width: '100%' }}>Submit</button>
                     }
+                    <button type="submit" onClick={() => testGet()}>Test</button>
+                    <button type="submit" onClick={() => testGet2()}>Test2</button>
                   </Grid>
 
                 </Grid>
