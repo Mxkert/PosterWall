@@ -13,7 +13,7 @@ connection.once('open', function() {
 })
 
 const app = express();
-app.get('/status', (req, res, next) => res.sendStatus(200));
+app.get('/api/status', (req, res, next) => res.sendStatus(200));
 
 const posters = require('./routes/posters');
 
@@ -21,7 +21,7 @@ app.use(volleyball);
 app.use(cors());
 app.use(express.json());
 
-app.post('/test', function (req, res) {
+app.post('/api/test', function (req, res) {
   res.send('Got a POST request')
 })
 
