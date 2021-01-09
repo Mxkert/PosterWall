@@ -1,5 +1,3 @@
-console.log('testing');
-
 require('dotenv').config();
 const express = require('express');
 const volleyball = require('volleyball');
@@ -15,6 +13,7 @@ connection.once('open', function() {
 })
 
 const app = express();
+app.get('/status', (req, res, next) => res.sendStatus(200));
 
 const posters = require('./routes/posters');
 
@@ -24,10 +23,6 @@ app.use(express.json());
 
 app.post('/test', function (req, res) {
   res.send('Got a POST request')
-})
-
-app.get('/get', function (req, res) {
-  res.send('Hello World!')
 })
 
 app.use('/posters', posters);
