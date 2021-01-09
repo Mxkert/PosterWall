@@ -27,18 +27,18 @@ app.post('/test', function (req, res) {
 
 app.use('/posters', posters);
 
-if (process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'staging') {
-  // Serve any static files
-  app.use(express.static(path.join(__dirname, 'client/build')));
+// if (process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'staging') {
+//   // Serve any static files
+//   app.use(express.static(path.join(__dirname, 'client/build')));
 
-  app.get("/serviceWorker.js", (req, res) => {
-    res.sendFile(path.resolve(__dirname, "client", "src", "serviceWorker.js"));
-  });
-  // Handle React routing, return all requests to React app
-  app.get('*', function(req, res) {
-    res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
-  });
-}
+//   app.get("/serviceWorker.js", (req, res) => {
+//     res.sendFile(path.resolve(__dirname, "client", "src", "serviceWorker.js"));
+//   });
+//   // Handle React routing, return all requests to React app
+//   app.get('*', function(req, res) {
+//     res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
+//   });
+// }
 
 
 function notFound(req, res, next) {
