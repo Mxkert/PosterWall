@@ -26,6 +26,10 @@ app.post('/test', function (req, res) {
   res.send('Got a POST request')
 })
 
+app.get('/get', function (req, res) {
+  res.send('Hello World!')
+})
+
 app.use('/posters', posters);
 
 if (process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'staging') {
