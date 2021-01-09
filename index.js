@@ -19,12 +19,10 @@ const app = express();
 const posters = require('./routes/posters');
 
 app.use(volleyball);
-app.use(cors({
-  origin: 'https://posterwall.hostman.site'
-}));
+app.use(cors());
 app.use(express.json());
 
-app.use('/api/posters', posters);
+app.use('/posters', posters);
 
 if (process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'staging') {
   // Serve any static files

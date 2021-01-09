@@ -102,7 +102,7 @@ export const SubmitForm = (props) => {
           rejected: false
         };
     
-        axios.post(`https://posterwall.hostman.site/api/posters/add`, newPoster)
+        axios.post(`https://posterwall.hostman.site/posters/add`, newPoster)
         .then(res => {
           // getPosters();
           console.log(res.data);
