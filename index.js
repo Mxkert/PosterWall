@@ -22,6 +22,10 @@ app.use(volleyball);
 app.use(cors());
 app.use(express.json());
 
+app.post('/test', function (req, res) {
+  res.send('Got a POST request')
+})
+
 app.use('/posters', posters);
 
 if (process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'staging') {
