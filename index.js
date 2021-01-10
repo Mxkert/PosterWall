@@ -19,7 +19,7 @@ app.use(volleyball);
 app.use(cors());
 app.use(express.json());
 
-app.use('/posters', posters);
+app.use('/api/posters', posters);
 
 if (process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'staging') {
   app.use(express.static('client/build'));
