@@ -25,7 +25,7 @@ app.use('/api/posters', posters);
 
 if (process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'staging') {
   console.log('production');
-  app.use(express.static('client/build'));
+  app.use(express.static('../client/build'));
   app.get("/serviceWorker.js", (req, res) => {
     res.sendFile(path.resolve(__dirname, "client", "src", "serviceWorker.js"));
   });
