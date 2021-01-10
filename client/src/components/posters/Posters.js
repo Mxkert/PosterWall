@@ -78,6 +78,21 @@ export const Posters = ({user}) => {
 
   }, [searchedTitle, selectedGenre, selectedPrice]);
 
+
+  const testGet = () => {
+    axios.get(`/api/get`)
+    .then(res => {
+      console.log(res);
+    });
+  }
+
+  const testGet2 = () => {
+    axios.post('/api/post')
+    .then(res => {
+      console.log(res);
+    });
+  }
+
   // Get all posters and store them in an array
   const getPosters = () => {
     // Get current date
@@ -277,6 +292,8 @@ export const Posters = ({user}) => {
               return (
                 <div className="poster" onClick={() => showPosterInfo(poster._id)} key={index}>
                   <img src={poster.image} alt={poster.title} />
+                  <button type="button" onClick={() => testGet()}>Test</button>
+                  <button type="button" onClick={() => testGet2()}>Test2</button>
                 </div>
               )
             })
