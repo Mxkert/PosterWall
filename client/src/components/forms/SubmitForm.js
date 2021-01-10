@@ -79,7 +79,8 @@ export const SubmitForm = (props) => {
     .then(res => {
       console.log(res);
       console.log('test');
-    });
+    })
+    .catch((error) => console.log( error.response.request._response ) );
   }
 
   // Add poster to the database
