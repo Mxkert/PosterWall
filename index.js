@@ -19,6 +19,8 @@ connection.once('open', function() {
 // Initialize express app
 const app = express();
 
+app.use(express.static('client/build'));
+
 // App use
 app.use(cors());
 
