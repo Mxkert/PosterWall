@@ -43,7 +43,10 @@ app.use('/api/posters', posters);
 //   });
 // }
 
-app.get('*', (req, res)=>{  res.sendFile(path.join(__dirname, '../client/build/index.html'));})
+// Handles any requests that don't match the ones above
+app.get('*', (req,res) =>{
+  res.sendFile(path.join(__dirname+'/client/build/index.html'));
+});
 
 function notFound(req, res, next) {
   res.status(404);
