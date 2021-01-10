@@ -16,9 +16,7 @@ const app = express();
 
 const posters = require('./routes/posters');
 app.use(volleyball);
-app.use(cors({
-  origin: ['https://overloader.herokuapp.com/, http://localhost:3000']
-}));
+app.use(cors());
 app.use(express.json());
 
 app.use('/posters', posters);
