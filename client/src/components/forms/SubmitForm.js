@@ -68,7 +68,7 @@ export const SubmitForm = (props) => {
   }
 
   const testGet2 = () => {
-    axios.get('https://posterwall.hostman.site/api/status')
+    axios.get('https://poster-wall-k6n5d.ondigitalocean.app/api/status')
     .then(res => {
       console.log(res);
     });
@@ -123,7 +123,7 @@ export const SubmitForm = (props) => {
           rejected: false
         };
     
-        axios.post(`https://posterwall.hostman.site/posters/add`, newPoster)
+        axios.post(`https://poster-wall-k6n5d.ondigitalocean.app/api/posters/add`, newPoster)
         .then(res => {
           // getPosters();
           console.log(res.data);
