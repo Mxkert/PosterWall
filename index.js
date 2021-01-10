@@ -49,11 +49,20 @@ app.get('*', (req,res) =>{
   res.sendFile(path.join(__dirname + '/client/build/index.html'));
 });
 
-console.log(__dirname);
+console.log('dir name: ' + __dirname);
 // app.use(express.static(path.join(__dirname + '/client/build')));
 
 // app.get('*', (req,res) =>{
 //   res.sendFile(path.join(__dirname + '/client/build/index.html'));
+// });
+
+// app.get('/', function (req, res) {
+//   res.sendFile(path.join(__dirname, 'build', 'index.html'));
+// });
+
+// // Handles any requests that don't match the ones above
+// app.get('*', (req,res) =>{
+// res.sendFile(path.join(__dirname, 'build', 'index.html'));
 // });
 
 function notFound(req, res, next) {
