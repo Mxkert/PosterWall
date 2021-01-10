@@ -270,7 +270,7 @@ export const Posters = ({user}) => {
 
           </div>
           <div className="filter-results">
-            <h3>{searchResultsAmount} posters matched your filters</h3>
+            <h3>{searchResultsAmount} posters matched your filters - Test</h3>
           </div>
         </div>
         
