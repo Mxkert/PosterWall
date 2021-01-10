@@ -25,12 +25,12 @@ app.use('/posters', posters);
 
 if (process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'staging') {
   app.use(express.static('client/build'));
-  app.get("/serviceWorker.js", (req, res) => {
-    res.sendFile(path.resolve(__dirname, "client", "src", "serviceWorker.js"));
-  });
-  app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname + '/client/build/index.html'));
-  });
+  // app.get("/serviceWorker.js", (req, res) => {
+  //   res.sendFile(path.resolve(__dirname, "client", "src", "serviceWorker.js"));
+  // });
+  // app.get('*', (req, res) => {
+  //   res.sendFile(path.join(__dirname + '/client/build/index.html'));
+  // });
 }
 
 
