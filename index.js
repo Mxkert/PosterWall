@@ -17,13 +17,15 @@ const app = express();
 const posters = require('./routes/posters');
 app.use(volleyball);
 app.use(cors({
-  origin: ['https://overloader.herokuapp.com/, http://localhost:3000']
+  origin: ['https://poster-wall-k6n5d.ondigitalocean.app/, http://localhost:3000']
 }));
 app.use(express.json());
 
 app.use('/posters', posters);
+console.log('new build');
 
 if (process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'staging') {
+  console.log('prod');
   app.use(express.static('client/build'));
   // app.get("/serviceWorker.js", (req, res) => {
   //   res.sendFile(path.resolve(__dirname, "client", "src", "serviceWorker.js"));
