@@ -125,7 +125,7 @@ export const SubmitForm = (props) => {
           rejected: false
         };
     
-        axios.post(`https://poster-wall-k6n5d.ondigitalocean.app/api/posters/adding`, newPoster)
+        axios.post(`https://poster-wall-k6n5d.ondigitalocean.app/adding`, newPoster)
         .then(res => {
           // getPosters();
           console.log(res.data);
