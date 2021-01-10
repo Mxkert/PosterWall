@@ -78,6 +78,7 @@ export const SubmitForm = (props) => {
     axios.post('/api/test')
     .then(res => {
       console.log(res);
+      console.log('test');
     });
   }
 
