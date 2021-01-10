@@ -39,12 +39,14 @@ app.use('/posters', posters);
 //   });
 // }
 
-app.use(express.static(__dirname)); //here is important thing - no static directory, because all static :)
+// ... other app.use middleware 
+app.use(express.static(path.join(__dirname, "client", "build")))
 
-app.get("/*", function(req, res) {
-  res.sendFile(path.join(__dirname, "client/build", "index.html"));
+// ...
+// Right before your app.listen(), add this:
+app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "client", "build", "index.html"));
 });
-
 
 function notFound(req, res, next) {
   res.status(404);
