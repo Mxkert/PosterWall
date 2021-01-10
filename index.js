@@ -50,6 +50,7 @@ app.get('*', (req,res) =>{
 });
 
 console.log('dir name: ' + __dirname);
+console.log('build: ' + path.join(__dirname + '/client/build/index.html'));
 // app.use(express.static(path.join(__dirname + '/client/build')));
 
 // app.get('*', (req,res) =>{
