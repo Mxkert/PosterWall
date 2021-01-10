@@ -19,8 +19,6 @@ connection.once('open', function() {
 // Initialize express app
 const app = express();
 
-app.use(express.static('client/build'));
-
 // App use
 app.use(cors());
 
@@ -34,11 +32,9 @@ app.use(express.json());
 app.use('/api/posters', posters);
 
 if (process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'staging') {
+  console.log('in production');
   app.use(express.static('../client/build'));
-  app.get("/serviceWorker.js", (req, res) => {
-    res.sendFile(path.resolve(__dirname, "client", "src", "serviceWorker.js"));
-  });
-  app.get('*', (req, res) => {
+  app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname + '/client/build/index.html'));
   });
 }
