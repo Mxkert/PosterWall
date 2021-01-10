@@ -12,17 +12,17 @@ connection.once('open', function() {
 })
 
 const app = express();
-app.get('/api/status', (req, res, next) => res.sendStatus(200));
+app.get('/api/status', (req, res, next) => res.sendStatus(456));
 
 const posters = require('./routes/posters');
 
-app.use(volleyball);
+// app.use(volleyball);
 app.use(cors());
 app.use(express.json());
 
 app.post('/api/test', function (req, res) {
   res.send('Got a POST request')
-})
+});
 
 app.use('/posters', posters);
 

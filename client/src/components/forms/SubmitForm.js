@@ -74,6 +74,13 @@ export const SubmitForm = (props) => {
     });
   }
 
+  const testGet3 = () => {
+    axios.post('/api/test')
+    .then(res => {
+      console.log(res);
+    });
+  }
+
   // Add poster to the database
   const addPoster = async (data) => {
 
@@ -305,8 +312,9 @@ export const SubmitForm = (props) => {
                       :
                         <button className="btn" disabled type="submit" style={{ width: '100%' }}>Submit</button>
                     }
-                    <button type="submit" onClick={() => testGet()}>Test</button>
-                    <button type="submit" onClick={() => testGet2()}>Test2</button>
+                    <button type="button" onClick={() => testGet()}>Test</button>
+                    <button type="button" onClick={() => testGet2()}>Test2</button>
+                    <button type="button" onClick={() => testGet3()}>Test3</button>
                   </Grid>
 
                 </Grid>
