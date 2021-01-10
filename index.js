@@ -23,6 +23,20 @@ app.post('/api/test', function (req, res) {
   res.send('POST request to the homepage')
 })
 
+let Poster = require('../models/Poster');
+
+
+app.post('/api/posters/add', (req, res) => {
+  let poster = new Poster(req.body);
+  poster.save()
+    .then(project => {
+        res.status(200).json({'poster': 'poster added successfully'});
+    })
+    .catch(err => {
+        res.status(400).send('adding new poster failed');
+    });
+});
+
 app.use('/api/posters', posters);
 
 if (process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'staging') {
