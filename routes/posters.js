@@ -52,6 +52,8 @@ router.post('/add', (req, res) => {
     })
     .catch(err => {
         res.status(400).send('adding new poster failed');
+        console.log(err);
+        res.send(error);
     });
 });
 

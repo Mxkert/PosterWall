@@ -4,8 +4,6 @@ const path = require('path');
 const cors = require('cors');
 const port = process.env.PORT || 5000;
 
-let Poster = require('../models/Poster');
-
 // MongoDB Database using Mongoose
 const mongoose = require('mongoose');
 mongoose.connect('mongodb+srv://Mxkert:testtest@cluster0.jmfjg.mongodb.net/Posterwall?retryWrites=true&w=majority', {useNewUrlParser: true, useUnifiedTopology: true});
@@ -24,17 +22,6 @@ app.use(express.json());
 app.post('/api/test', function (req, res) {
   res.send('POST request to the homepage')
 })
-
-app.post('/api/posters/add', (req, res) => {
-  let poster = new Poster(req.body);
-  poster.save()
-    .then(project => {
-        res.status(200).json({'poster': 'poster added successfully'});
-    })
-    .catch(err => {
-        res.status(400).send('adding new poster failed');
-    });
-});
 
 app.use('/api/posters', posters);
 
