@@ -44,8 +44,14 @@ app.use('/api/posters', posters);
 // }
 
 // Handles any requests that don't match the ones above
-app.use(express.static('client/build'));
-app.get('*', (req,res) =>{
+// app.use(express.static('client/build'));
+// app.get('*', (req,res) =>{
+//   res.sendFile(path.join(__dirname + '/client/build/index.html'));
+// });
+
+app.use(express.static(path.join(__dirname, 'client/build')));
+
+app.get('/*', (req,res) =>{
   res.sendFile(path.join(__dirname + '/client/build/index.html'));
 });
 
