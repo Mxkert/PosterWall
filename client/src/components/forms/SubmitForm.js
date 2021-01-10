@@ -113,7 +113,7 @@ export const SubmitForm = (props) => {
           image: result.data.url,
           title: data.title,
           genre: data.genre,
-          // acts: acts,
+          acts: acts,
           description: data.description,
           price: data.price,
           // date: data.date,
@@ -125,7 +125,7 @@ export const SubmitForm = (props) => {
           rejected: false
         };
     
-        axios.post(`https://poster-wall-k6n5d.ondigitalocean.app/adding`, newPoster)
+        axios.post(`https://poster-wall-k6n5d.ondigitalocean.app/api/posters/add`, newPoster)
         .then(res => {
           // getPosters();
           console.log(res.data);
