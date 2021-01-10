@@ -19,6 +19,10 @@ app.use(volleyball);
 app.use(cors());
 app.use(express.json());
 
+app.post('/api/test', function (req, res) {
+  res.send('POST request to the homepage')
+})
+
 app.use('/api/posters', posters);
 
 if (process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'staging') {
