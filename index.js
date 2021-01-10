@@ -15,15 +15,11 @@ connection.once('open', function() {
 const app = express();
 
 const posters = require('./routes/posters');
-
 app.use(volleyball);
-app.use(cors());
+app.use(cors({
+  origin: ['https://poster-wall-k6n5d.ondigitalocean.app/, http://localhost:3000']
+}));
 app.use(express.json());
-
-app.get('/get', (req, res) => {
-  res.send('Hello World!')
-})
-app.post('/`post`', function (req, res) { res.send('Got a POST request') })
 
 app.use('/api/posters', posters);
 
