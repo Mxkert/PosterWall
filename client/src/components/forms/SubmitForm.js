@@ -67,13 +67,6 @@ export const SubmitForm = (props) => {
     });
   }
 
-  const testGet = () => {
-    axios.get(`/api/status`)
-    .then(res => {
-      console.log(res);
-    });
-  }
-
   const testGet2 = () => {
     axios.get('https://posterwall.hostman.site/api/status')
     .then(res => {
