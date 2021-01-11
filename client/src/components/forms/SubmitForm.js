@@ -60,29 +60,6 @@ export const SubmitForm = (props) => {
     setIsOpen(props.open);
   }, [props.open]);
 
-  const testGet = () => {
-    axios.get(`/api/status`)
-    .then(res => {
-      console.log(res);
-    });
-  }
-
-  const testGet2 = () => {
-    axios.get('https://poster-wall-k6n5d.ondigitalocean.app/api/status')
-    .then(res => {
-      console.log(res);
-    });
-  }
-
-  const testGet3 = () => {
-    axios.post('/api/test')
-    .then(res => {
-      console.log(res);
-      console.log('test');
-    })
-    .catch((error) => console.log( error.response.request._response ) );
-  }
-
   // Add poster to the database
   const addPoster = async (data) => {
 
@@ -125,7 +102,7 @@ export const SubmitForm = (props) => {
           rejected: false
         };
     
-        axios.post(`https://poster-wall-k6n5d.ondigitalocean.app/api/posters/add`, newPoster)
+        axios.post(`/api/posters/add`, newPoster)
         .then(res => {
           // getPosters();
           console.log(res.data);
@@ -314,9 +291,6 @@ export const SubmitForm = (props) => {
                       :
                         <button className="btn" disabled type="submit" style={{ width: '100%' }}>Submit</button>
                     }
-                    <button type="button" onClick={() => testGet()}>Test</button>
-                    <button type="button" onClick={() => testGet2()}>Test2</button>
-                    <button type="button" onClick={() => testGet3()}>Test3</button>
                   </Grid>
 
                 </Grid>

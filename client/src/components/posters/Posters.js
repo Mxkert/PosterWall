@@ -292,8 +292,6 @@ export const Posters = ({user}) => {
               return (
                 <div className="poster" onClick={() => showPosterInfo(poster._id)} key={index}>
                   <img src={poster.image} alt={poster.title} />
-                  <button type="button" onClick={() => testGet()}>Test</button>
-                  <button type="button" onClick={() => testGet2()}>Test2</button>
                 </div>
               )
             })
