@@ -13,8 +13,8 @@ export const SubmitButton = () => {
     <>
       <SubmitForm open={submitFormOpened} />
 
-      <div className="upload-icon">
-        <FaCloudUploadAlt onClick={() => setOpenSubmitForm(!submitFormOpened)} />
+      <div className="upload-icon" onClick={() => setOpenSubmitForm(!submitFormOpened)}>
+        <FaCloudUploadAlt />
       </div>
     </>
   );

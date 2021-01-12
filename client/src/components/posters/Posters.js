@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useForm, useFieldArray } from "react-hook-form";
-import { FaTimes } from 'react-icons/fa';
+import { FaTimes, FaFilter } from 'react-icons/fa';
 import moment from "moment";
 import 'moment/locale/nl';
 
@@ -36,6 +36,7 @@ export const Posters = ({user}) => {
   const [posterInfo, setPosterInfo] = useState([]);
   
   const [posterDetailOpened, setPosterDetailOpened] = useState(false);
+  const [filterOpened, setFilterOpen] = useState(false);
 
   const { register, handleSubmit } = useForm();
   
@@ -77,21 +78,6 @@ export const Posters = ({user}) => {
     setSearchResults(results);
 
   }, [searchedTitle, selectedGenre, selectedPrice]);
-
-
-  const testGet = () => {
-    axios.get(`/api/get`)
-    .then(res => {
-      console.log(res);
-    });
-  }
-
-  const testGet2 = () => {
-    axios.post('/api/post')
-    .then(res => {
-      console.log(res);
-    });
-  }
 
   // Get all posters and store them in an array
   const getPosters = () => {
@@ -206,10 +192,15 @@ export const Posters = ({user}) => {
           <AdminTools />
         : null }
         { posterDetailOpened ? null :
+        <>
+          <div className="upload-icon" style={{ top: '5%', zIndex: '999' }} onClick={() => setFilterOpen(!filterOpened)}>
+            <FaFilter />
+          </div>
           <SubmitButton />
+        </>
         }
         
-        <div className="filter-container">
+        <div className={filterOpened ? 'filter-container active' : 'filter-container'}>
           <div className="filters">
 
             {/* Title filter */}
@@ -270,7 +261,7 @@ export const Posters = ({user}) => {
 
           </div>
           <div className="filter-results">
-            <h3>{searchResultsAmount} posters matched your filters - Test</h3>
+            <h3>{searchResultsAmount} posters matched your filters</h3>
           </div>
         </div>
         

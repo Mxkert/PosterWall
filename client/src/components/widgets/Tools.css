@@ -12,9 +12,9 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  top: -10.5em;
+  top: 10em;
   width: 75px;
-  height: 150px;
+  height: 225px;
   background: #fff;
   border-radius: 50px;
   opacity: 0;
@@ -23,6 +23,7 @@
 
 .admin-tools .tools.active {
   opacity: 1;
+  top: -15.5em;
   transition: all 0.5s;
 }
 
@@ -53,7 +54,7 @@
   font-size: 12px;
 }
 
-.admin-tools .tools .tool:first-child {
+.admin-tools .tools .tool:not(:last-child) {
   margin-bottom: 1rem;
 }
 

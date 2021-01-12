@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import { FaTools, FaFileArchive, FaFileSignature } from 'react-icons/fa';
+import { FaTools, FaFileArchive, FaFileSignature, FaImage } from 'react-icons/fa';
+import moment from "moment";
+import 'moment/locale/nl';
 
 import './Tools.css';
 
@@ -10,17 +12,29 @@ export const AdminTools = () => {
   const [toolsActive, setToolsActive] = useState(false);
 
   const [amountToReview, setAmountToReview] = useState(0);
+  const [amountAvailablePosters, setAmountAvailablePosters] = useState(0);
 
   // Get all posters and store them in an array
   const getPostersToReview = () => {
+    // Get current date
+    const currentDate = moment().locale('nl').format("YYYY-MM-DD");
     // Get posters
-    axios.get(`/api/posters/not-accepted`)
+    axios.get(`/api/posters/`)
     .then(res => {
+      let date = '';
       let amount = 0;
+      let available = 0;
       res.data.map(poster => {
-        amount = amount + 1;
+        date = moment(poster.date).locale('nl').format("YYYY-MM-DD");
+        if (poster.accepted === false && date > currentDate) {
+          amount++;
+        } 
+        if (poster.accepted === true && date < currentDate) {
+          available++;
+        } 
       });
       setAmountToReview(amount);
+      setAmountAvailablePosters(available);
     });
   }
 
@@ -43,6 +57,12 @@ export const AdminTools = () => {
           <Link to="/archive"><FaFileArchive /></Link>
           <div className="tool-label">
             <span>Archive</span>
+          </div>
+        </div>
+        <div className="tool">
+          <Link to="/"><FaImage /></Link>
+          <div className="tool-label">
+            <span>Posters</span>
           </div>
         </div>
       </div>

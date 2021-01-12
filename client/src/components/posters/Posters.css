@@ -89,17 +89,35 @@ form.small-form {
 
 /* Filters */
 .filter-container {
+  position: fixed;
+  right: 0;
+  width: 33.3%;
+  background: rgba(0,0,0,0);
+  top: 0;
+  height: 100vh;
+  z-index: 2;
+  padding: 5rem;
   display: flex;
   flex-direction: column;
+  transform: translateX(100%);
+  transition: all 0.5s;
+}
+
+.filter-container.active {
+  background: rgba(0,0,0,0.75);
+  transform: translateX(0);
+  transition: all 0.5s;
 }
 
 .filters {
   display: flex;
   justify-content: space-between;
+  flex-direction: column;
 }
 
 .filters > .MuiFormControl-root {
-  width: 25%;
+  width: 100%;
+  margin-bottom: 2rem;
 }
 
 .MuiMenu-list {

@@ -97,7 +97,7 @@ export const SubmitForm = (props) => {
           location: data.location,
           // start_time: data.start_time,
           // end_time: data.end_time,
-          // creation_date: currentDate,
+          creation_date: currentDate,
           accepted: false,
           rejected: false
         };
