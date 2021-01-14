@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useForm, useFieldArray } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { FaTimes, FaFileAlt } from 'react-icons/fa';
 import axios from 'axios';
 import moment from "moment";
@@ -120,7 +120,7 @@ export const SubmitForm = (props) => {
       // Image could not be uploaded
       } catch (err) {
         console.log(err);
-        setUploadError(err);
+        setUploadError('There was error uploading the poster');
       }
 
     } catch(err) {
@@ -155,6 +155,7 @@ export const SubmitForm = (props) => {
         <div className="modal-body submit-modal">
           <div className="detail-container">
             <div className="poster-image">
+              { uploadError }
               {/* <img src="https://via.placeholder.com/400x600" alt="" /> */}
               {/* <input id="poster" type="file" onChange={onChangePicture}/> */}
               <div className="upload-btn">
@@ -169,7 +170,7 @@ export const SubmitForm = (props) => {
                 </label>
               </div>
               
-              <img className="submitImg" src={picture} />
+              <img className="submitImg" src={picture} alt="" />
             </div>
             <div className="poster-content">
               <form noValidate onSubmit={handleSubmit(addPoster)}>

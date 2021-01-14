@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useForm, useFieldArray } from "react-hook-form";
 import { FaTimes, FaFilter } from 'react-icons/fa';
 import moment from "moment";
 import 'moment/locale/nl';
@@ -37,8 +36,6 @@ export const Posters = ({user}) => {
   
   const [posterDetailOpened, setPosterDetailOpened] = useState(false);
   const [filterOpened, setFilterOpen] = useState(false);
-
-  const { register, handleSubmit } = useForm();
   
   // Search
   const [searchResults, setSearchResults] = useState([]);
@@ -47,7 +44,6 @@ export const Posters = ({user}) => {
   const [searchedTitle, setSearchedTitle] = useState("");
   const [selectedGenre, setSelectedGenre] = useState("");
   const [selectedPrice, setSelectedPrice] = useState("");
-  const [searchedAct, setSearchedAct] = useState("");
 
   const handleChange = event => {
      setSearchedTitle(event.target.value);
@@ -77,7 +73,7 @@ export const Posters = ({user}) => {
     setSearchResultsAmount(results.length);
     setSearchResults(results);
 
-  }, [searchedTitle, selectedGenre, selectedPrice]);
+  }, [searchedTitle, selectedGenre, selectedPrice, posters]);
 
   // Get all posters and store them in an array
   const getPosters = () => {
@@ -93,14 +89,14 @@ export const Posters = ({user}) => {
       let date = '';
       let genres = [];
       // posters = res.data;
-      res.data.map(poster => { 
+      res.data.forEach(poster => { 
         date = moment(poster.date).locale('nl').format("YYYY-MM-DD");
         if (poster.accepted === true && date > currentDate) {
           availablePosters.push(poster); 
 
           // Push unique genre to array
           genres.push(poster.genre);
-          genres = genres.filter((x, i, a) => a.indexOf(x) == i);
+          genres = genres.filter((x, i, a) => a.indexOf(x) === i);
           setAllGenres(genres);
         } 
       });

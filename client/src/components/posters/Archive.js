@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useForm, useFieldArray } from "react-hook-form";
 import { FaTimes } from 'react-icons/fa';
 import moment from "moment";
 import 'moment/locale/nl';
@@ -13,7 +12,6 @@ import Grid from '@material-ui/core/Grid';
 import Masonry from 'react-masonry-css'
 
 import { AdminTools } from '../widgets/AdminTools';
-import { SubmitButton } from '../widgets/SubmitButton';
 
 export const Archive = ({user}) => {
 
@@ -30,11 +28,6 @@ export const Archive = ({user}) => {
   
   const [posterDetailOpened, setPosterDetailOpened] = useState(false);
 
-  const { register, handleSubmit } = useForm();
-  
-  // Search
-  const [searchResults, setSearchResults] = useState([]);
-
   // Get all posters and store them in an array
   const getPosters = () => {
     // Get current date
@@ -47,7 +40,7 @@ export const Archive = ({user}) => {
       let availablePosters = [];
       let date = '';
       // posters = res.data;
-      res.data.map(poster => { 
+      res.data.forEach(poster => { 
         date = moment(poster.date).locale('nl').format("YYYY-MM-DD");
         if (poster.accepted === true && date < currentDate) {
           availablePosters.push(poster); 

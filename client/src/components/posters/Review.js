@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useForm, useFieldArray } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import axios from 'axios';
 import { FaTimes, FaCheck, FaDoorClosed, FaTrashAlt } from 'react-icons/fa';
 import moment from "moment";
@@ -34,7 +34,6 @@ export const Review = ({user}) => {
   const { register, handleSubmit } = useForm();
 
   const [posterTitle, setPosterTitle] = useState('');
-  const [posterGenre, setPosterGenre] = useState('');
   const [posterId, setPosterId] = useState('');
 
   const [posters, setPosters] = useState([]);
@@ -43,13 +42,7 @@ export const Review = ({user}) => {
   const [posterDetailOpened, setPosterDetailOpened] = useState(false);
 
   // Submit modal
-  const [picture, setPicture] = useState('https://via.placeholder.com/400x600');
   const [pictureURL, setPictureURL] = useState('');
-
-  const onChangePicture = async e => {
-    setPicture(URL.createObjectURL(e.target.files[0]));
-    setPictureURL(e.target.files[0]);
-  };
 
   // Get all posters and store them in an array
   const getPosters = () => {
@@ -62,7 +55,7 @@ export const Review = ({user}) => {
       posters = res.data;
       posters.sort((a, b) => (a.creation_date > b.creation_date) ? 1 : -1)
 
-      posters.map((poster, index) => {
+      posters.forEach((poster, index) => {
         setPosters(posters => [...posters, poster]);
       });
     });
@@ -83,13 +76,12 @@ export const Review = ({user}) => {
 
       // Set acts as chips from data
       setActs([]);
-      res.data.acts.map(act => {
+      res.data.acts.forEach(act => {
         setActs(acts => [...acts, act] );
       });
 
       setPosterId(res.data._id);
       setPosterTitle(res.data.title);
-      setPosterGenre(res.data.genre);
     });
   }
 
@@ -158,7 +150,6 @@ export const Review = ({user}) => {
       .then(res => {
         // getPosters();
         console.log(res.data);
-        setPicture('');
         setPictureURL('');
         setPosterDetailOpened(false);
       });
@@ -200,12 +191,12 @@ export const Review = ({user}) => {
                             <FaCheck />
                           </IconButton>
                         </Tooltip>
-                        <Tooltip title="Reject" class="btn action-btn btn-reject" onClick={() => acceptPoster(posterInfo._id)}>
+                        <Tooltip title="Reject" class="btn action-btn btn-reject" onClick={() => rejectPoster(posterInfo._id)}>
                           <IconButton aria-label="reject">
                             <FaDoorClosed />
                           </IconButton>
                         </Tooltip>
-                        <Tooltip title="Delete" class="btn action-btn btn-delete" onClick={() => acceptPoster(posterInfo._id)}>
+                        <Tooltip title="Delete" class="btn action-btn btn-delete" onClick={() => deletePoster(posterInfo._id)}>
                           <IconButton aria-label="delete">
                             <FaTrashAlt />
                           </IconButton>
@@ -273,7 +264,6 @@ export const Review = ({user}) => {
                         inputRef={register}
                         InputLabelProps={{ shrink: true }}
                         value={posterInfo.genre}
-                        onChange={e => setPosterGenre(e.target.value)}
                       />
                     </Grid>
                     <Grid item xs={4}>

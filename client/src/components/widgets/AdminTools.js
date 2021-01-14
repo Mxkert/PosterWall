@@ -12,7 +12,7 @@ export const AdminTools = () => {
   const [toolsActive, setToolsActive] = useState(false);
 
   const [amountToReview, setAmountToReview] = useState(0);
-  const [amountAvailablePosters, setAmountAvailablePosters] = useState(0);
+  // const [amountAvailablePosters, setAmountAvailablePosters] = useState(0);
 
   // Get all posters and store them in an array
   const getPostersToReview = () => {
@@ -23,18 +23,18 @@ export const AdminTools = () => {
     .then(res => {
       let date = '';
       let amount = 0;
-      let available = 0;
-      res.data.map(poster => {
+      // let available = 0;
+      res.data.forEach(poster => {
         date = moment(poster.date).locale('nl').format("YYYY-MM-DD");
         if (poster.accepted === false && date > currentDate) {
           amount++;
         } 
-        if (poster.accepted === true && date < currentDate) {
-          available++;
-        } 
+        // if (poster.accepted === true && date < currentDate) {
+        //   available++;
+        // } 
       });
       setAmountToReview(amount);
-      setAmountAvailablePosters(available);
+      // setAmountAvailablePosters(available);
     });
   }
 

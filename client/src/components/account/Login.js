@@ -7,7 +7,6 @@ import { firebase } from '../../config/firebase';
 // Import loading icon from Lottie
 import SuccessIcon from "../animations/SuccessIcon";
 
-import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 
 import TextField from "@material-ui/core/TextField";
