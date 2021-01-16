@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { FaTimes } from 'react-icons/fa';
-import moment from "moment";
+import moment from 'moment';
 import 'moment/locale/nl';
 
 import './Posters.css';

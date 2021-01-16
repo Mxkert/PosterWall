@@ -1,6 +1,6 @@
 import 'date-fns';
 import React from 'react';
-import moment from "moment";
+import moment from 'moment';
 import 'moment/locale/nl';
 import Grid from '@material-ui/core/Grid';
 import DateFnsUtils from '@date-io/date-fns';

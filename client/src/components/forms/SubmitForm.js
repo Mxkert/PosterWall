@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useForm } from "react-hook-form";
 import { FaTimes, FaFileAlt } from 'react-icons/fa';
 import axios from 'axios';
-import moment from "moment";
+import moment from 'moment';
 import 'moment/locale/nl';
 
 import Grid from '@material-ui/core/Grid';

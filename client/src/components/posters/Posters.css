@@ -87,6 +87,17 @@ form.small-form {
   width: 100%;
 }
 
+@media (max-width: 768px) {
+  .my-masonry-grid_column {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+  .my-masonry-grid_column > div {
+    width: 47.5%;
+  }
+}
+
 /* Filters */
 .filter-container {
   position: fixed;
@@ -123,4 +134,87 @@ form.small-form {
 .MuiMenu-list {
   background: rgba(0, 0, 0, 0.7);
   color: #fff;
+}
+
+/* Inputs */
+.poster-content .description {
+  font-size: 1em;
+  letter-spacing: 1.2px;
+  font-family: 'Roboto';
+  line-height: 1.65;
+}
+
+.poster-content .date-and-time {
+  display: flex;
+  align-items: center;
+}
+
+.poster-content .date-and-time .slash {
+  margin: 0 15px;
+}
+
+.poster-content .date-and-time .date {
+  font-size: 2em;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.poster-content .date-and-time .time {
+  font-size: 2em;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+@media (max-width: 768px) {
+  .poster-content .title {
+    text-align: center;
+  }
+  .poster-content .date-and-time {
+    display: block;
+    text-align: center;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid rgba(255,255,255,0.15);
+    padding-bottom: 2rem;
+  }
+}
+
+.poster-content .meta {
+  display: flex;
+  flex-direction: column;
+  margin: 2rem 0 2.5rem;
+}
+
+.poster-content .meta .topic {
+  font-weight: 300 !important;
+  width: 100px;
+}
+
+.poster-content .meta div {
+  display: flex;
+  font-size: 1.5em;
+  font-weight: 500;
+}
+
+.poster-content .acts {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 1.5rem 0;
+}
+
+.poster-content .acts .act {
+  margin-right: 0.5rem;
+  padding: 7.5px 20px;
+  background: #fff;
+  color: #000;
+  border-radius: 6px;
+  letter-spacing: 1.5px;
+  font-family: 'Roboto';
+  font-weight: 600;
+  filter: drop-shadow(0px 6px 6px rgba(0, 0, 0, 0.75));
+}
+
+@media (max-width: 768px) {
+  .poster-content .acts .act {
+    margin-bottom: 1rem;
+  }
 }

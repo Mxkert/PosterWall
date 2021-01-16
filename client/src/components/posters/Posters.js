@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { FaTimes, FaFilter } from 'react-icons/fa';
-import moment from "moment";
+import moment from 'moment';
 import 'moment/locale/nl';
 
 import './Posters.css';
@@ -137,43 +137,46 @@ export const Posters = ({user}) => {
                 <img src={ posterInfo.image } alt={ posterInfo.title } />
               </div>
               <div className="poster-content">
-                
-                  <Grid container spacing={3} justify="center">
-                    <Grid item xs={12}>
+
+                    <div className="title">
                       <h1>{ posterInfo.title }</h1>
-                    </Grid>
+                    </div>
 
-                    <Grid item xs={6}>
-                      { moment(posterInfo.date).locale('nl').format("YYYY-MM-DD") }
-                    </Grid>
-                    <Grid item xs={3}>
-                      { posterInfo.start_time }
-                    </Grid>
-                    <Grid item xs={3}>
-                      { posterInfo.end_time }
-                    </Grid>
+                    <div className="date-and-time">
+                      <div className="date">
+                        { moment(posterInfo.date).locale('nl').format("D MMMM YYYY") }
+                      </div>
+                      <span className="slash">/</span>
+                      <div className="time">
+                        <span class="start-time">{ posterInfo.start_time }</span>
+                        <span className="slash">-</span>
+                        <span class="end-time">{ posterInfo.end_time }</span>
+                      </div>
+                    </div>
 
-                    <Grid item xs={4}>
-                      { posterInfo.genre }
-                    </Grid>
-                    <Grid item xs={4}>
-                      { posterInfo.price }
-                    </Grid>
-                    <Grid item xs={4}>
-                      { posterInfo.location }
-                    </Grid>
+                    <div className="meta">
+                      <div>
+                        <span className="topic">Genre:</span> <span className="genre">{ posterInfo.genre }</span>
+                      </div>
+                      <div>
+                        <span className="topic">Price:</span> € <span className="price">{ posterInfo.price }</span>
+                      </div>
+                      <div>
+                        <span className="topic">Location:</span> <span className="location">{ posterInfo.location }</span>
+                      </div>
+                    </div>
 
-                    <Grid item xs={12}>
-                    {/* { posterInfo.acts.map((act, index) => (
-                      act
-                    ))} */}
-                    </Grid>
+                    <div className="acts">
+                    { posterInfo.acts ? posterInfo.acts.map((act, index) => (
+                      <div className="act">
+                        { act }
+                      </div>
+                    )) : null }
+                    </div>
 
-                    <Grid item xs={12}>
+                    <div className="description">
                       { posterInfo.description }
-                    </Grid>
-
-                  </Grid>
+                    </div>
 
               </div>
             </div>

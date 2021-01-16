@@ -6,7 +6,6 @@ import { firebase } from '../../config/firebase';
 
 // Import loading icon from Lottie
 import SuccessIcon from "../animations/SuccessIcon";
-
 import Grid from '@material-ui/core/Grid';
 
 import TextField from "@material-ui/core/TextField";
@@ -45,7 +44,7 @@ export const Login = () => {
   return (
     <>
 
-    { toHome ? <Redirect to="/posters" /> : null }
+    { toHome ? <Redirect to="/" /> : null }
 
     { loggedIn ?
       <div className="icon-screen">
@@ -93,11 +92,11 @@ export const Login = () => {
                   <button type="submit" className="btn" style={{ width: '100%', marginTop: '1.5rem' }}>Log in</button>
                 </Grid>
 
-                <Grid item xs={12}>
+                {/* <Grid item xs={12}>
                   <div className="form-bottom">
                     <p>Don't have an account? <a href="/signup">Sign up here</a>.</p>
                   </div>
-                </Grid> 
+                </Grid>  */}
               </Grid>
             </Grid>
           </form>

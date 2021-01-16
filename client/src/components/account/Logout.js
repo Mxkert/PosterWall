@@ -28,7 +28,7 @@ export const Logout = () => {
 
     { !loggedIn ?
       <>
-        { toHome ? <Redirect to="/posters" /> : null }
+        { toHome ? <Redirect to="/login" /> : null }
         <div className="icon-screen">
           <SuccessIcon />
           <p>You have been succesfully logged out.</p>

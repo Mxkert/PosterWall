@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useForm } from "react-hook-form";
 import axios from 'axios';
 import { FaTimes, FaCheck, FaDoorClosed, FaTrashAlt } from 'react-icons/fa';
-import moment from "moment";
+import moment from 'moment';
 import 'moment/locale/nl';
 
 import './Posters.css';

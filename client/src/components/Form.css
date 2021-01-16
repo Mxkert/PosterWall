@@ -178,11 +178,13 @@ DETAIL FORM & SUBMIT FORM
   align-items: center;
   justify-content: center;
   opacity: 0;
+  display: none;
 }
 
 .slide-out.opened {
   right: 0;
   opacity: 1;
+  display: flex;
 }
 
 .slide-out .modal-close-btn {
@@ -192,4 +194,20 @@ DETAIL FORM & SUBMIT FORM
   color: #fff;
   font-size: 52px;
   cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .slide-out {
+    height: auto;
+  }
+  .slide-out .modal-close-btn {
+    position: absolute;
+    right: 25px;
+    top: 35px;
+    color: #fff;
+    font-size: 32px;
+    cursor: pointer;
+    font-weight: 300;
+    z-index: 5;
+  }
 }
