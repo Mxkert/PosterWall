@@ -36,9 +36,12 @@ export const SubmitForm = (props) => {
   const [pictureURL, setPictureURL] = useState('');
 
   const [success, setSuccess] = useState(false);
-  const [checking, setCheck] = useState(false);
   const [error, setError] = useState(null);
   const [uploadError, setUploadError] = useState(null);
+  const [posterError, setPosterError] = useState(null);
+
+  const [uploadingImage, setUploadingImage] = useState(false);
+  const [addingPoster, setAddingPoster] = useState(false);
   
   const [selectedDate, setDate] = useState(moment().format("YYYY-MM-DD"));
   const [selectedStartTime, setSelectedStartTime] = useState(moment());
@@ -78,34 +81,31 @@ export const SubmitForm = (props) => {
   // Add poster to the database
   const addPoster = async (data) => {
 
-    console.log(data);
-    console.log(data.description);
-
-    setCheck(true);
-
-    let CLOUDINARY_URL = 'https://api.cloudinary.com/v1_1/dk9dh4jbu/upload';
-
-    const fd = new FormData();
-    fd.append('file', pictureURL);
-    fd.append('upload_preset', 'testing');
-    fd.append('cloud_name', 'dk9dh4jbu');
-
+    // Start image upload
     try {
+
+      setUploadingImage(true);
+
+      let CLOUDINARY_URL = 'https://api.cloudinary.com/v1_1/dk9dh4jbu/upload';
+  
+      const fd = new FormData();
+      fd.append('file', pictureURL);
+      fd.append('upload_preset', 'testing');
+      fd.append('cloud_name', 'dk9dh4jbu');
+
       const config = {
         headers: { "X-Requested-With": "XMLHttpRequest" },
       };
-            
-      try {
-        let result = await axios.post(CLOUDINARY_URL, fd, config);
-        console.log(result.data.url);
 
-        if (!result) {
-          setUploadError('There was error uploading the poster')
-        }
-    
+      let result = await axios.post(CLOUDINARY_URL, fd, config);
+      console.log(result.data.url);
+
+      // Start API call
+        setAddingPoster(true);
+        
         var currentDate =  moment().locale('nl').add(1, 'hours').format("YYYY-MM-DD HH:mm:ss");
         var eventDate =  moment(data.date).format("YYYY-MM-DD HH:mm:ss");
-   
+
         const newPoster = {
           image: result.data.url,
           title: data.title,
@@ -121,36 +121,34 @@ export const SubmitForm = (props) => {
           accepted: false,
           rejected: false
         };
-
-        console.log(eventDate);
     
         axios.post(`/api/posters/add`, newPoster)
-        .then(res => {
-          // getPosters();
+        .then(res => { 
           console.log(res.data);
-          setPicture('');
-          setPictureURL('');
+          setAddingPoster(false);
           setSuccess(true);
-        })
-        .then(res => {
+
           setTimeout(() => {
             setIsOpen(false);
             setSuccess(false);
           }, 1500);
+        })
+        .catch(error => {
+          console.log(error);
+          setAddingPoster(false);
+          setPosterError('There was an error submitting the poster. Please try again.')
         });
 
-      // Image could not be uploaded
-      } catch (err) {
-        console.log(err);
-      }
-
-    } catch(err) {
-        console.log(err);
-        setSuccess(false);
-        setError(err);
-        console.log(err);
+      setAddingPoster(false);
+    
+    // Image upload failed
+    } catch (err) {
+      setUploadingImage(false);
+      setUploadError('There was an error uploading the poster. Please try again.')
     }
-
+    
+    setUploadingImage(false);
+    
   }
 
   const handleChange = (data) => {
@@ -310,9 +308,34 @@ export const SubmitForm = (props) => {
                     />
                   </Grid>
 
+                  { uploadError ?
                   <Grid item xs={12}>
-                    { checking ? uploadError : null }
-                    <button className="btn" type="submit" style={{ width: '100%' }}>Submit</button>
+                    <p style={{ margin: '0' }}>{ uploadError }</p>
+                  </Grid>
+                  : null }
+
+                  { posterError ?
+                  <Grid item xs={12}>
+                    <p style={{ margin: '0' }}>{ posterError }</p>
+                  </Grid>
+                  : null }
+
+                  <Grid item xs={12}>
+                      { uploadingImage === true ? 
+                      <button disabled className="btn" type="submit" style={{ width: '100%' }}>
+                        Submitting poster...
+                      </button>
+                      : null }
+                      { addingPoster === true ? 
+                      <button disabled className="btn" type="submit" style={{ width: '100%' }}>
+                        Submitting poster...
+                      </button>
+                      : null }
+                      { addingPoster === false && uploadingImage === false ? 
+                      <button className="btn" type="submit" style={{ width: '100%' }}>
+                        Submit
+                      </button>
+                      : null }
                   </Grid>
 
                 </Grid>

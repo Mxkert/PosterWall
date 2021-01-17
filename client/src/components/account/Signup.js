@@ -6,6 +6,11 @@ import { firebase } from '../../config/firebase';
 
 // Import loading icon from Lottie
 import SuccessIcon from "../animations/SuccessIcon";
+import Container from '@material-ui/core/Container';
+import Grid from '@material-ui/core/Grid';
+
+import TextField from "@material-ui/core/TextField";
+import Alert from '@material-ui/lab/Alert';
 
 import '../Form.css';
 
@@ -31,7 +36,7 @@ export const Signup = () => {
       // ...
       console.log(errorCode);
       console.log(errorMessage);
-
+  
       setErrorMessage(errorMessage);
     }); 
   }
@@ -40,6 +45,8 @@ export const Signup = () => {
     <>
 
       { toHome ? <Redirect to="/" /> : null }
+
+      <Container maxWidth="md">
 
       { loggedIn ?
         <div className="icon-screen">
@@ -54,24 +61,47 @@ export const Signup = () => {
           </h1>
           { errorMessage ? <div style={{ marginBottom: '1.5rem' }}>{errorMessage}</div> : ''}
           <form onSubmit={handleSubmit(signUp)}>
-            <div className="form-group">
-              <label htmlFor="username">
-                <input className="form-input" type="email" ref={register} name="email" placeholder="E-mailadres" />
-              </label>
-            </div>
-            <div className="form-group">
-              <label htmlFor="password">
-                <input className="form-input" type="password" ref={register} name="password" placeholder="Wachtwoord" />
-              </label>
-            </div>
-            <button type="submit" className="btn btn-blue">Sign up</button>
+            <Grid container spacing={3} justify="center">
+
+              <Grid item xs={12}>
+                { errorMessage ? <Alert severity="error">{ errorMessage }</Alert> : null}
+              </Grid> 
+
+              <Grid item xs={12}>
+                <TextField 
+                  id="email"
+                  name="email"
+                  type="email"
+                  label="E-mail address"
+                  variant="outlined"
+                  className="form-input"
+                  inputRef={register}
+                />
+              </Grid> 
+
+              <Grid item xs={12}>
+                <TextField 
+                  id="password"
+                  name="password"
+                  type="password"
+                  label="Password"
+                  variant="outlined"
+                  className="form-input"
+                  inputRef={register}
+                />
+
+                <Grid item xs={12}>
+                  <button type="submit" className="btn" style={{ width: '100%', marginTop: '1.5rem' }}>Sign up</button>
+                </Grid>
+
+              </Grid>
+
+            </Grid>
           </form>
-        </div>
-        <div className="form-bottom">
-          <p>Already have an account? <a href="/login">Login here</a>.</p>
         </div>
       </div>
       }
+      </Container>
     </>
   )
 
