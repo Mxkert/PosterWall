@@ -306,11 +306,8 @@ export const SubmitForm = (props) => {
                       aria-label="description" 
                       rowsMin={3} 
                       placeholder="Description" 
-                      ref={register}
+                      inputRef={register}
                     />
-                  </Grid>
-
-                  <Grid item xs={12}>
                   </Grid>
 
                   <Grid item xs={12}>

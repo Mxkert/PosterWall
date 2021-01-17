@@ -147,9 +147,9 @@ export const Posters = ({user}) => {
                       </div>
                       <span className="slash">/</span>
                       <div className="time">
-                        <span class="start-time">{ posterInfo.start_time }</span>
+                        <span className="start-time">{ posterInfo.start_time }</span>
                         <span className="slash">-</span>
-                        <span class="end-time">{ posterInfo.end_time }</span>
+                        <span className="end-time">{ posterInfo.end_time }</span>
                       </div>
                     </div>
 
@@ -191,7 +191,7 @@ export const Posters = ({user}) => {
         : null }
         { posterDetailOpened ? null :
         <>
-          <div className="filter-icon" style={{ top: '5%', zIndex: '999' }} onClick={() => setFilterOpen(!filterOpened)}>
+          <div className="filter-icon" style={{ top: '5%', zIndex: '3' }} onClick={() => setFilterOpen(!filterOpened)}>
             { filterOpened ? 
              <FaTimes />
              : 
