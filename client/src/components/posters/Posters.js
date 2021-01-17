@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { FaTimes, FaFilter } from 'react-icons/fa';
+import { FaTimes, FaSlidersH } from 'react-icons/fa';
 import moment from 'moment';
 import 'moment/locale/nl';
 
 import './Posters.css';
 
 import Container from '@material-ui/core/Container';
-import Grid from '@material-ui/core/Grid';
 
 import Masonry from 'react-masonry-css'
 
@@ -192,8 +191,13 @@ export const Posters = ({user}) => {
         : null }
         { posterDetailOpened ? null :
         <>
-          <div className="upload-icon" style={{ top: '5%', zIndex: '999' }} onClick={() => setFilterOpen(!filterOpened)}>
-            <FaFilter />
+          <div className="filter-icon" style={{ top: '5%', zIndex: '999' }} onClick={() => setFilterOpen(!filterOpened)}>
+            { filterOpened ? 
+             <FaTimes />
+             : 
+             <FaSlidersH />
+            }
+            
           </div>
           <SubmitButton />
         </>

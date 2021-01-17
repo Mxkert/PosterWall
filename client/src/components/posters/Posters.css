@@ -79,12 +79,12 @@ form.small-form {
  
 /* Style your items */
 .my-masonry-grid_column > div { /* change div to reference your elements you put in <Masonry> */
-  background: grey;
   margin-bottom: 30px;
 }
 
 .my-masonry-grid_column > div img { /* change div to reference your elements you put in <Masonry> */
   width: 100%;
+  filter: drop-shadow(0px 14px 6px rgba(0, 0, 0, 0.7));
 }
 
 @media (max-width: 768px) {
@@ -102,12 +102,12 @@ form.small-form {
 .filter-container {
   position: fixed;
   right: 0;
-  width: 33.3%;
+  width: 27.5%;
   background: rgba(0,0,0,0);
   top: 0;
   height: 100vh;
   z-index: 2;
-  padding: 5rem;
+  padding: 8rem 3rem 3rem;
   display: flex;
   flex-direction: column;
   transform: translateX(100%);
@@ -118,6 +118,7 @@ form.small-form {
   background: rgba(0,0,0,0.75);
   transform: translateX(0);
   transition: all 0.5s;
+  box-shadow: -5px 0px 10px 1px rgba(0, 0, 0, 0.7);
 }
 
 .filters {

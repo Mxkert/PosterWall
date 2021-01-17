@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { FaTimes, FaFileAlt } from 'react-icons/fa';
 import axios from 'axios';
 import moment from 'moment';
-import 'moment/locale/nl';
+// import 'moment/locale/nl';
 
 import Grid from '@material-ui/core/Grid';
 import '../forms/SubmitForm.css';
@@ -35,14 +35,28 @@ export const SubmitForm = (props) => {
   const [picture, setPicture] = useState('https://via.placeholder.com/400x600');
   const [pictureURL, setPictureURL] = useState('');
 
-  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [checking, setCheck] = useState(false);
   const [error, setError] = useState(null);
   const [uploadError, setUploadError] = useState(null);
   
-  const [selectedDate, setSelectedDate] = React.useState(moment().locale('nl').format("YYYY-MM-DD"));
+  const [selectedDate, setDate] = useState(moment().format("YYYY-MM-DD"));
+  const [selectedStartTime, setSelectedStartTime] = useState(moment());
+  const [selectedEndTime, setSelectedEndTime] = useState(moment());
 
-  const handleDateChange = (date) => {
-    setSelectedDate(date);
+  const onDateChange = (date, value) => {
+    setDate(date);
+    console.log(date);
+    console.log(value);
+  };
+
+  const handleStartTime = (time) => {
+    console.log(time);
+    setSelectedStartTime(time);
+  };
+
+  const handleEndTime = (time) => {
+    setSelectedEndTime(time);
   };
 
   const onChangePicture = async e => {
@@ -53,6 +67,7 @@ export const SubmitForm = (props) => {
 
   // Set modal opened
   useEffect(() => {
+    console.log(selectedDate);
     setIsOpen(formIsOpen);
   }, [formIsOpen]);
 
@@ -66,7 +81,7 @@ export const SubmitForm = (props) => {
     console.log(data);
     console.log(data.description);
 
-    setLoading(true);
+    setCheck(true);
 
     let CLOUDINARY_URL = 'https://api.cloudinary.com/v1_1/dk9dh4jbu/upload';
 
@@ -83,8 +98,13 @@ export const SubmitForm = (props) => {
       try {
         let result = await axios.post(CLOUDINARY_URL, fd, config);
         console.log(result.data.url);
+
+        if (!result) {
+          setUploadError('There was error uploading the poster')
+        }
     
         var currentDate =  moment().locale('nl').add(1, 'hours').format("YYYY-MM-DD HH:mm:ss");
+        var eventDate =  moment(data.date).format("YYYY-MM-DD HH:mm:ss");
    
         const newPoster = {
           image: result.data.url,
@@ -93,14 +113,16 @@ export const SubmitForm = (props) => {
           acts: acts,
           description: data.description,
           price: data.price,
-          // date: data.date,
+          date: eventDate,
           location: data.location,
-          // start_time: data.start_time,
-          // end_time: data.end_time,
+          start_time: data.start_time,
+          end_time: data.end_time,
           creation_date: currentDate,
           accepted: false,
           rejected: false
         };
+
+        console.log(eventDate);
     
         axios.post(`/api/posters/add`, newPoster)
         .then(res => {
@@ -108,24 +130,23 @@ export const SubmitForm = (props) => {
           console.log(res.data);
           setPicture('');
           setPictureURL('');
-          setLoading(false);
+          setSuccess(true);
         })
         .then(res => {
           setTimeout(() => {
             setIsOpen(false);
-            setLoading(false);
+            setSuccess(false);
           }, 1500);
         });
 
       // Image could not be uploaded
       } catch (err) {
         console.log(err);
-        setUploadError('There was error uploading the poster');
       }
 
     } catch(err) {
         console.log(err);
-        setLoading(false);
+        setSuccess(false);
         setError(err);
         console.log(err);
     }
@@ -139,7 +160,7 @@ export const SubmitForm = (props) => {
   return (
     <div className={ formIsOpen ? 'slide-out slide-out-form opened' : 'slide-out slide-out-form' }>
 
-      { loading ?
+      { success ?
         <div className="icon-screen">
           <SuccessIcon />
           <p>The poster has succesfully been uploaded.</p>
@@ -155,7 +176,6 @@ export const SubmitForm = (props) => {
         <div className="modal-body submit-modal">
           <div className="detail-container">
             <div className="poster-image">
-              { uploadError }
               {/* <img src="https://via.placeholder.com/400x600" alt="" /> */}
               {/* <input id="poster" type="file" onChange={onChangePicture}/> */}
               <div className="upload-btn">
@@ -186,16 +206,16 @@ export const SubmitForm = (props) => {
                     />
                   </Grid>
 
-                  <Grid item xs={6}>
+                  <Grid item xs={4}>
                     <MuiPickersUtilsProvider utils={DateFnsUtils}>
                       <KeyboardDatePicker
                         className="date-picker"
                         id="date"
                         name="date"
-                        // label="Date"
-                        format="dd/mm/yyyy"
+                        showTodayButton={true}
                         value={selectedDate}
-                        onChange={handleDateChange}
+                        format="yyyy-MM-dd"
+                        onChange={onDateChange}
                         KeyboardButtonProps={{
                           'aria-label': 'change date',
                         }}
@@ -204,14 +224,14 @@ export const SubmitForm = (props) => {
                       />
                     </MuiPickersUtilsProvider>
                   </Grid>
-                  <Grid item xs={3}>
+                  <Grid item xs={4}>
                     <MuiPickersUtilsProvider utils={DateFnsUtils}>
                       <KeyboardTimePicker
                         ampm={false}
-                        id="end_time"
-                        name="end_time"
-                        value={selectedDate}
-                        onChange={handleDateChange}
+                        id="start_time"
+                        name="start_time"
+                        value={selectedStartTime}
+                        onChange={handleStartTime}
                         KeyboardButtonProps={{
                           'aria-label': 'change time',
                         }}
@@ -220,16 +240,21 @@ export const SubmitForm = (props) => {
                       />
                     </MuiPickersUtilsProvider>
                   </Grid>
-                  <Grid item xs={3}>
-                    <TextField 
-                      id="start_time"
-                      name="start_time"
-                      type="time"
-                      label="End time"
-                      variant="outlined"
-                      InputLabelProps={{ shrink: true }}
-                      inputRef={register}
-                    />
+                  <Grid item xs={4}>
+                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                      <KeyboardTimePicker
+                        ampm={false}
+                        id="end_time"
+                        name="end_time"
+                        value={selectedEndTime}
+                        onChange={handleEndTime}
+                        KeyboardButtonProps={{
+                          'aria-label': 'change time',
+                        }}
+                        inputRef={register}
+                        variant="outlined"
+                      />
+                    </MuiPickersUtilsProvider>
                   </Grid>
 
                   <Grid item xs={4}>
@@ -286,12 +311,11 @@ export const SubmitForm = (props) => {
                   </Grid>
 
                   <Grid item xs={12}>
-                    {
-                      pictureURL ?
-                        <button className="btn" type="submit" style={{ width: '100%' }}>Submit</button>
-                      :
-                        <button className="btn" disabled type="submit" style={{ width: '100%' }}>Submit</button>
-                    }
+                  </Grid>
+
+                  <Grid item xs={12}>
+                    { checking ? uploadError : null }
+                    <button className="btn" type="submit" style={{ width: '100%' }}>Submit</button>
                   </Grid>
 
                 </Grid>
