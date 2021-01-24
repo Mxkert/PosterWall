@@ -130,7 +130,7 @@
 }
 
 /* Chip input */
-.WAMuiChipInput-chipContainer-8, .jss10 {
+.WAMuiChipInput-chipContainer-8, [name="acts"] > div {
   color: #fff !important;
   box-shadow: 0px 14px 24px rgba(0, 0, 0, 0.7);
   background: rgba(0,0,0,0.75) !important;

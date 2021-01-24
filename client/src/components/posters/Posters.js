@@ -19,6 +19,13 @@ import FormControl from '@material-ui/core/FormControl';
 import MenuItem from '@material-ui/core/MenuItem';
 import InputLabel from '@material-ui/core/InputLabel';
 
+import DateFnsUtils from '@date-io/date-fns';
+import {
+  MuiPickersUtilsProvider,
+  KeyboardTimePicker,
+  KeyboardDatePicker,
+} from '@material-ui/pickers';
+
 export const Posters = ({user}) => {
 
   const breakpointColumnsObj = {
@@ -43,6 +50,8 @@ export const Posters = ({user}) => {
   const [searchedTitle, setSearchedTitle] = useState("");
   const [selectedGenre, setSelectedGenre] = useState("");
   const [selectedPrice, setSelectedPrice] = useState("");
+  const [selectedDateFrom, setSelectedDateFrom] = useState(moment('1970-01-01').format("YYYY-MM-DD"));
+  const [selectedDateTo, setSelectedDateTo] = useState(moment('2100-01-01').format("YYYY-MM-DD"));
 
   const handleChange = event => {
      setSearchedTitle(event.target.value);
@@ -53,6 +62,12 @@ export const Posters = ({user}) => {
   const handlePriceFilter = event => {
     setSelectedPrice(event.target.value);
   };
+  const handleDateFromFilter = (date, value) => {
+    setSelectedDateFrom(date);
+  };
+  const handleDateToFilter = (date, value) => {
+    setSelectedDateTo(date);
+  };
 
   useEffect(() => {
     const results = posters.filter(poster => {
@@ -60,11 +75,15 @@ export const Posters = ({user}) => {
         selectedPrice ? (
           poster.title.toString().toLowerCase().indexOf(searchedTitle.toLowerCase()) > -1 &&
           poster.genre.toLowerCase().indexOf(selectedGenre.toLowerCase()) > -1 &&
-          poster.price < parseInt(selectedPrice)
+          poster.price < parseInt(selectedPrice) &&
+          moment(poster.date).format("YYYY-MM-DD") > moment(selectedDateFrom).format("YYYY-MM-DD") &&
+          moment(poster.date).format("YYYY-MM-DD") < moment(selectedDateTo).format("YYYY-MM-DD")
         ) : (
           poster.title.toString().toLowerCase().indexOf(searchedTitle.toLowerCase()) > -1 &&
           poster.genre.toLowerCase().indexOf(selectedGenre.toLowerCase()) > -1 &&
-          poster.price < 9999
+          poster.price < 9999 &&
+          moment(poster.date).format("YYYY-MM-DD") > moment(selectedDateFrom).format("YYYY-MM-DD") &&
+          moment(poster.date).format("YYYY-MM-DD") < moment(selectedDateTo).format("YYYY-MM-DD")
         )
       );
     });
@@ -72,7 +91,7 @@ export const Posters = ({user}) => {
     setSearchResultsAmount(results.length);
     setSearchResults(results);
 
-  }, [searchedTitle, selectedGenre, selectedPrice, posters]);
+  }, [searchedTitle, selectedGenre, selectedPrice, posters, selectedDateFrom, selectedDateTo]);
 
   // Get all posters and store them in an array
   const getPosters = () => {
@@ -261,6 +280,59 @@ export const Posters = ({user}) => {
                 <MenuItem value='50'>50</MenuItem>
               </Select>
             </FormControl>
+          
+            {/* Date from filter */}
+            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+              <InputLabel id="demo-simple-select-outlined-label">Date from</InputLabel>
+              <KeyboardDatePicker
+                className="date-picker"
+                id="date"
+                showTodayButton={true}
+                value={selectedDateFrom}
+                format="yyyy-MM-dd"
+                onChange={handleDateFromFilter}
+                KeyboardButtonProps={{
+                  'aria-label': 'change date',
+                }}
+                variant="outlined"
+              />
+            </MuiPickersUtilsProvider>
+          
+          {/* Date to filter */}
+          <MuiPickersUtilsProvider utils={DateFnsUtils}>
+            <InputLabel id="demo-simple-select-outlined-label">Date to</InputLabel>
+            <KeyboardDatePicker
+              className="date-picker"
+              id="date"
+              showTodayButton={true}
+              value={selectedDateTo}
+              format="yyyy-MM-dd"
+              onChange={handleDateToFilter}
+              KeyboardButtonProps={{
+                'aria-label': 'change date',
+              }}
+              variant="outlined"
+            />
+          </MuiPickersUtilsProvider>
+
+            {/* <FormControl variant="outlined">
+              <InputLabel id="demo-simple-select-outlined-label">Date from</InputLabel>
+              <Select
+                labelId="demo-simple-select-outlined-label"
+                id="demo-simple-select-outlined"
+                value={selectedDateFrom}
+                onChange={handleDateFromFilter}
+                label="Price"
+              >
+                <MenuItem value="">
+                  <em>Remove filter</em>
+                </MenuItem>
+                <MenuItem value='0'>Free</MenuItem>
+                <MenuItem value='10'>10</MenuItem>
+                <MenuItem value='20'>20</MenuItem>
+                <MenuItem value='50'>50</MenuItem>
+              </Select>
+            </FormControl> */}
 
           </div>
           <div className="filter-results">

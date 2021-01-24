@@ -86,6 +86,12 @@ export const SubmitForm = (props) => {
 
       setUploadingImage(true);
 
+      if (pictureURL === '') {
+        setPosterError('Please upload a poster before submitting the form.')
+        setUploadingImage(false);
+        return;
+      }
+
       let CLOUDINARY_URL = 'https://api.cloudinary.com/v1_1/dk9dh4jbu/upload';
   
       const fd = new FormData();
@@ -131,7 +137,7 @@ export const SubmitForm = (props) => {
           setTimeout(() => {
             setIsOpen(false);
             setSuccess(false);
-          }, 1500);
+          }, 2500);
         })
         .catch(error => {
           console.log(error);
@@ -158,20 +164,20 @@ export const SubmitForm = (props) => {
   return (
     <div className={ formIsOpen ? 'slide-out slide-out-form opened' : 'slide-out slide-out-form' }>
 
-      { success ?
-        <div className="icon-screen">
-          <SuccessIcon />
-          <p>The poster has succesfully been uploaded.</p>
-          { error ? error : null }
-        </div>
-      :
-
       <>
         <FaTimes className="modal-close-btn" onClick={() => setIsOpen(false)} />
 
         <div className="blurred-bg"></div>
 
         <div className="modal-body submit-modal">
+
+          { success ?
+            <div className="icon-screen">
+              <SuccessIcon />
+              <p>The poster has succesfully been uploaded.</p>
+              { error ? error : null }
+            </div>
+          :
           <div className="detail-container">
             <div className="poster-image">
               {/* <img src="https://via.placeholder.com/400x600" alt="" /> */}
@@ -342,9 +348,9 @@ export const SubmitForm = (props) => {
               </form>
             </div>
           </div>
+          }
         </div>
       </>
-    }
 
     </div>
   );
