@@ -18,6 +18,13 @@ import IconButton from '@material-ui/core/IconButton';
 import TextareaAutosize from '@material-ui/core/TextareaAutosize';
 import ChipInput from 'material-ui-chip-input';
 
+import DateFnsUtils from '@date-io/date-fns';
+import {
+  MuiPickersUtilsProvider,
+  KeyboardTimePicker,
+  KeyboardDatePicker,
+} from '@material-ui/pickers';
+
 import { AdminTools } from '../widgets/AdminTools';
 
 export const Review = ({user}) => {
@@ -40,6 +47,25 @@ export const Review = ({user}) => {
 
   const [posterInfo, setPosterInfo] = useState([]);
   const [posterDetailOpened, setPosterDetailOpened] = useState(false);
+  
+  const [selectedDate, setDate] = useState(moment().format("YYYY-MM-DD"));
+  const [selectedStartTime, setSelectedStartTime] = useState(moment());
+  const [selectedEndTime, setSelectedEndTime] = useState(moment());
+
+  const onDateChange = (date, value) => {
+    setDate(date);
+    console.log(date);
+    console.log(value);
+  };
+
+  const handleStartTime = (time) => {
+    console.log(time);
+    setSelectedStartTime(time);
+  };
+
+  const handleEndTime = (time) => {
+    setSelectedEndTime(time);
+  };
 
   // Submit modal
   const [pictureURL, setPictureURL] = useState('');
@@ -217,41 +243,55 @@ export const Review = ({user}) => {
                       />
                     </Grid>
 
-                    <Grid item xs={6}>
-                      <TextField 
-                        id="date"
-                        name="date"
-                        type="date"
-                        label="Date"
-                        variant="outlined"
-                        InputLabelProps={{ shrink: true }}
-                        inputRef={register}
-                        value={moment(posterInfo.date).locale('nl').format("YYYY-MM-DD")}
-                      />
+                    <Grid item xs={4}>
+                      <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                        <KeyboardDatePicker
+                          className="date-picker"
+                          id="date"
+                          name="date"
+                          showTodayButton={true}
+                          value={selectedDate}
+                          format="yyyy-MM-dd"
+                          onChange={onDateChange}
+                          KeyboardButtonProps={{
+                            'aria-label': 'change date',
+                          }}
+                          inputRef={register}
+                          variant="outlined"
+                        />
+                      </MuiPickersUtilsProvider>
                     </Grid>
-                    <Grid item xs={3}>
-                      <TextField 
-                        id="end_time"
-                        name="end_time"
-                        type="time"
-                        label="Start time"
-                        variant="outlined"
-                        InputLabelProps={{ shrink: true }}
-                        inputRef={register}
-                        value={posterInfo.start_time}
-                      />
+                    <Grid item xs={4}>
+                      <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                        <KeyboardTimePicker
+                          ampm={false}
+                          id="start_time"
+                          name="start_time"
+                          value={selectedStartTime}
+                          onChange={handleStartTime}
+                          KeyboardButtonProps={{
+                            'aria-label': 'change time',
+                          }}
+                          inputRef={register}
+                          variant="outlined"
+                        />
+                      </MuiPickersUtilsProvider>
                     </Grid>
-                    <Grid item xs={3}>
-                      <TextField 
-                        id="start_time"
-                        name="start_time"
-                        type="time"
-                        label="End time"
-                        variant="outlined"
-                        InputLabelProps={{ shrink: true }}
-                        inputRef={register}
-                        value={posterInfo.end_time}
-                      />
+                    <Grid item xs={4}>
+                      <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                        <KeyboardTimePicker
+                          ampm={false}
+                          id="end_time"
+                          name="end_time"
+                          value={selectedEndTime}
+                          onChange={handleEndTime}
+                          KeyboardButtonProps={{
+                            'aria-label': 'change time',
+                          }}
+                          inputRef={register}
+                          variant="outlined"
+                        />
+                      </MuiPickersUtilsProvider>
                     </Grid>
 
                     <Grid item xs={4}>
@@ -340,6 +380,10 @@ export const Review = ({user}) => {
       </div>
 
       <Container maxWidth="md">
+
+        <div className="page-header" style={{ textAlign: 'center', marginBottom: '4rem' }}>
+          <h1>Posters to review</h1>
+        </div>
 
         <AdminTools />
 

@@ -16,7 +16,6 @@ export const Logout = () => {
       // Sign-out successful.
       setLoggedIn(false);
       setTimeout(() => setToHome(true), 2000);
-      console.log('uitgelogt');
     }).catch(function(error) {
       // An error happened.
       console.log(error);

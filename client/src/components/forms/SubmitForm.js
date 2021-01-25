@@ -32,7 +32,7 @@ export const SubmitForm = (props) => {
   const [formIsOpen, setIsOpen] = useState(false);
 
   // Submit modal
-  const [picture, setPicture] = useState('https://via.placeholder.com/400x600');
+  const [picture, setPicture] = useState('https://www.genius100visions.com/wp-content/uploads/2017/09/placeholder-vertical.jpg');
   const [pictureURL, setPictureURL] = useState('');
 
   const [success, setSuccess] = useState(false);
@@ -188,7 +188,7 @@ export const SubmitForm = (props) => {
                     pictureURL ? 
                       <FaFileAlt style={{ opacity: '0' }} />
                     :
-                      <FaFileAlt />
+                      <FaFileAlt style={{ opacity: '0' }} />
                   }
                   <input id="poster" type="file" onChange={onChangePicture} />
                 </label>

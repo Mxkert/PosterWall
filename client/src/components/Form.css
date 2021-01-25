@@ -4,6 +4,12 @@
   margin-top: 2.5rem;
 } */
 
+.login-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 .form-control {
   font-family: "Roboto" ,sans-serif;
   font-size: 14px;
@@ -46,10 +52,22 @@
   padding: 1rem;
   font-size: 18px;
   border-radius: 6px;
-  background: #C5A47E;
+  background: linear-gradient(45deg, #444, #272727);
   width: auto;
   cursor: pointer;
   box-shadow: 0px 14px 24px rgba(0, 0, 0, 0.35);
+  -webkit-transition: box-shadow 0.2s linear;
+     -moz-transition: box-shadow 0.2s linear;
+       -o-transition: box-shadow 0.2s linear;
+          transition: box-shadow 0.2s linear;
+}
+
+.btn:hover {
+  box-shadow: 0px 14px 32px rgba(0, 0, 0, 0.65);
+  -webkit-transition: box-shadow 0.2s linear;
+     -moz-transition: box-shadow 0.2s linear;
+       -o-transition: box-shadow 0.2s linear;
+          transition: box-shadow 0.2s linear;
 }
 
 .action-btn {
@@ -126,7 +144,11 @@
 }
 
 .MuiInputBase-input {
-  font-size: 0.75em !important;
+  font-size: 0.825em !important;
+}
+
+.MuiInputBase-inputAdornedEnd {
+  padding: 0 !important;
 }
 
 /* Chip input */
@@ -144,7 +166,7 @@
   margin-left: 0.5rem !important;
   margin-right: 0 !important;
   margin-top: 0.5rem !important;
-  background: #000 !important;
+  background: #2c2c2c !important;
   color: #fff !important;
 }
 

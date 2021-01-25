@@ -26,7 +26,7 @@ export const AdminTools = () => {
       // let available = 0;
       res.data.forEach(poster => {
         date = moment(poster.date).locale('nl').format("YYYY-MM-DD");
-        if (poster.accepted === false && date > currentDate) {
+        if (poster.accepted === false && poster.rejected === false && date > currentDate) {
           amount++;
         } 
         // if (poster.accepted === true && date < currentDate) {

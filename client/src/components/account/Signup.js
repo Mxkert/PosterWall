@@ -48,59 +48,62 @@ export const Signup = () => {
 
       <Container maxWidth="md">
 
-      { loggedIn ?
-        <div className="icon-screen">
-          <SuccessIcon />
-          <p>You have been succesfully signed up and logged in.</p>
+        <div className="form-container">
+          <div className="form login-form">
+
+            { loggedIn ?
+              <div className="icon-screen">
+                <SuccessIcon />
+                <p>You have been succesfully signed up and logged in.</p>
+              </div>
+            :
+              <>
+                <h1 className="title">
+                  Sign up
+                </h1>
+                { errorMessage ? <div style={{ marginBottom: '1.5rem' }}>{errorMessage}</div> : ''}
+                <form onSubmit={handleSubmit(signUp)}>
+                  <Grid container spacing={3} justify="center">
+
+                    <Grid item xs={12}>
+                      { errorMessage ? <Alert severity="error">{ errorMessage }</Alert> : null}
+                    </Grid> 
+
+                    <Grid item xs={12}>
+                      <TextField 
+                        id="email"
+                        name="email"
+                        type="email"
+                        label="E-mail address"
+                        variant="outlined"
+                        className="form-input"
+                        inputRef={register}
+                      />
+                    </Grid> 
+
+                    <Grid item xs={12}>
+                      <TextField 
+                        id="password"
+                        name="password"
+                        type="password"
+                        label="Password"
+                        variant="outlined"
+                        className="form-input"
+                        inputRef={register}
+                      />
+
+                      <Grid item xs={12}>
+                        <button type="submit" className="btn" style={{ width: '100%', marginTop: '1.5rem' }}>Sign up</button>
+                      </Grid>
+
+                    </Grid>
+
+                  </Grid>
+                </form>
+              </>
+            }
+          </div>
         </div>
-      :
-      <div className="form-container">
-        <div className="form">
-          <h1 className="title">
-            Sign up
-          </h1>
-          { errorMessage ? <div style={{ marginBottom: '1.5rem' }}>{errorMessage}</div> : ''}
-          <form onSubmit={handleSubmit(signUp)}>
-            <Grid container spacing={3} justify="center">
-
-              <Grid item xs={12}>
-                { errorMessage ? <Alert severity="error">{ errorMessage }</Alert> : null}
-              </Grid> 
-
-              <Grid item xs={12}>
-                <TextField 
-                  id="email"
-                  name="email"
-                  type="email"
-                  label="E-mail address"
-                  variant="outlined"
-                  className="form-input"
-                  inputRef={register}
-                />
-              </Grid> 
-
-              <Grid item xs={12}>
-                <TextField 
-                  id="password"
-                  name="password"
-                  type="password"
-                  label="Password"
-                  variant="outlined"
-                  className="form-input"
-                  inputRef={register}
-                />
-
-                <Grid item xs={12}>
-                  <button type="submit" className="btn" style={{ width: '100%', marginTop: '1.5rem' }}>Sign up</button>
-                </Grid>
-
-              </Grid>
-
-            </Grid>
-          </form>
-        </div>
-      </div>
-      }
       </Container>
     </>
   )

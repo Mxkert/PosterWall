@@ -49,64 +49,69 @@ export const Login = () => {
 
     <Container maxWidth="md">
 
-    { loggedIn ?
-      <div className="icon-screen">
-        <SuccessIcon />
-        <p>You have been succesfully logged in.</p>
-      </div>
-    :
       <div className="form-container">
-        <div className="form">
-          <h1 className="title">
-            Log in
-          </h1>
+        <div className="form login-form">
 
-          <form className="small-form" onSubmit={handleSubmit(logIn)}>
-            <Grid container spacing={3} justify="center">
+        { loggedIn ?
+          <div className="icon-screen">
+            <SuccessIcon />
+          </div>
+        :
+          <>
 
-              <Grid item xs={12}>
-                { errorMessage ? <Alert severity="error">{ errorMessage }</Alert> : null}
-              </Grid> 
+            <h1 className="title">
+              Log in
+            </h1>
 
-              <Grid item xs={12}>
-                <TextField 
-                  id="email"
-                  name="email"
-                  type="email"
-                  label="E-mail address"
-                  variant="outlined"
-                  className="form-input"
-                  inputRef={register}
-                />
-              </Grid> 
-
-              <Grid item xs={12}>
-                <TextField 
-                  id="password"
-                  name="password"
-                  type="password"
-                  label="Password"
-                  variant="outlined"
-                  className="form-input"
-                  inputRef={register}
-                />
+            <form className="small-form" onSubmit={handleSubmit(logIn)}>
+              <Grid container spacing={3} justify="center">
 
                 <Grid item xs={12}>
-                  <button type="submit" className="btn" style={{ width: '100%', marginTop: '1.5rem' }}>Log in</button>
-                </Grid>
+                  { errorMessage ? <Alert severity="error">{ errorMessage }</Alert> : null}
+                </Grid> 
 
-                {/* <Grid item xs={12}>
-                  <div className="form-bottom">
-                    <p>Don't have an account? <a href="/signup">Sign up here</a>.</p>
-                  </div>
-                </Grid>  */}
+                <Grid item xs={12}>
+                  <TextField 
+                    id="email"
+                    name="email"
+                    type="email"
+                    label="E-mail address"
+                    variant="outlined"
+                    className="form-input"
+                    inputRef={register}
+                  />
+                </Grid> 
+
+                <Grid item xs={12}>
+                  <TextField 
+                    id="password"
+                    name="password"
+                    type="password"
+                    label="Password"
+                    variant="outlined"
+                    className="form-input"
+                    inputRef={register}
+                  />
+
+                  <Grid item xs={12}>
+                    <button type="submit" className="btn" style={{ width: '100%', marginTop: '1.5rem' }}>Log in</button>
+                  </Grid>
+
+                  {/* <Grid item xs={12}>
+                    <div className="form-bottom">
+                      <p>Don't have an account? <a href="/signup">Sign up here</a>.</p>
+                    </div>
+                  </Grid>  */}
+                </Grid>
               </Grid>
-            </Grid>
-          </form>
+            </form>
+
+          </>
+
+        }
 
         </div>
       </div>
-    }
     </Container>
     </>
   )
