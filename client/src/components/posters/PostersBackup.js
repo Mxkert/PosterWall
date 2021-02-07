@@ -49,13 +49,6 @@ export const Posters = ({user}) => {
   
   const [posterDetailOpened, setPosterDetailOpened] = useState(false);
   const [filterOpened, setFilterOpen] = useState(false);
-
-  // Google API
-  const [locationDistances, setLocationDistances] = useState([]);
-  const [locationDistances10, setLocationDistances10] = useState([]);
-  const [locationDistances20, setLocationDistances20] = useState([]);
-  const [locationDistances50, setLocationDistances50] = useState([]);
-  const [locationDistances500, setLocationDistances500] = useState([]);
   
   // Search
   const [searchResults, setSearchResults] = useState([]);
@@ -135,57 +128,30 @@ export const Posters = ({user}) => {
 
   // ================
 
-  const getDistance = (posterID, origin, destination, radius) => {
-    let origins = origin;
-    let destinations = destination;
-    let meters = radius * 1000
-
-    axios.post('/api/maps/distance', {origins, destinations})
-      .then(res => res.data)
-      .then(data => {
-        if (data < meters) {
-          setLocationDistances(locationDistances => [...locationDistances, posterID]);
-        }
-      })
-      .catch(err => console.log(`unable to get distances, ${err}`))
-  }
-
   useEffect(() => {
-    console.log('changing location')
-    setLocationDistances([]);
-    if (selectedLocation > 0) {
-      posters.forEach(poster => {
-        if (poster.location_lat) {
-          getDistance(poster._id, [`${sessionStorage.getItem("location")}`], [`${poster.location_lat},${poster.location_lng}`], selectedLocation)
-        }
-      })
-    } else {
-      console.log('location 0')
-    }
-  }, [selectedLocation]);
-
-  useEffect(() => {
-
     const results = posters.filter(poster => {
-
       return (
-        locationDistances.length ? (
-          selectedPrice ? (
-            poster.title.toString().toLowerCase().indexOf(searchedTitle.toLowerCase()) > -1 &&
-            poster.genre.toLowerCase().indexOf(selectedGenre.toLowerCase()) > -1 &&
-            poster.price < parseInt(selectedPrice) &&
-            moment(poster.date).format("YYYY-MM-DD") > moment(selectedDateFrom).format("YYYY-MM-DD") &&
-            moment(poster.date).format("YYYY-MM-DD") < moment(selectedDateTo).format("YYYY-MM-DD") &&
-            locationDistances.includes(poster._id)
-          ) : (
-            poster.title.toString().toLowerCase().indexOf(searchedTitle.toLowerCase()) > -1 &&
-            poster.genre.toLowerCase().indexOf(selectedGenre.toLowerCase()) > -1 &&
-            poster.price < 9999 &&
-            moment(poster.date).format("YYYY-MM-DD") > moment(selectedDateFrom).format("YYYY-MM-DD") &&
-            moment(poster.date).format("YYYY-MM-DD") < moment(selectedDateTo).format("YYYY-MM-DD") &&
-            locationDistances.includes(poster._id)
-          )
-        ) : (
+        selectedLocation ? (
+
+          poster.location_lat ?
+            fetch(`https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=${userLocation}&destinations=${poster.location_lat},${poster.location_lng}&language=nl-NL&key=AIzaSyAKQm69QiWowY9VPExD9xjJBN68FeAeEA0`, {
+              crossDomain: true,
+              method: 'GET',
+              headers: {
+                'Access-Control-Allow-Origin', "*"
+                'Content-Type': 'application/json'
+              }
+            })
+            .then(response => response.json())
+            .then(data => console.log(data))
+          : null
+          
+          // axios.get(`https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=${userLocation}&destinations=${poster.location_lat},${poster.location_lng}&language=nl-NL&key=AIzaSyAKQm69QiWowY9VPExD9xjJBN68FeAeEA0`)
+          // .then(res => { 
+          //   console.log(res.data);
+          // })
+
+         ) : (
           selectedPrice ? (
             poster.title.toString().toLowerCase().indexOf(searchedTitle.toLowerCase()) > -1 &&
             poster.genre.toLowerCase().indexOf(selectedGenre.toLowerCase()) > -1 &&
@@ -200,14 +166,13 @@ export const Posters = ({user}) => {
             moment(poster.date).format("YYYY-MM-DD") < moment(selectedDateTo).format("YYYY-MM-DD")
           )
         )
-      )
-
+      );
     });
 
     setSearchResultsAmount(results.length);
     setSearchResults(results);
 
-  }, [searchedTitle, selectedGenre, selectedPrice, posters, selectedDateFrom, selectedDateTo, locationDistances]);
+  }, [searchedTitle, selectedGenre, selectedPrice, posters, selectedDateFrom, selectedDateTo, selectedLocation]);
 
   const posterRef = useRef();
   const filterRef = useRef();
@@ -252,10 +217,29 @@ export const Posters = ({user}) => {
     }); 
   }
 
+  // Get all posters to review
+  // const getPostersToReview = () => {
+  //   // Get posters
+  //   axios.get(`/api/posters/not-accepted`)
+  //   .then(res => {
+  //     let amount = 0;
+  //     // posters = res.data;
+  //     res.data.forEach(poster => { 
+  //       amount++
+  //     });
+
+  //     setPostersToReview(availablePosters);
+  //   }); 
+  // }
+
   // Get posters on page load
   useEffect(() => {
     getPosters();
   }, []);
+
+  // useEffect(() => {
+  //   getPostersToReview();
+  // }, [postersToReview]);
 
   const showPosterInfo = (id) => {
     // Get poster detail information
@@ -424,7 +408,6 @@ export const Posters = ({user}) => {
               <MenuItem value='10'>10 km</MenuItem>
               <MenuItem value='20'>20 km</MenuItem>
               <MenuItem value='50'>50 km</MenuItem>
-              <MenuItem value='500'>500 km</MenuItem>
             </Select>
           </FormControl>
           

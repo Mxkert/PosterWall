@@ -14,7 +14,8 @@ router.post('/distance', (req, res) => {
 
   distance.matrix(origins, destinations, function(err, distances) {
     if (!err)
-      res.json(distances.rows[0].elements[0].distance.value)
+      if (distances.rows[0].elements[0].distance.value) 
+        res.json(distances.rows[0].elements[0].distance.value)
   })
 });
 
