@@ -38,6 +38,8 @@ export const Posters = ({user}) => {
     500: 2
   };
 
+  const [userLocation, setUserLocation] = useState('');
+
   const [posters, setPosters] = useState([]);
   const [allGenres, setAllGenres] = useState([]);
 
@@ -78,23 +80,65 @@ export const Posters = ({user}) => {
     setSelectedDateTo(date);
   };
 
+  // ==============
+
+  //  GEOLOCATION
+
+  // ==============
+  function success(pos) {
+    var crd = pos.coords;
+
+    if (sessionStorage.getItem("location") === null) {
+      sessionStorage.setItem('location', crd.latitude + ',' + crd.longitude);
+    }
+
+    setUserLocation(crd.latitude + ',' + crd.longitude);
+  }
+  
+  function errors(err) {
+    console.warn(`ERROR(${err.code}): ${err.message}`);
+  }
+
+  useEffect(() => {
+    
+    if (navigator.geolocation) {
+      navigator.permissions
+        .query({ name: "geolocation" })
+        .then(function (result) {
+          if (result.state === "granted") {
+            console.log(result.state);
+            //If granted then you can directly call your function here
+            navigator.geolocation.getCurrentPosition(success);
+          } else if (result.state === "prompt") {
+            navigator.geolocation.getCurrentPosition(success, errors);
+          } else if (result.state === "denied") {
+            //If denied then you have to show instructions to enable location
+          }
+          result.onchange = function () {
+            console.log(result.state);
+          };
+        });
+    } else {
+      alert("Sorry Not available!");
+    }
+  }, []);
+  // ================
+
+  //  END GEOLOCATION
+
+  // ================
+
   useEffect(() => {
     const results = posters.filter(poster => {
       return (
         selectedLocation ? (
-          selectedPrice ? (
-            poster.title.toString().toLowerCase().indexOf(searchedTitle.toLowerCase()) > -1 &&
-            poster.genre.toLowerCase().indexOf(selectedGenre.toLowerCase()) > -1 &&
-            poster.price < parseInt(selectedPrice) &&
-            moment(poster.date).format("YYYY-MM-DD") > moment(selectedDateFrom).format("YYYY-MM-DD") &&
-            moment(poster.date).format("YYYY-MM-DD") < moment(selectedDateTo).format("YYYY-MM-DD")
-          ) : (
-            poster.title.toString().toLowerCase().indexOf(searchedTitle.toLowerCase()) > -1 &&
-            poster.genre.toLowerCase().indexOf(selectedGenre.toLowerCase()) > -1 &&
-            poster.price < 9999 &&
-            moment(poster.date).format("YYYY-MM-DD") > moment(selectedDateFrom).format("YYYY-MM-DD") &&
-            moment(poster.date).format("YYYY-MM-DD") < moment(selectedDateTo).format("YYYY-MM-DD")
-          )
+
+          
+          axios.get(`https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=${userLocation}&destinations=${poster.location_lat},${poster.location_lng}&language=nl-NL&key=AIzaSyAKQm69QiWowY9VPExD9xjJBN68FeAeEA0`)
+          .then(res => { 
+            console.log(res.data);
+          })
+
         ) : (
           selectedPrice ? (
             poster.title.toString().toLowerCase().indexOf(searchedTitle.toLowerCase()) > -1 &&
