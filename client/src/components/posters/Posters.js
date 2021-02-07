@@ -133,11 +133,14 @@ export const Posters = ({user}) => {
       return (
         selectedLocation ? (
 
+          fetch(`https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=${userLocation}&destinations=${poster.location_lat},${poster.location_lng}&language=nl-NL&key=AIzaSyAKQm69QiWowY9VPExD9xjJBN68FeAeEA0`)
+          .then(response => response.json())
+          .then(data => console.log(data))
           
-          axios.get(`https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=${userLocation}&destinations=${poster.location_lat},${poster.location_lng}&language=nl-NL&key=AIzaSyAKQm69QiWowY9VPExD9xjJBN68FeAeEA0`)
-          .then(res => { 
-            console.log(res.data);
-          })
+          // axios.get(`https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=${userLocation}&destinations=${poster.location_lat},${poster.location_lng}&language=nl-NL&key=AIzaSyAKQm69QiWowY9VPExD9xjJBN68FeAeEA0`)
+          // .then(res => { 
+          //   console.log(res.data);
+          // })
 
         ) : (
           selectedPrice ? (
