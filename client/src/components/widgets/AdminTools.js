@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { FaTools, FaFileArchive, FaFileSignature, FaImage } from 'react-icons/fa';
@@ -7,12 +7,21 @@ import 'moment/locale/nl';
 
 import './Tools.css';
 
-export const AdminTools = () => {
+// Hooks
+import useOutsideClick from "../hooks/useOutsideClick";
+
+export const AdminTools = (props) => {
   
   const [toolsActive, setToolsActive] = useState(false);
 
   const [amountToReview, setAmountToReview] = useState(0);
   // const [amountAvailablePosters, setAmountAvailablePosters] = useState(0);
+
+  const adminRef = useRef();
+
+  useOutsideClick(adminRef, () => (
+    toolsActive ? setToolsActive(false) : null 
+  ));
 
   // Get all posters and store them in an array
   const getPostersToReview = () => {
@@ -41,10 +50,10 @@ export const AdminTools = () => {
   // Get posters on page load
   useEffect(() => {
     getPostersToReview();
-  }, []);
+  }, [props.review]);
 
   return (
-    <div className="admin-tools">
+    <div className="admin-tools" ref={adminRef}>
       <div className={toolsActive ? `tools active` : `tools`}>
         <div className="tool">
           <Link to="/review"><FaFileSignature /></Link>
@@ -62,7 +71,7 @@ export const AdminTools = () => {
         <div className="tool">
           <Link to="/"><FaImage /></Link>
           <div className="tool-label">
-            <span>Posters</span>
+            <span>Events</span>
           </div>
         </div>
       </div>

@@ -31,6 +31,12 @@ let Poster = new Schema({
     location: {
         type: String
     },
+    location_lat: {
+      type: Number
+    },
+    location_lng: {
+      type: Number
+    },
     creation_date: {
         type: Date
     },

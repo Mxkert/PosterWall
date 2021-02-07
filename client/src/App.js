@@ -19,6 +19,8 @@ import { Posters } from './components/posters/Posters';
 import { Review } from './components/posters/Review';
 import { Archive } from './components/posters/Archive';
 
+import { GeoLocation } from './components/GeoLocation';
+
 import { UserContext } from "./components/account/UserContext";
 
 import { Date } from './components/Date';
@@ -48,6 +50,8 @@ export const App = () => {
     <UserContext.Provider value={value}>
       <BrowserRouter>
         <div className="wrapper">
+          
+          <Route path="/geolocation" exact component={ GeoLocation } />
           
           <Route path="/signup" exact component={ Signup } />
           <Route path="/login" exact component={ Login } />

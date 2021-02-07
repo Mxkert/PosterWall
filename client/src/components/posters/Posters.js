@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
-import { FaTimes, FaSlidersH } from 'react-icons/fa';
+import { FaTimes, FaSearch } from 'react-icons/fa';
 import moment from 'moment';
 import 'moment/locale/nl';
 
@@ -26,6 +26,9 @@ import {
   KeyboardDatePicker,
 } from '@material-ui/pickers';
 
+// Hooks
+import useOutsideClick from "../hooks/useOutsideClick";
+
 export const Posters = ({user}) => {
 
   const breakpointColumnsObj = {
@@ -39,6 +42,8 @@ export const Posters = ({user}) => {
   const [allGenres, setAllGenres] = useState([]);
 
   const [posterInfo, setPosterInfo] = useState([]);
+
+  const [postersToReview, setPostersToReview] = useState(false);
   
   const [posterDetailOpened, setPosterDetailOpened] = useState(false);
   const [filterOpened, setFilterOpen] = useState(false);
@@ -46,10 +51,11 @@ export const Posters = ({user}) => {
   // Search
   const [searchResults, setSearchResults] = useState([]);
   const [searchResultsAmount, setSearchResultsAmount] = useState([]);
-
+  
   const [searchedTitle, setSearchedTitle] = useState("");
   const [selectedGenre, setSelectedGenre] = useState("");
   const [selectedPrice, setSelectedPrice] = useState("");
+  const [selectedLocation, setSelectedLocation] = useState("");
   const [selectedDateFrom, setSelectedDateFrom] = useState(moment('1970-01-01').format("YYYY-MM-DD"));
   const [selectedDateTo, setSelectedDateTo] = useState(moment('2100-01-01').format("YYYY-MM-DD"));
 
@@ -62,6 +68,9 @@ export const Posters = ({user}) => {
   const handlePriceFilter = event => {
     setSelectedPrice(event.target.value);
   };
+  const handleLocationFilter = event => {
+    setSelectedLocation(event.target.value);
+  };
   const handleDateFromFilter = (date, value) => {
     setSelectedDateFrom(date);
   };
@@ -72,18 +81,34 @@ export const Posters = ({user}) => {
   useEffect(() => {
     const results = posters.filter(poster => {
       return (
-        selectedPrice ? (
-          poster.title.toString().toLowerCase().indexOf(searchedTitle.toLowerCase()) > -1 &&
-          poster.genre.toLowerCase().indexOf(selectedGenre.toLowerCase()) > -1 &&
-          poster.price < parseInt(selectedPrice) &&
-          moment(poster.date).format("YYYY-MM-DD") > moment(selectedDateFrom).format("YYYY-MM-DD") &&
-          moment(poster.date).format("YYYY-MM-DD") < moment(selectedDateTo).format("YYYY-MM-DD")
+        selectedLocation ? (
+          selectedPrice ? (
+            poster.title.toString().toLowerCase().indexOf(searchedTitle.toLowerCase()) > -1 &&
+            poster.genre.toLowerCase().indexOf(selectedGenre.toLowerCase()) > -1 &&
+            poster.price < parseInt(selectedPrice) &&
+            moment(poster.date).format("YYYY-MM-DD") > moment(selectedDateFrom).format("YYYY-MM-DD") &&
+            moment(poster.date).format("YYYY-MM-DD") < moment(selectedDateTo).format("YYYY-MM-DD")
+          ) : (
+            poster.title.toString().toLowerCase().indexOf(searchedTitle.toLowerCase()) > -1 &&
+            poster.genre.toLowerCase().indexOf(selectedGenre.toLowerCase()) > -1 &&
+            poster.price < 9999 &&
+            moment(poster.date).format("YYYY-MM-DD") > moment(selectedDateFrom).format("YYYY-MM-DD") &&
+            moment(poster.date).format("YYYY-MM-DD") < moment(selectedDateTo).format("YYYY-MM-DD")
+          )
         ) : (
-          poster.title.toString().toLowerCase().indexOf(searchedTitle.toLowerCase()) > -1 &&
-          poster.genre.toLowerCase().indexOf(selectedGenre.toLowerCase()) > -1 &&
-          poster.price < 9999 &&
-          moment(poster.date).format("YYYY-MM-DD") > moment(selectedDateFrom).format("YYYY-MM-DD") &&
-          moment(poster.date).format("YYYY-MM-DD") < moment(selectedDateTo).format("YYYY-MM-DD")
+          selectedPrice ? (
+            poster.title.toString().toLowerCase().indexOf(searchedTitle.toLowerCase()) > -1 &&
+            poster.genre.toLowerCase().indexOf(selectedGenre.toLowerCase()) > -1 &&
+            poster.price < parseInt(selectedPrice) &&
+            moment(poster.date).format("YYYY-MM-DD") > moment(selectedDateFrom).format("YYYY-MM-DD") &&
+            moment(poster.date).format("YYYY-MM-DD") < moment(selectedDateTo).format("YYYY-MM-DD")
+          ) : (
+            poster.title.toString().toLowerCase().indexOf(searchedTitle.toLowerCase()) > -1 &&
+            poster.genre.toLowerCase().indexOf(selectedGenre.toLowerCase()) > -1 &&
+            poster.price < 9999 &&
+            moment(poster.date).format("YYYY-MM-DD") > moment(selectedDateFrom).format("YYYY-MM-DD") &&
+            moment(poster.date).format("YYYY-MM-DD") < moment(selectedDateTo).format("YYYY-MM-DD")
+          )
         )
       );
     });
@@ -91,7 +116,18 @@ export const Posters = ({user}) => {
     setSearchResultsAmount(results.length);
     setSearchResults(results);
 
-  }, [searchedTitle, selectedGenre, selectedPrice, posters, selectedDateFrom, selectedDateTo]);
+  }, [searchedTitle, selectedGenre, selectedPrice, posters, selectedDateFrom, selectedDateTo, selectedLocation]);
+
+  const posterRef = useRef();
+  const filterRef = useRef();
+
+  useOutsideClick(posterRef, () => (
+    posterDetailOpened ? setPosterDetailOpened(false) : null 
+  ));
+
+  useOutsideClick(filterRef, () => (
+    filterOpened ? setFilterOpen(false) : null 
+  ));
 
   // Get all posters and store them in an array
   const getPosters = () => {
@@ -109,7 +145,7 @@ export const Posters = ({user}) => {
       // posters = res.data;
       res.data.forEach(poster => { 
         date = moment(poster.date).locale('nl').format("YYYY-MM-DD");
-        if (poster.accepted === true && date > currentDate) {
+        if (poster.accepted === true && date >= currentDate) {
           availablePosters.push(poster); 
 
           // Push unique genre to array
@@ -125,10 +161,29 @@ export const Posters = ({user}) => {
     }); 
   }
 
+  // Get all posters to review
+  // const getPostersToReview = () => {
+  //   // Get posters
+  //   axios.get(`/api/posters/not-accepted`)
+  //   .then(res => {
+  //     let amount = 0;
+  //     // posters = res.data;
+  //     res.data.forEach(poster => { 
+  //       amount++
+  //     });
+
+  //     setPostersToReview(availablePosters);
+  //   }); 
+  // }
+
   // Get posters on page load
   useEffect(() => {
     getPosters();
   }, []);
+
+  // useEffect(() => {
+  //   getPostersToReview();
+  // }, [postersToReview]);
 
   const showPosterInfo = (id) => {
     // Get poster detail information
@@ -149,7 +204,7 @@ export const Posters = ({user}) => {
 
           <FaTimes className="modal-close-btn" onClick={() => setPosterDetailOpened(false)} />
 
-          <div className="modal-body detail-modal">
+          <div className="modal-body detail-modal" ref={posterRef}>
             <div className="detail-container">
               <div className="poster-image">
                 <img src={ posterInfo.image } alt={ posterInfo.title } />
@@ -206,7 +261,7 @@ export const Posters = ({user}) => {
       <Container maxWidth="md">
 
         { user ?
-          <AdminTools />
+          <AdminTools review={postersToReview} />
         : null }
         { posterDetailOpened ? null :
         <>
@@ -214,11 +269,11 @@ export const Posters = ({user}) => {
             { filterOpened ? 
              <FaTimes />
              : 
-             <FaSlidersH />
+             <FaSearch />
             }
             
           </div>
-          <SubmitButton />
+          <SubmitButton action={postersToReview => setPostersToReview(postersToReview)} />
         </>
         }
         
@@ -281,6 +336,25 @@ export const Posters = ({user}) => {
               </Select>
             </FormControl>
           
+          {/* Location filter */}
+          <FormControl variant="outlined">
+            <InputLabel id="demo-simple-select-outlined-label">Location range</InputLabel>
+            <Select
+              labelId="demo-simple-select-outlined-label"
+              id="demo-simple-select-outlined"
+              value={selectedLocation}
+              onChange={handleLocationFilter}
+              label="Location"
+            >
+              <MenuItem value="">
+                <em>Remove filter</em>
+              </MenuItem>
+              <MenuItem value='10'>10 km</MenuItem>
+              <MenuItem value='20'>20 km</MenuItem>
+              <MenuItem value='50'>50 km</MenuItem>
+            </Select>
+          </FormControl>
+          
             {/* Date from filter */}
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
               <InputLabel id="demo-simple-select-outlined-label">Date from</InputLabel>
@@ -336,7 +410,7 @@ export const Posters = ({user}) => {
 
           </div>
           <div className="filter-results">
-            <h3>{searchResultsAmount} posters matched your filters</h3>
+            <h3>{searchResultsAmount} events matched your filters</h3>
           </div>
         </div>
         

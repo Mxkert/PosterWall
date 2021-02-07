@@ -382,7 +382,7 @@ export const Review = ({user}) => {
       <Container maxWidth="md">
 
         <div className="page-header" style={{ textAlign: 'center', marginBottom: '4rem' }}>
-          <h1>Posters to review</h1>
+          <h1>Events to review</h1>
         </div>
 
         <AdminTools />
@@ -409,7 +409,7 @@ export const Review = ({user}) => {
         :
 
         <Grid container spacing={1} justify="center">
-          <h1>No posters to review</h1>
+          <h1>No events to review</h1>
         </Grid>
 
         }

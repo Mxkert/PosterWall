@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useForm } from "react-hook-form";
 import { FaTimes, FaFileAlt } from 'react-icons/fa';
 import axios from 'axios';
@@ -8,6 +8,9 @@ import moment from 'moment';
 import Grid from '@material-ui/core/Grid';
 import '../forms/SubmitForm.css';
 import '../Form.css';
+
+// Hooks
+import useOutsideClick from "../hooks/useOutsideClick";
 
 // Import loading icon from Lottie
 import SuccessIcon from "../animations/SuccessIcon";
@@ -78,8 +81,22 @@ export const SubmitForm = (props) => {
     setIsOpen(props.open);
   }, [props.open]);
 
+  const ref = useRef();
+
+  useOutsideClick(ref, () => (
+    formIsOpen ? setIsOpen(false) : null 
+  ));
+
   // Add poster to the database
   const addPoster = async (data) => {
+
+    // Place location in a variable
+    var location = data.location;
+    
+    // Get latitude and longitude using the Google Geocoding API
+    let locationDetails = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${location}&key=AIzaSyAKQm69QiWowY9VPExD9xjJBN68FeAeEA0`);
+    const locationLat = locationDetails.data.results[0].geometry.location.lat
+    const locationLng = locationDetails.data.results[0].geometry.location.lng
 
     // Start image upload
     try {
@@ -104,7 +121,6 @@ export const SubmitForm = (props) => {
       };
 
       let result = await axios.post(CLOUDINARY_URL, fd, config);
-      console.log(result.data.url);
 
       // Start API call
         setAddingPoster(true);
@@ -121,6 +137,8 @@ export const SubmitForm = (props) => {
           price: data.price,
           date: eventDate,
           location: data.location,
+          location_lat: locationLat,
+          location_lng: locationLng,
           start_time: data.start_time,
           end_time: data.end_time,
           creation_date: currentDate,
@@ -133,6 +151,7 @@ export const SubmitForm = (props) => {
           console.log(res.data);
           setAddingPoster(false);
           setSuccess(true);
+          props.action(true);
 
           setTimeout(() => {
             setIsOpen(false);
@@ -142,7 +161,7 @@ export const SubmitForm = (props) => {
         .catch(error => {
           console.log(error);
           setAddingPoster(false);
-          setPosterError('There was an error submitting the poster. Please try again.')
+          setPosterError('There was an error submitting the event. Please try again.')
         });
 
       setAddingPoster(false);
@@ -166,6 +185,7 @@ export const SubmitForm = (props) => {
 
       <>
         <FaTimes className="modal-close-btn" onClick={() => setIsOpen(false)} />
+        <FaTimes className="modal-close-btn" style={{ top: '250px' }} />
 
         <div className="blurred-bg"></div>
 
@@ -174,7 +194,7 @@ export const SubmitForm = (props) => {
           { success ?
             <div className="icon-screen">
               <SuccessIcon />
-              <p>The poster has succesfully been uploaded.</p>
+              <p>The event has succesfully been submitted.</p>
               { error ? error : null }
             </div>
           :
@@ -329,12 +349,12 @@ export const SubmitForm = (props) => {
                   <Grid item xs={12}>
                       { uploadingImage === true ? 
                       <button disabled className="btn" type="submit" style={{ width: '100%' }}>
-                        Submitting poster...
+                        Submitting event...
                       </button>
                       : null }
                       { addingPoster === true ? 
                       <button disabled className="btn" type="submit" style={{ width: '100%' }}>
-                        Submitting poster...
+                        Submitting event...
                       </button>
                       : null }
                       { addingPoster === false && uploadingImage === false ? 
