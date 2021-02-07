@@ -15,11 +15,14 @@ connection.once('open', function() {
 const app = express();
 
 const posters = require('./routes/posters');
+const maps = require('./routes/maps');
+
 app.use(volleyball);
 app.use(cors());
 app.use(express.json());
 
 app.use('/api/posters', posters);
+app.use('/api/maps', maps);
 
 if (process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'staging') {
   app.use(express.static('client/build'));

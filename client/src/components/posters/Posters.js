@@ -128,30 +128,41 @@ export const Posters = ({user}) => {
 
   // ================
 
+  const getDistance = (origin, destination, radius) => {
+    let origins = origin;
+    let destinations = destination;
+    let meters = radius * 1000
+
+    console.log(origins);
+    console.log(destinations);
+    console.log(meters);
+
+    axios.post('/api/maps/distance', {origins, destinations})
+      .then(res => res.data)
+      .then(data => {
+        console.log(data)
+        if (data < meters) {
+          console.log('below ' + radius + 'km')
+        } else {
+          console.log('above ' + radius + 'km')
+          return 'hallo';
+        }
+      })
+      .catch(err => console.log(`unable to get distances, ${err}`))
+  }
+
   useEffect(() => {
     const results = posters.filter(poster => {
-      return (
-        selectedLocation ? (
 
-          poster.location_lat ?
-            fetch(`https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=${userLocation}&destinations=${poster.location_lat},${poster.location_lng}&language=nl-NL&key=AIzaSyAKQm69QiWowY9VPExD9xjJBN68FeAeEA0`, {
-              method: 'GET',
-              headers: {
-                'Access-Control-Allow-Origin': "*",
-                'Access-Control-Allow-Headers': "*",
-                'Content-Type': 'application/json'
-              }
-            })
-            .then(response => response.json())
-            .then(data => console.log(data))
-          : null
-          
-          // axios.get(`https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=${userLocation}&destinations=${poster.location_lat},${poster.location_lng}&language=nl-NL&key=AIzaSyAKQm69QiWowY9VPExD9xjJBN68FeAeEA0`)
-          // .then(res => { 
-          //   console.log(res.data);
-          // })
-
-         ) : (
+      if (selectedLocation) {
+        if (poster.location_lat) {
+          let test = getDistance([`${sessionStorage.getItem("location")}`], [`${poster.location_lat},${poster.location_lng}`], selectedLocation)
+          if (test) {
+            console.log(test);
+          }
+        }
+      } else {
+        return (
           selectedPrice ? (
             poster.title.toString().toLowerCase().indexOf(searchedTitle.toLowerCase()) > -1 &&
             poster.genre.toLowerCase().indexOf(selectedGenre.toLowerCase()) > -1 &&
@@ -166,7 +177,31 @@ export const Posters = ({user}) => {
             moment(poster.date).format("YYYY-MM-DD") < moment(selectedDateTo).format("YYYY-MM-DD")
           )
         )
-      );
+      }
+
+      // return (
+      //   selectedLocation ? (
+
+      //       poster.location_lat ? 
+      //         getDistance([`${sessionStorage.getItem("location")}`], [`${poster.location_lat},${poster.location_lng}`], selectedLocation)
+      //       : null
+
+      //     ) : (
+      //     selectedPrice ? (
+      //       poster.title.toString().toLowerCase().indexOf(searchedTitle.toLowerCase()) > -1 &&
+      //       poster.genre.toLowerCase().indexOf(selectedGenre.toLowerCase()) > -1 &&
+      //       poster.price < parseInt(selectedPrice) &&
+      //       moment(poster.date).format("YYYY-MM-DD") > moment(selectedDateFrom).format("YYYY-MM-DD") &&
+      //       moment(poster.date).format("YYYY-MM-DD") < moment(selectedDateTo).format("YYYY-MM-DD")
+      //     ) : (
+      //       poster.title.toString().toLowerCase().indexOf(searchedTitle.toLowerCase()) > -1 &&
+      //       poster.genre.toLowerCase().indexOf(selectedGenre.toLowerCase()) > -1 &&
+      //       poster.price < 9999 &&
+      //       moment(poster.date).format("YYYY-MM-DD") > moment(selectedDateFrom).format("YYYY-MM-DD") &&
+      //       moment(poster.date).format("YYYY-MM-DD") < moment(selectedDateTo).format("YYYY-MM-DD")
+      //     )
+      //   )
+      // );
     });
 
     setSearchResultsAmount(results.length);
