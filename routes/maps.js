@@ -10,7 +10,7 @@ router.post('/distance', (req, res) => {
   console.log(origins);
   console.log(destinations);
 
-  distance.key('AIzaSyAKQm69QiWowY9VPExD9xjJBN68FeAeEA0');
+  distance.key(process.env.MAPS_API);
 
   distance.matrix(origins, destinations, function(err, distances) {
     if (!err)
