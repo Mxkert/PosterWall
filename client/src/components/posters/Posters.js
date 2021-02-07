@@ -133,16 +133,25 @@ export const Posters = ({user}) => {
       return (
         selectedLocation ? (
 
-          fetch(`https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=${userLocation}&destinations=${poster.location_lat},${poster.location_lng}&language=nl-NL&key=AIzaSyAKQm69QiWowY9VPExD9xjJBN68FeAeEA0`)
-          .then(response => response.json())
-          .then(data => console.log(data))
+          poster.location_lat ?
+            fetch(`https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=${userLocation}&destinations=${poster.location_lat},${poster.location_lng}&language=nl-NL&key=AIzaSyAKQm69QiWowY9VPExD9xjJBN68FeAeEA0`, {
+              method: 'GET',
+              headers: {
+                'Access-Control-Allow-Origin': "*",
+                'Access-Control-Allow-Headers': "*",
+                'Content-Type': 'application/json'
+              }
+            })
+            .then(response => response.json())
+            .then(data => console.log(data))
+          : null
           
           // axios.get(`https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=${userLocation}&destinations=${poster.location_lat},${poster.location_lng}&language=nl-NL&key=AIzaSyAKQm69QiWowY9VPExD9xjJBN68FeAeEA0`)
           // .then(res => { 
           //   console.log(res.data);
           // })
 
-        ) : (
+         ) : (
           selectedPrice ? (
             poster.title.toString().toLowerCase().indexOf(searchedTitle.toLowerCase()) > -1 &&
             poster.genre.toLowerCase().indexOf(selectedGenre.toLowerCase()) > -1 &&
