@@ -2,6 +2,7 @@ const express = require('express');
 const volleyball = require('volleyball');
 const path = require('path');
 const cors = require('cors');
+require('dotenv').config()
 const port = process.env.PORT || 5000;
 
 // MongoDB Database using Mongoose

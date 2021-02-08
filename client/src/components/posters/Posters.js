@@ -50,6 +50,8 @@ export const Posters = ({user}) => {
   const [posterDetailOpened, setPosterDetailOpened] = useState(false);
   const [filterOpened, setFilterOpen] = useState(false);
 
+  const [pickerOpen, setPickerOpen] = useState(false);
+
   // Google API
   const [locationDistances, setLocationDistances] = useState([]);
   const [locationDistances10, setLocationDistances10] = useState([]);
@@ -82,9 +84,12 @@ export const Posters = ({user}) => {
   };
   const handleDateFromFilter = (date, value) => {
     setSelectedDateFrom(date);
+    
+    setTimeout(() => setPickerOpen(false), 1000);
   };
   const handleDateToFilter = (date, value) => {
     setSelectedDateTo(date);
+    setTimeout(() => setPickerOpen(false), 1000);
   };
 
   // ==============
@@ -217,8 +222,14 @@ export const Posters = ({user}) => {
   ));
 
   useOutsideClick(filterRef, () => (
-    filterOpened ? setFilterOpen(false) : null 
+    pickerOpen ?
+      null
+    : filterOpened ? setFilterOpen(false) : null 
   ));
+
+  function check() {
+    setPickerOpen(true);
+  }
 
   // Get all posters and store them in an array
   const getPosters = () => {
@@ -349,7 +360,7 @@ export const Posters = ({user}) => {
         </>
         }
         
-        <div className={filterOpened ? 'filter-container active' : 'filter-container'}>
+        <div className={filterOpened ? 'filter-container active' : 'filter-container'} ref={filterRef}>
           <div className="filters">
 
             {/* Title filter */}
@@ -434,6 +445,7 @@ export const Posters = ({user}) => {
               <KeyboardDatePicker
                 className="date-picker"
                 id="date"
+                onClick={() => check()}
                 showTodayButton={true}
                 value={selectedDateFrom}
                 format="yyyy-MM-dd"
@@ -451,6 +463,7 @@ export const Posters = ({user}) => {
             <KeyboardDatePicker
               className="date-picker"
               id="date"
+              onClick={() => check()}
               showTodayButton={true}
               value={selectedDateTo}
               format="yyyy-MM-dd"

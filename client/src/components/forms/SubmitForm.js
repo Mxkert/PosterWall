@@ -43,6 +43,8 @@ export const SubmitForm = (props) => {
   const [uploadError, setUploadError] = useState(null);
   const [posterError, setPosterError] = useState(null);
 
+  const [pickerOpen, setPickerOpen] = useState(false);
+
   const [uploadingImage, setUploadingImage] = useState(false);
   const [addingPoster, setAddingPoster] = useState(false);
   
@@ -54,15 +56,18 @@ export const SubmitForm = (props) => {
     setDate(date);
     console.log(date);
     console.log(value);
+    setTimeout(() => setPickerOpen(false), 1000);
   };
 
   const handleStartTime = (time) => {
     console.log(time);
     setSelectedStartTime(time);
+    setTimeout(() => setPickerOpen(false), 1000);
   };
 
   const handleEndTime = (time) => {
     setSelectedEndTime(time);
+    setTimeout(() => setPickerOpen(false), 1000);
   };
 
   const onChangePicture = async e => {
@@ -70,6 +75,10 @@ export const SubmitForm = (props) => {
     setPicture(URL.createObjectURL(e.target.files[0]));
     setPictureURL(e.target.files[0]);
   };
+
+  function check() {
+    setPickerOpen(true);
+  }
 
   // Set modal opened
   useEffect(() => {
@@ -84,7 +93,9 @@ export const SubmitForm = (props) => {
   const ref = useRef();
 
   useOutsideClick(ref, () => (
-    formIsOpen ? setIsOpen(false) : null 
+    pickerOpen ?
+      null
+    : formIsOpen ? setIsOpen(false) : null 
   ));
 
   // Add poster to the database
@@ -185,11 +196,10 @@ export const SubmitForm = (props) => {
 
       <>
         <FaTimes className="modal-close-btn" onClick={() => setIsOpen(false)} />
-        <FaTimes className="modal-close-btn" style={{ top: '250px' }} />
 
         <div className="blurred-bg"></div>
 
-        <div className="modal-body submit-modal">
+        <div className="modal-body submit-modal" ref={ref}>
 
           { success ?
             <div className="icon-screen">
@@ -236,6 +246,7 @@ export const SubmitForm = (props) => {
                         className="date-picker"
                         id="date"
                         name="date"
+                        onClick={() => check()}
                         showTodayButton={true}
                         value={selectedDate}
                         format="yyyy-MM-dd"
@@ -252,6 +263,7 @@ export const SubmitForm = (props) => {
                     <MuiPickersUtilsProvider utils={DateFnsUtils}>
                       <KeyboardTimePicker
                         ampm={false}
+                        onClick={() => check()}
                         id="start_time"
                         name="start_time"
                         value={selectedStartTime}
@@ -268,6 +280,7 @@ export const SubmitForm = (props) => {
                     <MuiPickersUtilsProvider utils={DateFnsUtils}>
                       <KeyboardTimePicker
                         ampm={false}
+                        onClick={() => check()}
                         id="end_time"
                         name="end_time"
                         value={selectedEndTime}
