@@ -31,9 +31,9 @@ export const Review = ({user}) => {
 
   const breakpointColumnsObj = {
     default: 5,
-    1100: 3,
-    700: 2,
-    500: 1
+    991: 4,
+    768: 3,
+    500: 2
   };
 
   const [acts, setActs] = useState([]);

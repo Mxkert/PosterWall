@@ -28,6 +28,7 @@ const maps = require('./routes/maps');
 
 app.set("trust proxy", true);
 app.use(redirectWwwTraffic);
+
 app.use(volleyball);
 app.use(cors());
 app.use(express.json());

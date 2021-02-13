@@ -6,6 +6,9 @@ import 'moment/locale/nl';
 
 import './Posters.css';
 
+// Import loading icon from Lottie
+import LoadingIcon from "../animations/LoadingIcon";
+
 import Container from '@material-ui/core/Container';
 
 import Masonry from 'react-masonry-css'
@@ -18,6 +21,11 @@ import Select from '@material-ui/core/Select';
 import FormControl from '@material-ui/core/FormControl';
 import MenuItem from '@material-ui/core/MenuItem';
 import InputLabel from '@material-ui/core/InputLabel';
+
+// Location slider
+import { withStyles, makeStyles } from '@material-ui/core/styles';
+import Slider from '@material-ui/core/Slider';
+import Tooltip from '@material-ui/core/Tooltip';
 
 import DateFnsUtils from '@date-io/date-fns';
 import {
@@ -38,7 +46,49 @@ export const Posters = ({user}) => {
     500: 2
   };
 
+  function ValueLabelComponent(props) {
+    const { children, open, value } = props;
+  
+    return (
+      <Tooltip open={open} enterTouchDelay={0} placement="top" title={value}>
+        {children}
+      </Tooltip>
+    );
+  }
+
+  const PrettoSlider = withStyles({
+    root: {
+      color: '#52af77',
+      height: 8,
+    },
+    thumb: {
+      height: 24,
+      width: 24,
+      backgroundColor: '#fff',
+      border: '2px solid currentColor',
+      marginTop: -8,
+      marginLeft: -12,
+      '&:focus, &:hover, &$active': {
+        boxShadow: 'inherit',
+      },
+    },
+    active: {},
+    valueLabel: {
+      left: 'calc(-50% + 4px)',
+    },
+    track: {
+      height: 8,
+      borderRadius: 4,
+    },
+    rail: {
+      height: 8,
+      borderRadius: 4,
+    },
+  })(Slider);
+
   const [userLocation, setUserLocation] = useState('');
+
+  const [loading, setLoading] = useState(false);
 
   const [posters, setPosters] = useState([]);
   const [allGenres, setAllGenres] = useState([]);
@@ -54,10 +104,6 @@ export const Posters = ({user}) => {
 
   // Google API
   const [locationDistances, setLocationDistances] = useState([]);
-  const [locationDistances10, setLocationDistances10] = useState([]);
-  const [locationDistances20, setLocationDistances20] = useState([]);
-  const [locationDistances50, setLocationDistances50] = useState([]);
-  const [locationDistances500, setLocationDistances500] = useState([]);
   
   // Search
   const [searchResults, setSearchResults] = useState([]);
@@ -66,9 +112,14 @@ export const Posters = ({user}) => {
   const [searchedTitle, setSearchedTitle] = useState("");
   const [selectedGenre, setSelectedGenre] = useState("");
   const [selectedPrice, setSelectedPrice] = useState("");
-  const [selectedLocation, setSelectedLocation] = useState("");
-  const [selectedDateFrom, setSelectedDateFrom] = useState(moment('1970-01-01').format("YYYY-MM-DD"));
-  const [selectedDateTo, setSelectedDateTo] = useState(moment('2100-01-01').format("YYYY-MM-DD"));
+  const [selectedLocation, setSelectedLocation] = useState(null);
+  const [selectedRadius, setSelectedRadius] = useState(0);
+  const [changingLocation, setChangingLocation] = useState(0);
+  const [selectedDateFrom, setSelectedDateFrom] = useState(moment().format("YYYY-MM-DD"));
+  const [selectedDateTo, setSelectedDateTo] = useState(moment().format("YYYY-MM-DD"));
+
+  const [dateFilterChanged, setDateFilterChanged] = useState(false);
+  const [dateToChanged, setDateToChanged] = useState(false);
 
   const handleChange = event => {
      setSearchedTitle(event.target.value);
@@ -79,18 +130,43 @@ export const Posters = ({user}) => {
   const handlePriceFilter = event => {
     setSelectedPrice(event.target.value);
   };
-  const handleLocationFilter = event => {
-    setSelectedLocation(event.target.value);
+  const handleSelectedRadius = (event, value) => {
+    // setSelectedRadius(value);
+    console.log('change');
+  }
+  function handleLocationFilter(value) {
+    console.log('location filter ' + value);
+    setSelectedLocation(value);
+    
+    setTimeout(() => {
+      setPickerOpen(false)
+    }, 1000);
   };
   const handleDateFromFilter = (date, value) => {
-    setSelectedDateFrom(date);
+    setSelectedDateFrom(value);
+    setDateFilterChanged(true);
     
     setTimeout(() => setPickerOpen(false), 1000);
   };
   const handleDateToFilter = (date, value) => {
-    setSelectedDateTo(date);
+    setSelectedDateTo(value);
+    setDateFilterChanged(true);
     setTimeout(() => setPickerOpen(false), 1000);
   };
+
+  const handleOpenFilter = () => {
+    filterOpened ? setFilterOpen(false) : setFilterOpen(true)
+  }
+
+  function valuetext(value) {
+    // console.log(value);
+    // if (changingLocation === 2) {
+    //   handleLocationFilter(value);
+    // }
+    // setChangingLocation(0);
+    // setSelectedRadius(value);
+    return `${value} km`;
+  }
 
   // ==============
 
@@ -169,48 +245,110 @@ export const Posters = ({user}) => {
     }
   }, [selectedLocation]);
 
-  useEffect(() => {
+  const getFilteredPosters = () => {
+
+    console.log(selectedDateFrom);
+    console.log(selectedDateTo);
 
     const results = posters.filter(poster => {
 
       return (
-        locationDistances.length ? (
-          selectedPrice ? (
-            poster.title.toString().toLowerCase().indexOf(searchedTitle.toLowerCase()) > -1 &&
-            poster.genre.toLowerCase().indexOf(selectedGenre.toLowerCase()) > -1 &&
-            poster.price < parseInt(selectedPrice) &&
-            moment(poster.date).format("YYYY-MM-DD") > moment(selectedDateFrom).format("YYYY-MM-DD") &&
-            moment(poster.date).format("YYYY-MM-DD") < moment(selectedDateTo).format("YYYY-MM-DD") &&
-            locationDistances.includes(poster._id)
-          ) : (
-            poster.title.toString().toLowerCase().indexOf(searchedTitle.toLowerCase()) > -1 &&
-            poster.genre.toLowerCase().indexOf(selectedGenre.toLowerCase()) > -1 &&
-            poster.price < 9999 &&
-            moment(poster.date).format("YYYY-MM-DD") > moment(selectedDateFrom).format("YYYY-MM-DD") &&
-            moment(poster.date).format("YYYY-MM-DD") < moment(selectedDateTo).format("YYYY-MM-DD") &&
-            locationDistances.includes(poster._id)
-          )
-        ) : (
-          selectedPrice ? (
-            poster.title.toString().toLowerCase().indexOf(searchedTitle.toLowerCase()) > -1 &&
-            poster.genre.toLowerCase().indexOf(selectedGenre.toLowerCase()) > -1 &&
-            poster.price < parseInt(selectedPrice) &&
-            moment(poster.date).format("YYYY-MM-DD") > moment(selectedDateFrom).format("YYYY-MM-DD") &&
-            moment(poster.date).format("YYYY-MM-DD") < moment(selectedDateTo).format("YYYY-MM-DD")
-          ) : (
-            poster.title.toString().toLowerCase().indexOf(searchedTitle.toLowerCase()) > -1 &&
-            poster.genre.toLowerCase().indexOf(selectedGenre.toLowerCase()) > -1 &&
-            poster.price < 9999 &&
-            moment(poster.date).format("YYYY-MM-DD") > moment(selectedDateFrom).format("YYYY-MM-DD") &&
-            moment(poster.date).format("YYYY-MM-DD") < moment(selectedDateTo).format("YYYY-MM-DD")
-          )
-        )
+
+        poster.title.toString().toLowerCase().indexOf(searchedTitle.toLowerCase()) > -1 &&
+        poster.genre.toLowerCase().indexOf(selectedGenre.toLowerCase()) > -1 &&
+        ( selectedPrice !== '' ? poster.price < parseInt(selectedPrice) : poster.price < 9999 ) &&
+        ( dateFilterChanged ? moment(poster.date).format("YYYY-MM-DD") < moment(selectedDateTo).format("YYYY-MM-DD") : poster.title.toString().toLowerCase().indexOf(searchedTitle.toLowerCase()) > -1 ) && 
+        ( dateFilterChanged ? moment(poster.date).format("YYYY-MM-DD") > moment(selectedDateFrom).format("YYYY-MM-DD") : poster.title.toString().toLowerCase().indexOf(searchedTitle.toLowerCase()) > -1 ) &&
+        ( locationDistances.length ? locationDistances.includes(poster._id) : poster.title.toString().toLowerCase().indexOf(searchedTitle.toLowerCase()) > -1 )
+
+        // locationDistances.length ? (
+        //   selectedPrice ? (
+        //     locationDistances.includes(poster._id) &&
+        //     poster.title.toString().toLowerCase().indexOf(searchedTitle.toLowerCase()) > -1 &&
+        //     poster.genre.toLowerCase().indexOf(selectedGenre.toLowerCase()) > -1 &&
+        //     poster.price < parseInt(selectedPrice) &&
+        //     moment(poster.date).format("YYYY-MM-DD") > moment(selectedDateFrom).format("YYYY-MM-DD") &&
+        //     moment(poster.date).format("YYYY-MM-DD") < moment(selectedDateTo).format("YYYY-MM-DD")
+        //   ) : (
+        //     locationDistances.includes(poster._id) &&
+        //     poster.title.toString().toLowerCase().indexOf(searchedTitle.toLowerCase()) > -1 &&
+        //     poster.genre.toLowerCase().indexOf(selectedGenre.toLowerCase()) > -1 &&
+        //     poster.price < 9999 &&
+        //     moment(poster.date).format("YYYY-MM-DD") > moment(selectedDateFrom).format("YYYY-MM-DD") &&
+        //     moment(poster.date).format("YYYY-MM-DD") < moment(selectedDateTo).format("YYYY-MM-DD")
+        //   )
+        // ) : (
+        //   selectedPrice ? (
+        //     poster.title.toString().toLowerCase().indexOf(searchedTitle.toLowerCase()) > -1 &&
+        //     poster.genre.toLowerCase().indexOf(selectedGenre.toLowerCase()) > -1 &&
+        //     poster.price < parseInt(selectedPrice) &&
+        //     moment(poster.date).format("YYYY-MM-DD") > moment(selectedDateFrom).format("YYYY-MM-DD") &&
+        //     moment(poster.date).format("YYYY-MM-DD") < moment(selectedDateTo).format("YYYY-MM-DD")
+        //   ) : (
+        //     poster.title.toString().toLowerCase().indexOf(searchedTitle.toLowerCase()) > -1 &&
+        //     poster.genre.toLowerCase().indexOf(selectedGenre.toLowerCase()) > -1 &&
+        //     poster.price < 9999 &&
+        //     moment(poster.date).format("YYYY-MM-DD") > moment(selectedDateFrom).format("YYYY-MM-DD") &&
+        //     moment(poster.date).format("YYYY-MM-DD") < moment(selectedDateTo).format("YYYY-MM-DD")
+        //   )
+        // )
       )
 
     });
 
+    if (results) {
+      setLoading(false);
+    }
+
+    // console.log(results);
+
     setSearchResultsAmount(results.length);
     setSearchResults(results);
+
+  };
+
+  useEffect(async () => {
+
+    setLoading(true);
+    getFilteredPosters();
+
+    // const results = await posters.filter(poster => {
+
+    //   return (
+    //     locationDistances.length ? (
+    //       selectedPrice ? (
+    //         poster.title.toString().toLowerCase().indexOf(searchedTitle.toLowerCase()) > -1 &&
+    //         poster.genre.toLowerCase().indexOf(selectedGenre.toLowerCase()) > -1 &&
+    //         poster.price < parseInt(selectedPrice) &&
+    //         moment(poster.date).format("YYYY-MM-DD") > moment(selectedDateFrom).format("YYYY-MM-DD") &&
+    //         moment(poster.date).format("YYYY-MM-DD") < moment(selectedDateTo).format("YYYY-MM-DD") &&
+    //         locationDistances.includes(poster._id)
+    //       ) : (
+    //         poster.title.toString().toLowerCase().indexOf(searchedTitle.toLowerCase()) > -1 &&
+    //         poster.genre.toLowerCase().indexOf(selectedGenre.toLowerCase()) > -1 &&
+    //         poster.price < 9999 &&
+    //         moment(poster.date).format("YYYY-MM-DD") > moment(selectedDateFrom).format("YYYY-MM-DD") &&
+    //         moment(poster.date).format("YYYY-MM-DD") < moment(selectedDateTo).format("YYYY-MM-DD") &&
+    //         locationDistances.includes(poster._id)
+    //       )
+    //     ) : (
+    //       selectedPrice ? (
+    //         poster.title.toString().toLowerCase().indexOf(searchedTitle.toLowerCase()) > -1 &&
+    //         poster.genre.toLowerCase().indexOf(selectedGenre.toLowerCase()) > -1 &&
+    //         poster.price < parseInt(selectedPrice) &&
+    //         moment(poster.date).format("YYYY-MM-DD") > moment(selectedDateFrom).format("YYYY-MM-DD") &&
+    //         moment(poster.date).format("YYYY-MM-DD") < moment(selectedDateTo).format("YYYY-MM-DD")
+    //       ) : (
+    //         poster.title.toString().toLowerCase().indexOf(searchedTitle.toLowerCase()) > -1 &&
+    //         poster.genre.toLowerCase().indexOf(selectedGenre.toLowerCase()) > -1 &&
+    //         poster.price < 9999 &&
+    //         moment(poster.date).format("YYYY-MM-DD") > moment(selectedDateFrom).format("YYYY-MM-DD") &&
+    //         moment(poster.date).format("YYYY-MM-DD") < moment(selectedDateTo).format("YYYY-MM-DD")
+    //       )
+    //     )
+    //   )
+
+    // });
 
   }, [searchedTitle, selectedGenre, selectedPrice, posters, selectedDateFrom, selectedDateTo, locationDistances]);
 
@@ -227,8 +365,14 @@ export const Posters = ({user}) => {
     : filterOpened ? setFilterOpen(false) : null 
   ));
 
-  function check() {
-    setPickerOpen(true);
+  // const change = () => {
+  //   console.log('change');
+  // }
+
+  const mouseUp = (event, value) => {
+    setChangingLocation(2);
+    setSelectedLocation(value);
+    setSelectedRadius(value);
   }
 
   // Get all posters and store them in an array
@@ -348,7 +492,7 @@ export const Posters = ({user}) => {
         : null }
         { posterDetailOpened ? null :
         <>
-          <div className="filter-icon" style={{ top: '5%', zIndex: '3' }} onClick={() => setFilterOpen(!filterOpened)}>
+          <div className="filter-icon" style={{ top: '5%', zIndex: '3' }} onClick={handleOpenFilter}>
             { filterOpened ? 
              <FaTimes />
              : 
@@ -385,6 +529,8 @@ export const Posters = ({user}) => {
                 value={selectedGenre}
                 onChange={handleGenreFilter}
                 label="Genre"
+                onClose={() => setTimeout(() => setPickerOpen(false), 1000)}
+                onOpen={() => setPickerOpen(true)}
               >
                 <MenuItem value="">
                   <em>Remove filter</em>
@@ -408,6 +554,8 @@ export const Posters = ({user}) => {
                 value={selectedPrice}
                 onChange={handlePriceFilter}
                 label="Price"
+                onClose={() => setTimeout(() => setPickerOpen(false), 1000)}
+                onOpen={() => setPickerOpen(true)}
               >
                 <MenuItem value="">
                   <em>Remove filter</em>
@@ -422,12 +570,26 @@ export const Posters = ({user}) => {
           {/* Location filter */}
           <FormControl variant="outlined">
             <InputLabel id="demo-simple-select-outlined-label">Location range</InputLabel>
-            <Select
+            <PrettoSlider 
+              valueLabelDisplay="auto" 
+              aria-label="pretto slider" 
+              defaultValue={selectedRadius} 
+              getAriaValueText={valuetext}
+              // value={selectedRadius}
+              // onMouseDown={() => {check(); mouseDown() }}
+              onChangeCommitted={mouseUp}
+              // onChange={(value) => change(value)}
+              // onMouseUp={handleLocationFilter}
+              // onMouseDown={handleLocationFilter}
+            />
+      
+            {/* <Select
               labelId="demo-simple-select-outlined-label"
               id="demo-simple-select-outlined"
               value={selectedLocation}
               onChange={handleLocationFilter}
               label="Location"
+              onClick={() => check()}
             >
               <MenuItem value="">
                 <em>Remove filter</em>
@@ -436,7 +598,7 @@ export const Posters = ({user}) => {
               <MenuItem value='20'>20 km</MenuItem>
               <MenuItem value='50'>50 km</MenuItem>
               <MenuItem value='500'>500 km</MenuItem>
-            </Select>
+            </Select> */}
           </FormControl>
           
             {/* Date from filter */}
@@ -445,7 +607,8 @@ export const Posters = ({user}) => {
               <KeyboardDatePicker
                 className="date-picker"
                 id="date"
-                onClick={() => check()}
+                onClose={() => setTimeout(() => setPickerOpen(false), 1000)}
+                onOpen={() => setPickerOpen(true)}
                 showTodayButton={true}
                 value={selectedDateFrom}
                 format="yyyy-MM-dd"
@@ -463,7 +626,8 @@ export const Posters = ({user}) => {
             <KeyboardDatePicker
               className="date-picker"
               id="date"
-              onClick={() => check()}
+              onClose={() => setTimeout(() => setPickerOpen(false), 1000)}
+              onOpen={() => setPickerOpen(true)}
               showTodayButton={true}
               value={selectedDateTo}
               format="yyyy-MM-dd"
@@ -507,6 +671,7 @@ export const Posters = ({user}) => {
         >
 
         {
+          loading ? <LoadingIcon /> :
           searchResults.map((poster, index) => (
             <div className="poster" onClick={() => showPosterInfo(poster._id)} key={index}>
               <img src={poster.image} alt={poster.title} />

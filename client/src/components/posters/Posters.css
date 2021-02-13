@@ -147,6 +147,18 @@ form.small-form {
   transition: all 0.5s;
 }
 
+@media (max-width: 991px) {
+  .filter-container {
+    width: 50%;
+  }
+}
+
+@media (max-width: 500px) {
+  .filter-container {
+    width: 75%;
+  }
+}
+
 .filter-container.active {
   background: rgba(0,0,0,0.75);
   transform: translateX(0);

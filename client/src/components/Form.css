@@ -239,6 +239,8 @@ DETAIL FORM & SUBMIT FORM
   right: 0;
   opacity: 1;
   display: flex;
+  overflow-y: scroll;
+  height: 100%;
 }
 
 .slide-out .modal-close-btn {
