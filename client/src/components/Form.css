@@ -241,6 +241,8 @@ DETAIL FORM & SUBMIT FORM
   display: flex;
   overflow-y: scroll;
   height: 100%;
+  position: fixed;
+  overflow-x: hidden;
 }
 
 .slide-out .modal-close-btn {

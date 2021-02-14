@@ -76,10 +76,6 @@ export const SubmitForm = (props) => {
     setPictureURL(e.target.files[0]);
   };
 
-  function check() {
-    setPickerOpen(true);
-  }
-
   // Set modal opened
   useEffect(() => {
     console.log(selectedDate);
@@ -92,11 +88,11 @@ export const SubmitForm = (props) => {
 
   const ref = useRef();
 
-  useOutsideClick(ref, () => (
-    pickerOpen ?
-      null
-    : formIsOpen ? setIsOpen(false) : null 
-  ));
+  // useOutsideClick(ref, () => (
+  //   pickerOpen ?
+  //     null
+  //   : formIsOpen ? setIsOpen(false) : null 
+  // ));
 
   // Add poster to the database
   const addPoster = async (data) => {
@@ -199,7 +195,7 @@ export const SubmitForm = (props) => {
 
         <div className="blurred-bg"></div>
 
-        <div className="modal-body submit-modal" ref={ref}>
+        <div className="modal-body submit-modal">
 
           { success ?
             <div className="icon-screen">
@@ -240,47 +236,48 @@ export const SubmitForm = (props) => {
                     />
                   </Grid>
 
-                  <Grid item xs={4}>
+                  <Grid item md={4} xs={12}>
                     <MuiPickersUtilsProvider utils={DateFnsUtils}>
                       <KeyboardDatePicker
                         className="date-picker"
                         id="date"
                         name="date"
-                        onClick={() => check()}
                         showTodayButton={true}
                         value={selectedDate}
                         format="yyyy-MM-dd"
+                        onOpen={() => setPickerOpen(true)}
                         onChange={onDateChange}
                         KeyboardButtonProps={{
                           'aria-label': 'change date',
                         }}
                         inputRef={register}
                         variant="outlined"
+                       
                       />
                     </MuiPickersUtilsProvider>
                   </Grid>
-                  <Grid item xs={4}>
+                  <Grid item md={4} xs={6}>
                     <MuiPickersUtilsProvider utils={DateFnsUtils}>
                       <KeyboardTimePicker
                         ampm={false}
-                        onClick={() => check()}
                         id="start_time"
                         name="start_time"
                         value={selectedStartTime}
                         onChange={handleStartTime}
+                        onOpen={() => setPickerOpen(true)}
                         KeyboardButtonProps={{
                           'aria-label': 'change time',
                         }}
                         inputRef={register}
                         variant="outlined"
+                       
                       />
                     </MuiPickersUtilsProvider>
                   </Grid>
-                  <Grid item xs={4}>
+                  <Grid item md={4} xs={6}>
                     <MuiPickersUtilsProvider utils={DateFnsUtils}>
                       <KeyboardTimePicker
                         ampm={false}
-                        onClick={() => check()}
                         id="end_time"
                         name="end_time"
                         value={selectedEndTime}
@@ -290,11 +287,12 @@ export const SubmitForm = (props) => {
                         }}
                         inputRef={register}
                         variant="outlined"
+                       
                       />
                     </MuiPickersUtilsProvider>
                   </Grid>
 
-                  <Grid item xs={4}>
+                  <Grid item md={4} xs={6}>
                     <TextField 
                       id="genre"
                       name="genre"
@@ -304,7 +302,7 @@ export const SubmitForm = (props) => {
                       inputRef={register}
                     />
                   </Grid>
-                  <Grid item xs={4}>
+                  <Grid item md={4} xs={6}>
                     <TextField 
                       id="price"
                       name="price"
@@ -314,7 +312,7 @@ export const SubmitForm = (props) => {
                       inputRef={register}
                     />
                   </Grid>
-                  <Grid item xs={4}>
+                  <Grid item md={4} xs={12}>
                     <TextField 
                       id="location"
                       name="location"
@@ -333,6 +331,7 @@ export const SubmitForm = (props) => {
                       inputRef={register}
                       fullWidth
                       onChange={(chips) => handleChange(chips)}
+                     
                     />
                   </Grid>
 
