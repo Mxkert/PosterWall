@@ -59,7 +59,7 @@ export const Posters = ({user}) => {
 
   const PrettoSlider = withStyles({
     root: {
-      color: '#52af77',
+      color: '#444',
       height: 8,
     },
     thumb: {
@@ -216,7 +216,6 @@ export const Posters = ({user}) => {
   }
 
   useEffect(() => {
-    console.log('changing location')
     setLocationDistances([]);
     if (selectedLocation > 0) {
       posters.forEach(poster => {
@@ -224,15 +223,10 @@ export const Posters = ({user}) => {
           getDistance(poster._id, [`${sessionStorage.getItem("location")}`], [`${poster.location_lat},${poster.location_lng}`], selectedLocation)
         }
       })
-    } else {
-      console.log('location 0')
     }
   }, [selectedLocation]);
 
   const getFilteredPosters = () => {
-
-    console.log(selectedDateFrom);
-    console.log(selectedDateTo);
 
     const results = posters.filter(poster => {
 
@@ -339,7 +333,7 @@ export const Posters = ({user}) => {
 
           <FaTimes className="modal-close-btn" onClick={() => setPosterDetailOpened(false)} />
 
-          <div className="modal-body detail-modal" ref={posterRef}>
+          <div className="modal-body detail-modal" refs={posterRef}>
             <div className="detail-container">
               <div className="poster-image">
                 <img src={ posterInfo.image } alt={ posterInfo.title } />
@@ -438,7 +432,7 @@ export const Posters = ({user}) => {
                 value={selectedGenre}
                 onChange={handleGenreFilter}
                 label="Genre"
-                ref={filterRef}
+                refs={filterRef}
               >
                 <MenuItem value="">
                   <em>Remove filter</em>
@@ -462,7 +456,7 @@ export const Posters = ({user}) => {
                 value={selectedPrice}
                 onChange={handlePriceFilter}
                 label="Price"
-                ref={filterRef}
+                refs={filterRef}
               >
                 <MenuItem value="">
                   <em>Remove filter</em>
@@ -475,7 +469,7 @@ export const Posters = ({user}) => {
             </FormControl>
           
           {/* Location filter */}
-          <div class="location-container">
+          <div className="location-container">
             {/* <FormControl variant="outlined"> */}
               {/* <InputLabel id="demo-simple-select-outlined-label">Location range</InputLabel> */}
               <Typography id="label">Location (km)</Typography>
@@ -485,13 +479,13 @@ export const Posters = ({user}) => {
                 defaultValue={selectedRadius} 
                 getAriaValueText={valuetext}
                 onChangeCommitted={mouseUp}
-                ref={filterRef}
+                refs={filterRef}
               />
             {/* </FormControl> */}
           </div>
           
             {/* Date from filter */}
-            <div class="date-container">
+            <div className="date-container">
               <MuiPickersUtilsProvider utils={DateFnsUtils}>
                 <InputLabel id="demo-simple-select-outlined-label">Date from</InputLabel>
                 <KeyboardDatePicker
@@ -506,13 +500,13 @@ export const Posters = ({user}) => {
                     'aria-label': 'change date',
                   }}
                   variant="outlined"
-                  ref={filterRef}
+                  refs={filterRef}
                 />
               </MuiPickersUtilsProvider>
             </div>
           
           {/* Date to filter */}
-          <div class="date-container">
+          <div className="date-container">
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
               <InputLabel id="demo-simple-select-outlined-label">Date to</InputLabel>
               <KeyboardDatePicker
@@ -526,7 +520,7 @@ export const Posters = ({user}) => {
                   'aria-label': 'change date',
                 }}
                 variant="outlined"
-                ref={filterRef}
+                refs={filterRef}
               />
             </MuiPickersUtilsProvider>
           </div>

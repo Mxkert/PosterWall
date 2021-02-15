@@ -45,12 +45,13 @@ export const Review = ({user}) => {
 
   const [posters, setPosters] = useState([]);
 
-  const [posterInfo, setPosterInfo] = useState([]);
+  const [posterInfo, setPosterInfo] = useState({});
   const [posterDetailOpened, setPosterDetailOpened] = useState(false);
   
   const [selectedDate, setDate] = useState(moment().format("YYYY-MM-DD"));
   const [selectedStartTime, setSelectedStartTime] = useState(moment());
   const [selectedEndTime, setSelectedEndTime] = useState(moment());
+  const [descriptionValue, setDescriptionValue] = useState('');
 
   const onDateChange = (date, value) => {
     setDate(date);
@@ -65,6 +66,10 @@ export const Review = ({user}) => {
 
   const handleEndTime = (time) => {
     setSelectedEndTime(time);
+  };
+
+  const handleDescription = (event) => {
+    setDescriptionValue(event.target.value);
   };
 
   // Submit modal
@@ -162,7 +167,7 @@ export const Review = ({user}) => {
         title: data.title,
         genre: data.genre,
         acts: acts,
-        description: data.description,
+        description: descriptionValue,
         price: data.price,
         date: data.date,
         start_time: data.start_time,
@@ -250,7 +255,7 @@ export const Review = ({user}) => {
                           id="date"
                           name="date"
                           showTodayButton={true}
-                          value={selectedDate}
+                          value={moment(posterInfo.date).format("YYYY-MM-DD")}
                           format="yyyy-MM-dd"
                           onChange={onDateChange}
                           KeyboardButtonProps={{
@@ -304,6 +309,7 @@ export const Review = ({user}) => {
                         inputRef={register}
                         InputLabelProps={{ shrink: true }}
                         value={posterInfo.genre}
+                        onChange={e => setPosterInfo({'genre': e.target.value})}
                       />
                     </Grid>
                     <Grid item xs={4}>
@@ -316,6 +322,7 @@ export const Review = ({user}) => {
                         InputLabelProps={{ shrink: true }}
                         inputRef={register}
                         value={posterInfo.price}
+                        onChange={e => setPosterInfo({'price': e.target.value})}
                       />
                     </Grid>
                     <Grid item xs={4}>
@@ -328,6 +335,7 @@ export const Review = ({user}) => {
                         InputLabelProps={{ shrink: true }}
                         inputRef={register}
                         value={posterInfo.location}
+                        onChange={e => setPosterInfo({'location': e.target.value})}
                       />
                     </Grid>
 
@@ -352,6 +360,7 @@ export const Review = ({user}) => {
                         placeholder="Description" 
                         inputRef={register}
                         value={posterInfo.description}
+                        onChange={handleDescription}
                       />
                     </Grid>
 

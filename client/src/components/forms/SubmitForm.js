@@ -16,6 +16,7 @@ import useOutsideClick from "../hooks/useOutsideClick";
 import SuccessIcon from "../animations/SuccessIcon";
 
 import TextField from "@material-ui/core/TextField";
+import OutlinedInput from "@material-ui/core/OutlinedInput";
 import TextareaAutosize from '@material-ui/core/TextareaAutosize';
 import ChipInput from 'material-ui-chip-input';
 
@@ -42,6 +43,7 @@ export const SubmitForm = (props) => {
   const [error, setError] = useState(null);
   const [uploadError, setUploadError] = useState(null);
   const [posterError, setPosterError] = useState(null);
+  const [descriptionValue, setDescriptionValue] = useState('');
 
   const [pickerOpen, setPickerOpen] = useState(false);
 
@@ -74,6 +76,10 @@ export const SubmitForm = (props) => {
 
     setPicture(URL.createObjectURL(e.target.files[0]));
     setPictureURL(e.target.files[0]);
+  };
+
+  const handleDescription = (event) => {
+    setDescriptionValue(event.target.value);
   };
 
   // Set modal opened
@@ -140,7 +146,7 @@ export const SubmitForm = (props) => {
           title: data.title,
           genre: data.genre,
           acts: acts,
-          description: data.description,
+          description: descriptionValue,
           price: data.price,
           date: eventDate,
           location: data.location,
@@ -336,13 +342,18 @@ export const SubmitForm = (props) => {
                   </Grid>
 
                   <Grid item xs={12}>
-                    <TextareaAutosize 
+                 
+                    <OutlinedInput 
+                      inputComponent={TextareaAutosize} 
                       id="description"
                       name="description"
                       aria-label="description" 
                       rowsMin={3} 
                       placeholder="Description" 
-                      inputRef={register}
+                      ref={register}
+                      value={descriptionValue}
+                      onChange={handleDescription}
+                      style={{ width: '100%' }}
                     />
                   </Grid>
 
