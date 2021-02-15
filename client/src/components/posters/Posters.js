@@ -25,6 +25,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 // Location slider
 import { withStyles, makeStyles } from '@material-ui/core/styles';
 import Slider from '@material-ui/core/Slider';
+import Typography from '@material-ui/core/Typography';
 import Tooltip from '@material-ui/core/Tooltip';
 
 import DateFnsUtils from '@date-io/date-fns';
@@ -474,29 +475,53 @@ export const Posters = ({user}) => {
             </FormControl>
           
           {/* Location filter */}
-          <FormControl variant="outlined">
-            <InputLabel id="demo-simple-select-outlined-label">Location range</InputLabel>
-            <PrettoSlider 
-              valueLabelDisplay="auto" 
-              aria-label="pretto slider" 
-              defaultValue={selectedRadius} 
-              getAriaValueText={valuetext}
-              onChangeCommitted={mouseUp}
-              ref={filterRef}
-            />
-          </FormControl>
+          <div class="location-container">
+            {/* <FormControl variant="outlined"> */}
+              {/* <InputLabel id="demo-simple-select-outlined-label">Location range</InputLabel> */}
+              <Typography id="label">Location (km)</Typography>
+              <PrettoSlider 
+                valueLabelDisplay="auto" 
+                aria-label="pretto slider" 
+                defaultValue={selectedRadius} 
+                getAriaValueText={valuetext}
+                onChangeCommitted={mouseUp}
+                ref={filterRef}
+              />
+            {/* </FormControl> */}
+          </div>
           
             {/* Date from filter */}
+            <div class="date-container">
+              <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                <InputLabel id="demo-simple-select-outlined-label">Date from</InputLabel>
+                <KeyboardDatePicker
+                  className="date-picker"
+                  id="date"
+                  showTodayButton={true}
+                  value={selectedDateFrom}
+                  format="yyyy-MM-dd"
+                  minDate={today}
+                  onChange={handleDateFromFilter}
+                  KeyboardButtonProps={{
+                    'aria-label': 'change date',
+                  }}
+                  variant="outlined"
+                  ref={filterRef}
+                />
+              </MuiPickersUtilsProvider>
+            </div>
+          
+          {/* Date to filter */}
+          <div class="date-container">
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
-              <InputLabel id="demo-simple-select-outlined-label">Date from</InputLabel>
+              <InputLabel id="demo-simple-select-outlined-label">Date to</InputLabel>
               <KeyboardDatePicker
                 className="date-picker"
                 id="date"
                 showTodayButton={true}
-                value={selectedDateFrom}
+                value={selectedDateTo}
                 format="yyyy-MM-dd"
-                minDate={today}
-                onChange={handleDateFromFilter}
+                onChange={handleDateToFilter}
                 KeyboardButtonProps={{
                   'aria-label': 'change date',
                 }}
@@ -504,24 +529,7 @@ export const Posters = ({user}) => {
                 ref={filterRef}
               />
             </MuiPickersUtilsProvider>
-          
-          {/* Date to filter */}
-          <MuiPickersUtilsProvider utils={DateFnsUtils}>
-            <InputLabel id="demo-simple-select-outlined-label">Date to</InputLabel>
-            <KeyboardDatePicker
-              className="date-picker"
-              id="date"
-              showTodayButton={true}
-              value={selectedDateTo}
-              format="yyyy-MM-dd"
-              onChange={handleDateToFilter}
-              KeyboardButtonProps={{
-                'aria-label': 'change date',
-              }}
-              variant="outlined"
-              ref={filterRef}
-            />
-          </MuiPickersUtilsProvider>
+          </div>
 
           </div>
           <div className="filter-results">
