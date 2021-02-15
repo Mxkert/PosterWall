@@ -120,6 +120,7 @@ export const Posters = ({user}) => {
 
   const [dateFilterChanged, setDateFilterChanged] = useState(false);
   const [dateToChanged, setDateToChanged] = useState(false);
+  const today = new Date();
 
   const handleChange = event => {
      setSearchedTitle(event.target.value);
@@ -494,6 +495,7 @@ export const Posters = ({user}) => {
                 showTodayButton={true}
                 value={selectedDateFrom}
                 format="yyyy-MM-dd"
+                minDate={today}
                 onChange={handleDateFromFilter}
                 KeyboardButtonProps={{
                   'aria-label': 'change date',
