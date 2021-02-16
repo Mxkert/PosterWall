@@ -73,7 +73,7 @@ export const Archive = ({user}) => {
 
         { posterInfo ?
         <>
-          <div className="blurred-bg"></div>
+          <div className="blurred-bg" onClick={() => setPosterDetailOpened(false)}></div>
 
           <FaTimes className="modal-close-btn" onClick={() => setPosterDetailOpened(false)} />
 
