@@ -212,6 +212,7 @@ form.small-form {
 .filters .date-container label, .filters .location-container p {
   color: #fff;
   width: 30%;
+  margin-right: 5%;
 }
 
 @media (max-width: 500px) {
@@ -222,7 +223,15 @@ form.small-form {
   .filters .date-container label, .filters .location-container p {
     margin-bottom: 15px;
     width: 100%;
+    margin-right: 0%;
   }
+}
+
+.MuiSlider-thumb.Mui-disabled {
+  width: 13px !important;
+  height: 13px !important;
+  margin-top: -3px !important;
+  margin-left: -4px !important;
 }
 
 /* Inputs */

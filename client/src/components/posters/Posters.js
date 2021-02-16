@@ -88,6 +88,7 @@ export const Posters = ({user}) => {
   })(Slider);
 
   const [userLocation, setUserLocation] = useState('');
+  const [userLocationName, setUserLocationName] = useState('');
 
   const [loading, setLoading] = useState(false);
 
@@ -105,6 +106,7 @@ export const Posters = ({user}) => {
 
   // Google API
   const [locationDistances, setLocationDistances] = useState([]);
+  const [locationPermission, setLocationPermission] = useState(false);
   
   // Search
   const [searchResults, setSearchResults] = useState([]);
@@ -170,6 +172,10 @@ export const Posters = ({user}) => {
   function errors(err) {
     console.warn(`ERROR(${err.code}): ${err.message}`);
   }
+  
+  function refreshPage() {
+    window.location.reload(false);
+  }
 
   useEffect(() => {
     
@@ -178,16 +184,18 @@ export const Posters = ({user}) => {
         .query({ name: "geolocation" })
         .then(function (result) {
           if (result.state === "granted") {
-            console.log(result.state);
+            setLocationPermission(true)
             //If granted then you can directly call your function here
             navigator.geolocation.getCurrentPosition(success);
           } else if (result.state === "prompt") {
             navigator.geolocation.getCurrentPosition(success, errors);
           } else if (result.state === "denied") {
             //If denied then you have to show instructions to enable location
+            setLocationPermission(false)
           }
           result.onchange = function () {
             console.log(result.state);
+            refreshPage();
           };
         });
     } else {
@@ -211,6 +219,18 @@ export const Posters = ({user}) => {
         if (data < meters) {
           setLocationDistances(locationDistances => [...locationDistances, posterID]);
         }
+      })
+      .catch(err => console.log(`unable to get distances, ${err}`))
+  }
+
+  const getLocation = () => {
+    const latlng = sessionStorage.getItem("location");
+
+    axios.post('/api/maps/location', {latlng})
+      .then(res => res.data)
+      .then(data => {
+        const userLocation = data;
+        setUserLocationName(data);
       })
       .catch(err => console.log(`unable to get distances, ${err}`))
   }
@@ -312,6 +332,7 @@ export const Posters = ({user}) => {
   // Get posters on page load
   useEffect(() => {
     getPosters();
+    getLocation();
   }, []);
 
   const showPosterInfo = (id) => {
@@ -469,10 +490,10 @@ export const Posters = ({user}) => {
             </FormControl>
           
           {/* Location filter */}
-          <div className="location-container">
-            {/* <FormControl variant="outlined"> */}
-              {/* <InputLabel id="demo-simple-select-outlined-label">Location range</InputLabel> */}
-              <Typography id="label">Location (km)</Typography>
+          { locationPermission ? 'ja' : 'nee' }
+          { locationPermission ?
+            <div className="location-container">
+              <Typography id="label">Location (km){ userLocationName ? ' - From ' + userLocationName : null }</Typography>
               <PrettoSlider 
                 valueLabelDisplay="auto" 
                 aria-label="pretto slider" 
@@ -481,8 +502,26 @@ export const Posters = ({user}) => {
                 onChangeCommitted={mouseUp}
                 refs={filterRef}
               />
-            {/* </FormControl> */}
-          </div>
+            </div>
+          :
+          <Tooltip title="Please allow location tracking before using this filter">
+            <div className="location-container">
+              {/* <FormControl variant="outlined"> */}
+                {/* <InputLabel id="demo-simple-select-outlined-label">Location range</InputLabel> */}
+                <Typography id="label">Location (km){ userLocationName ? ' - From ' + userLocationName : null }</Typography>
+                <PrettoSlider 
+                  valueLabelDisplay="auto" 
+                  aria-label="pretto slider" 
+                  defaultValue={selectedRadius} 
+                  getAriaValueText={valuetext}
+                  onChangeCommitted={mouseUp}
+                  refs={filterRef}
+                  disabled
+                />
+              {/* </FormControl> */}
+            </div>
+          </Tooltip>
+          }
           
             {/* Date from filter */}
             <div className="date-container">

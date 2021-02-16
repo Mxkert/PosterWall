@@ -1,5 +1,6 @@
 const express = require('express');
 const distance = require('google-distance-matrix');
+const fetch = require('node-fetch');
 
 const router = express.Router();
 
@@ -17,6 +18,17 @@ router.post('/distance', (req, res) => {
       if (distances.rows[0].elements[0].distance.value) 
         res.json(distances.rows[0].elements[0].distance.value)
   })
+});
+
+router.post('/location', (req, res) => {
+  const latlng = req.body.latlng
+
+  fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${latlng}&key=${process.env.MAPS_API}`)
+    .then(res => res.json())
+    .then(body => {
+      const location = body.results[0].address_components[3].long_name;
+      res.json(location)
+    });
 });
 
 module.exports = router;
