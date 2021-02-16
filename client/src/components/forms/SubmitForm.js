@@ -199,7 +199,7 @@ export const SubmitForm = (props) => {
       <>
         <FaTimes className="modal-close-btn" onClick={() => setIsOpen(false)} />
 
-        <div className="blurred-bg"></div>
+        <div className="blurred-bg" onClick={() => setIsOpen(false)}></div>
 
         <div className="modal-body submit-modal">
 
