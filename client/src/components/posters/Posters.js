@@ -350,7 +350,7 @@ export const Posters = ({user}) => {
 
         { posterInfo ?
         <>
-          <div className="blurred-bg"></div>
+          <div className="blurred-bg" onClick={() => setPosterDetailOpened(false)}></div>
 
           <FaTimes className="modal-close-btn" onClick={() => setPosterDetailOpened(false)} />
 
@@ -490,7 +490,6 @@ export const Posters = ({user}) => {
             </FormControl>
           
           {/* Location filter */}
-          { locationPermission ? 'ja' : 'nee' }
           { locationPermission ?
             <div className="location-container">
               <Typography id="label">Location (km){ userLocationName ? ' - From ' + userLocationName : null }</Typography>
