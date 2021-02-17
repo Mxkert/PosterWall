@@ -5,6 +5,8 @@ import axios from 'axios';
 import moment from 'moment';
 // import 'moment/locale/nl';
 
+import LocationAutocomplete from 'location-autocomplete';
+
 import Grid from '@material-ui/core/Grid';
 import '../forms/SubmitForm.css';
 import '../Form.css';
@@ -53,6 +55,8 @@ export const SubmitForm = (props) => {
   const [selectedDate, setDate] = useState(moment().format("YYYY-MM-DD"));
   const [selectedStartTime, setSelectedStartTime] = useState(moment());
   const [selectedEndTime, setSelectedEndTime] = useState(moment());
+
+  const [selectedLocation, setSelectedLocation] = useState('');
 
   const onDateChange = (date, value) => {
     setDate(date);
@@ -104,10 +108,10 @@ export const SubmitForm = (props) => {
   const addPoster = async (data) => {
 
     // Place location in a variable
-    var location = data.location;
+    var location = selectedLocation;
     
     // Get latitude and longitude using the Google Geocoding API
-    let locationDetails = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${location}&key=AIzaSyAKQm69QiWowY9VPExD9xjJBN68FeAeEA0`);
+    let locationDetails = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${selectedLocation}&key=AIzaSyAKQm69QiWowY9VPExD9xjJBN68FeAeEA0`);
     const locationLat = locationDetails.data.results[0].geometry.location.lat
     const locationLng = locationDetails.data.results[0].geometry.location.lng
 
@@ -149,7 +153,7 @@ export const SubmitForm = (props) => {
           description: descriptionValue,
           price: data.price,
           date: eventDate,
-          location: data.location,
+          location: selectedLocation,
           location_lat: locationLat,
           location_lng: locationLng,
           start_time: data.start_time,
@@ -193,6 +197,16 @@ export const SubmitForm = (props) => {
     setActs(data);
   }
 
+  function onDropdownSelect(component) {
+    // this will give you access to the entire location object, including
+    // the `place_id` and `address_components`
+    const place = component.autocomplete.getPlace();
+    const selectedPlace = place.formatted_address;
+  
+    // other awesome stuff
+    setSelectedLocation(selectedPlace);
+  }
+
   return (
     <div className={ formIsOpen ? 'slide-out slide-out-form opened' : 'slide-out slide-out-form' }>
 
@@ -231,6 +245,7 @@ export const SubmitForm = (props) => {
             <div className="poster-content">
               <form noValidate onSubmit={handleSubmit(addPoster)}>
                 <Grid container spacing={3} justify="center">
+
                   <Grid item xs={12}>
                     <TextField 
                       id="title"
@@ -242,7 +257,17 @@ export const SubmitForm = (props) => {
                     />
                   </Grid>
 
-                  <Grid item md={4} xs={12}>
+                  <Grid item md={6} xs={6}>
+                    <TextField 
+                      id="genre"
+                      name="genre"
+                      type="text"
+                      label="Genre"
+                      variant="outlined"
+                      inputRef={register}
+                    />
+                  </Grid>
+                  <Grid item md={6} xs={12}>
                     <MuiPickersUtilsProvider utils={DateFnsUtils}>
                       <KeyboardDatePicker
                         className="date-picker"
@@ -300,16 +325,6 @@ export const SubmitForm = (props) => {
 
                   <Grid item md={4} xs={6}>
                     <TextField 
-                      id="genre"
-                      name="genre"
-                      type="text"
-                      label="Genre"
-                      variant="outlined"
-                      inputRef={register}
-                    />
-                  </Grid>
-                  <Grid item md={4} xs={6}>
-                    <TextField 
                       id="price"
                       name="price"
                       type="number"
@@ -318,7 +333,7 @@ export const SubmitForm = (props) => {
                       inputRef={register}
                     />
                   </Grid>
-                  <Grid item md={4} xs={12}>
+                  {/* <Grid item md={4} xs={12}>
                     <TextField 
                       id="location"
                       name="location"
@@ -327,6 +342,19 @@ export const SubmitForm = (props) => {
                       variant="outlined"
                       inputRef={register}
                     />
+                  </Grid> */}
+                  
+                  <Grid item xs={12}>
+                    <div>
+                      <LocationAutocomplete
+                        id="location"
+                        name="location"
+                        placeholder="Location"
+                        locationType="(regions)"
+                        googleAPIKey="AIzaSyAKQm69QiWowY9VPExD9xjJBN68FeAeEA0"
+                        onDropdownSelect={(e) => onDropdownSelect(e)}
+                      />
+                    </div>
                   </Grid>
 
                   <Grid item xs={12}>

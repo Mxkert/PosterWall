@@ -201,6 +201,31 @@ input#acts {
   font-size: 1em !important;
 }
 
+/* Places API input */
+.pac-target-input {
+  color: #fff !important;
+  box-shadow: 0px 14px 24px rgb(0 0 0 / 70%);
+  background: rgba(0,0,0,0.75) !important;
+  border-radius: 6px;
+  padding: 20px 14px !important;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  font-size: 1em !important;
+  border: 1px solid rgba(255,255,255,0.25);
+  color: currentColor;
+  width: 94.5%;
+  height: 1.1876em;
+  margin: 0;
+  display: block;
+  padding: 6px 0 7px;
+  min-width: 0;
+  background: none;
+  box-sizing: content-box;
+  animation-name: mui-auto-fill-cancel;
+  letter-spacing: inherit;
+  animation-duration: 10ms;
+  -webkit-tap-highlight-color: transparent;
+}
+
 /* Textarea */
 textarea {
   font-family: "Roboto" ,sans-serif;
