@@ -219,7 +219,7 @@ form.small-form {
   display: flex;
   align-items: center;
   margin-bottom: 30px;
-}
+} 
 
 .filters .date-container label, .filters .location-container p {
   color: #fff;
@@ -244,6 +244,25 @@ form.small-form {
   height: 13px !important;
   margin-top: -3px !important;
   margin-left: -4px !important;
+}
+
+.places {
+  position: relative;
+  left: -3rem;
+  width: 119%;
+  max-height: 0%;
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+  -webkit-transition: all 1s cubic-bezier(.05,1.27,1,.93);  
+  -o-transition: all 1s cubic-bezier(.05,1.27,1,.93);  
+  transition: all 1s cubic-bezier(.05,1.27,1,.93);
+}
+
+.places.open {
+  max-height: 100%;
+  -webkit-transition: all 1s cubic-bezier(.05,1.27,1,.93);  
+  -o-transition: all 1s cubic-bezier(.05,1.27,1,.93);  
+  transition: all 1s cubic-bezier(.05,1.27,1,.93);
 }
 
 /* Inputs */

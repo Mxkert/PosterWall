@@ -11,9 +11,6 @@ import Grid from '@material-ui/core/Grid';
 import '../forms/SubmitForm.css';
 import '../Form.css';
 
-// Hooks
-import useOutsideClick from "../hooks/useOutsideClick";
-
 // Import loading icon from Lottie
 import SuccessIcon from "../animations/SuccessIcon";
 

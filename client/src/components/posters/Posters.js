@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import axios from 'axios';
 import { FaTimes, FaSearch } from 'react-icons/fa';
 import moment from 'moment';
@@ -38,8 +38,184 @@ import {
 // Hooks
 import useOutsideClick from "../hooks/useOutsideClick";
 
+// Google Maps
+import LocationAutocomplete from 'location-autocomplete';
+import { GoogleMap, useJsApiLoader, Circle, Marker } from '@react-google-maps/api';
+
+
 export const Posters = ({user}) => {
 
+  const [markers, setMarkers]  = useState([]);
+
+  // Get all posters and store them in an array
+  const getPosterLocations = () => {
+    // Get current date
+    const currentDate = moment().locale('nl').format("YYYY-MM-DD");
+    let date = '';
+    axios.get(`/api/posters/`)
+    .then(res => {
+      let allMarkers = [];
+      // posters = res.data; 
+      res.data.forEach(poster => { 
+        date = moment(poster.date).locale('nl').format("YYYY-MM-DD");
+        if (poster.accepted === true && date >= currentDate) {
+          if (poster.location_lat) {
+            allMarkers.push({
+              title: poster.title,
+              lat: poster.location_lat, 
+              lng: poster.location_lng,
+              id: poster._id
+            });
+          }
+        } 
+      });
+      setMarkers(allMarkers);
+    }); 
+  }
+
+  useEffect(() => {
+    getPosterLocations();
+  }, []);
+
+  const markerOptions = {
+    icon: 'https://i.imgur.com/bZwCrmW.png'
+  }
+
+  // Maps
+  const containerStyle = {
+    width: '100%',
+    height: '400px'
+  };
+  
+  const center = {
+    lat: 51.99585388647266,
+    lng: 4.197716419667051
+  };
+
+  const { isLoaded } = useJsApiLoader({
+    id: 'google-map-script',
+    googleMapsApiKey: 'AIzaSyAKQm69QiWowY9VPExD9xjJBN68FeAeEA0'
+  })
+
+  const mapOptions = {
+    styles: [
+      { elementType: "geometry", stylers: [{ color: "#242f3e" }] },
+      { elementType: "labels.text.stroke", stylers: [{ color: "#242f3e" }] },
+      { elementType: "labels.text.fill", stylers: [{ color: "#746855" }] },
+      {
+        featureType: "administrative.locality",
+        elementType: "labels.text.fill",
+        stylers: [{ color: "#d59563" }],
+      },
+      { 
+        featureType: "poi",
+        elementType: "labels.text.fill",
+        stylers: [{ color: "#d59563" }],
+      },
+      {
+        featureType: "poi.park",
+        elementType: "geometry",
+        stylers: [{ color: "#263c3f" }],
+      },
+      {
+        featureType: "poi.park",
+        elementType: "labels.text.fill",
+        stylers: [{ color: "#6b9a76" }],
+      },
+      {
+        featureType: "road",
+        elementType: "geometry",
+        stylers: [{ color: "#38414e" }],
+      },
+      {
+        featureType: "road",
+        elementType: "geometry.stroke",
+        stylers: [{ color: "#212a37" }],
+      },
+      {
+        featureType: "road",
+        elementType: "labels.text.fill",
+        stylers: [{ color: "#9ca5b3" }],
+      },
+      {
+        featureType: "road.highway",
+        elementType: "geometry",
+        stylers: [{ color: "#746855" }],
+      },
+      {
+        featureType: "road.highway",
+        elementType: "geometry.stroke",
+        stylers: [{ color: "#1f2835" }],
+      },
+      {
+        featureType: "road.highway",
+        elementType: "labels.text.fill",
+        stylers: [{ color: "#f3d19c" }],
+      },
+      {
+        featureType: "transit",
+        elementType: "geometry",
+        stylers: [{ color: "#2f3948" }],
+      },
+      {
+        featureType: "transit.station",
+        elementType: "labels.text.fill",
+        stylers: [{ color: "#d59563" }],
+      },
+      {
+        featureType: "water",
+        elementType: "geometry",
+        stylers: [{ color: "#17263c" }],
+      },
+      {
+        featureType: "water",
+        elementType: "labels.text.fill",
+        stylers: [{ color: "#515c6d" }],
+      },
+      {
+        featureType: "water",
+        elementType: "labels.text.stroke",
+        stylers: [{ color: "#17263c" }],
+      },
+    ]
+  }
+
+  const options = {
+    strokeColor: '#FF0000',
+    strokeOpacity: 0.8,
+    strokeWeight: 2,
+    fillColor: '#FF0000',
+    fillOpacity: 0.35,
+    clickable: false,
+    draggable: true,
+    editable: false,
+    visible: true,
+    zIndex: 1
+  }
+
+  const onLoad2 = circle => {
+    console.log('Circle onLoad circle: ', circle)
+  }
+  
+  const onUnmount2 = circle => {
+    console.log('Circle onUnmount circle: ', circle)
+  }
+
+  const [map, setMap] = React.useState(null)
+  const [location, setLocation]  = useState({});
+
+  const onLoad = React.useCallback(function callback(map) {
+    const bounds = new window.google.maps.LatLngBounds();
+    map.fitBounds(bounds);
+    setMap(map)
+
+  }, [])
+
+  const onUnmount = React.useCallback(function callback(map) {
+    setMap(null)
+  }, [])
+
+  // Default
   const breakpointColumnsObj = {
     default: 5,
     991: 4,
@@ -157,16 +333,25 @@ export const Posters = ({user}) => {
   // ==============
 
   //  GEOLOCATION
-
+ 
   // ==============
   function success(pos) {
     var crd = pos.coords;
+
+    sessionStorage.setItem('location_crd', `{ lat: ${crd.latitude}, lng: ${crd.longitude} }`);
+    sessionStorage.setItem('loc_lat', parseFloat(crd.latitude));
+    sessionStorage.setItem('loc_lng', parseFloat(crd.longitude));
 
     if (sessionStorage.getItem("location") === null) {
       sessionStorage.setItem('location', crd.latitude + ',' + crd.longitude);
     }
 
     setUserLocation(crd.latitude + ',' + crd.longitude);
+
+    setLocation({
+      lat: crd.latitude,
+      lng: crd.longitude
+    })
   }
   
   function errors(err) {
@@ -181,7 +366,7 @@ export const Posters = ({user}) => {
     
     if (navigator.geolocation) {
       navigator.permissions
-        .query({ name: "geolocation" })
+        .query({ name: "geolocation" }) 
         .then(function (result) {
           if (result.state === "granted") {
             setLocationPermission(true)
@@ -344,6 +529,16 @@ export const Posters = ({user}) => {
     });
   }
 
+  function onDropdownSelect(component) {
+    // this will give you access to the entire location object, including
+    // the `place_id` and `address_components`
+    const place = component.autocomplete.getPlace();
+    const selectedPlace = place.formatted_address;
+  
+    // other awesome stuff
+    setSelectedLocation(selectedPlace);
+  }
+
   return (
     <>
       <div className={ posterDetailOpened ? 'slide-out slide-out-detail opened' : 'slide-out slide-out-detail'}>
@@ -371,7 +566,7 @@ export const Posters = ({user}) => {
                       </div>
                       <span className="slash">/</span>
                       <div className="time">
-                        <span className="start-time">{ posterInfo.start_time }</span>
+                        <span className="start-time">{ posterInfo.start_time }</span> 
                         <span className="slash">-</span>
                         <span className="end-time">{ posterInfo.end_time }</span>
                       </div>
@@ -379,13 +574,13 @@ export const Posters = ({user}) => {
 
                     <div className="meta">
                       <div>
-                        <span className="topic">Genre:</span> <span className="genre">{ posterInfo.genre }</span>
+                        <span className="topic">Genre: </span> <span className="genre">{ posterInfo.genre }</span>
                       </div>
                       <div>
                         <span className="topic">Price:</span> € <span className="price">{ posterInfo.price }</span>
                       </div>
                       <div>
-                        <span className="topic">Location:</span> <span className="location">{ posterInfo.location }</span>
+                        <span className="topic">Locations:</span> <span className="location">{ posterInfo.location }</span>
                       </div>
                     </div>
 
@@ -480,7 +675,7 @@ export const Posters = ({user}) => {
                 refs={filterRef}
               >
                 <MenuItem value="">
-                  <em>Remove filter</em>
+                  <em>Remove filter </em>
                 </MenuItem>
                 <MenuItem value='0'>Free</MenuItem>
                 <MenuItem value='10'>10</MenuItem>
@@ -491,8 +686,9 @@ export const Posters = ({user}) => {
           
           {/* Location filter */}
           { locationPermission ?
+          <>
             <div className="location-container">
-              <Typography id="label">Location (km){ userLocationName ? ' - From ' + userLocationName : null }</Typography>
+              <Typography id="label">Locations (km){ userLocationName ? ' - From ' + userLocationName : null }</Typography>
               <PrettoSlider 
                 valueLabelDisplay="auto" 
                 aria-label="pretto slider" 
@@ -502,6 +698,71 @@ export const Posters = ({user}) => {
                 refs={filterRef}
               />
             </div>
+            <div className="places open">
+              <LocationAutocomplete
+                id="location"
+                name="location"
+                placeholder="Location"
+                locationType="(regions)"
+                googleAPIKey="AIzaSyAKQm69QiWowY9VPExD9xjJBN68FeAeEA0"
+                onDropdownSelect={(e) => onDropdownSelect(e)}
+              />
+              { 
+              isLoaded ? (
+                <>
+                  <GoogleMap
+                    mapContainerStyle={containerStyle}
+                    center={{
+                      lat: parseFloat(sessionStorage.getItem('loc_lat')),
+                      lng: parseFloat(sessionStorage.getItem('loc_lng'))
+                    }}
+                    zoom={10}
+                    onLoad={onLoad}
+                    onUnmount={onUnmount}
+                    options={mapOptions}
+                  >
+                    {markers.map((marker, index) => {
+                      return (
+                        <Marker
+                          position={{ lat: marker.lat, lng: marker.lng }}
+                          options={markerOptions}
+                          key={index}
+                          onClick={(e) => {
+                            console.log(e)
+                            console.log(marker.id)
+                            showPosterInfo(marker.id)
+                          }}
+                          title={marker.title}
+                        /> 
+                      )
+                    })}
+                    <Circle 
+                      // optional
+                      onLoad={onLoad2}
+                      // optional
+                      onUnmount={onUnmount2}
+                      onDrag={(e) => console.log(e)}
+                      onDragStart={(e) => console.log(e)}
+                      onDragEnd={() => console.log('test')}
+                      onRadiusChanged={(e) => {
+                        console.log('radius changed ', selectedRadius);
+                      }}
+                      onClick={() => console.log('clicked')}
+                      onMouseDown={() => console.log('mouse down')}
+                      // required
+                      center={{
+                        lat: parseFloat(sessionStorage.getItem('loc_lat')),
+                        lng: parseFloat(sessionStorage.getItem('loc_lng'))
+                      }}
+                      // required
+                      options={options}
+                      radius={selectedRadius * 1000}
+                    />
+                  </GoogleMap>
+                </>
+              ) : <></> }
+            </div>
+          </>
           :
           <Tooltip title="Please allow location tracking before using this filter">
             <div className="location-container">
@@ -578,7 +839,7 @@ export const Posters = ({user}) => {
         {
           loading ? <LoadingIcon /> :
           searchResults.map((poster, index) => (
-            <div className="poster" onClick={() => showPosterInfo(poster._id)} key={index}>
+            <div className="poster" onClick={() => showPosterInfo(poster._id)} key={poster._id}>
               <img src={poster.image} alt={poster.title} />
             </div>
           ))
