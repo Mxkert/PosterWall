@@ -39,8 +39,7 @@ import {
 import useOutsideClick from "../hooks/useOutsideClick";
 
 // Google Maps
-import LocationAutocomplete from 'location-autocomplete';
-import { GoogleMap, useJsApiLoader, Circle, Marker } from '@react-google-maps/api';
+import { GoogleMap, useJsApiLoader, Circle, Marker, StandaloneSearchBox } from '@react-google-maps/api';
 
 
 export const Posters = ({user}) => {
@@ -94,6 +93,7 @@ export const Posters = ({user}) => {
 
   const { isLoaded } = useJsApiLoader({
     id: 'google-map-script',
+    libraries: 'places',
     googleMapsApiKey: 'AIzaSyAKQm69QiWowY9VPExD9xjJBN68FeAeEA0'
   })
 
@@ -203,10 +203,19 @@ export const Posters = ({user}) => {
 
   const [map, setMap] = React.useState(null)
   const [location, setLocation]  = useState({});
+  const [mapCenter, setMapCenter]  = useState({
+    lat: parseFloat(sessionStorage.getItem('loc_lat')),
+    lng: parseFloat(sessionStorage.getItem('loc_lng'))
+  });
 
   const onLoad = React.useCallback(function callback(map) {
+    setMapCenter({
+      lat: parseFloat(sessionStorage.getItem('loc_lat')),
+      lng: parseFloat(sessionStorage.getItem('loc_lng'))
+    })
+
     const bounds = new window.google.maps.LatLngBounds();
-    map.fitBounds(bounds);
+    // map.fitBounds(bounds);
     setMap(map)
 
   }, [])
@@ -214,6 +223,39 @@ export const Posters = ({user}) => {
   const onUnmount = React.useCallback(function callback(map) {
     setMap(null)
   }, [])
+
+
+
+  const searchBox = useRef(null);
+
+  // useOutsideClick(searchBox, () => (
+  //   console.log('test')
+  // ));
+
+  // useOutsideClick(adminRef, () => (
+  //   toolsActive ? setToolsActive(false) : null 
+  // ));
+
+  // const onLoadSearchbox = ref => this.searchBox = ref;
+  // const searchBox = React.useRef<StandaloneSearchBox>(null);
+
+  const onPlacesChanged = async () => {
+    const place = searchBox.current.state.searchBox.gm_accessors_.places.Ke.formattedPrediction;
+    console.log(place);
+    
+    // Get latitude and longitude using the Google Geocoding API
+    let locationDetails = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${place}&key=AIzaSyAKQm69QiWowY9VPExD9xjJBN68FeAeEA0`);
+    const locationLat = locationDetails.data.results[0].geometry.location.lat
+    const locationLng = locationDetails.data.results[0].geometry.location.lng
+
+    console.log(locationLat);
+    console.log(locationLng);
+
+    setMapCenter({
+      lat: locationLat,
+      lng: locationLng
+    })
+  }; 
 
   // Default
   const breakpointColumnsObj = {
@@ -379,7 +421,7 @@ export const Posters = ({user}) => {
             setLocationPermission(false)
           }
           result.onchange = function () {
-            console.log(result.state);
+            console.log(result.state); 
             refreshPage();
           };
         });
@@ -422,16 +464,18 @@ export const Posters = ({user}) => {
 
   useEffect(() => {
     setLocationDistances([]);
-    if (selectedLocation > 0) {
-      posters.forEach(poster => {
-        if (poster.location_lat) {
-          getDistance(poster._id, [`${sessionStorage.getItem("location")}`], [`${poster.location_lat},${poster.location_lng}`], selectedLocation)
-        }
-      })
-    }
-  }, [selectedLocation]);
+
+    posters.forEach(poster => {
+      if (poster.location_lat) {
+        getDistance(poster._id, [`${mapCenter.lat},${mapCenter.lng}`], [`${poster.location_lat},${poster.location_lng}`], selectedRadius)
+      }
+    })
+    
+  }, [mapCenter, selectedRadius]);
 
   const getFilteredPosters = () => {
+
+    console.log(locationDistances);
 
     const results = posters.filter(poster => {
 
@@ -461,7 +505,7 @@ export const Posters = ({user}) => {
     setLoading(true);
     getFilteredPosters();
 
-  }, [searchedTitle, selectedGenre, selectedPrice, posters, selectedDateFrom, selectedDateTo, locationDistances]);
+  }, [searchedTitle, selectedGenre, selectedPrice, posters, selectedDateFrom, selectedDateTo, locationDistances, selectedRadius]);
 
   const posterRef = useRef();
   const filterRef = useRef();
@@ -699,28 +743,50 @@ export const Posters = ({user}) => {
               />
             </div>
             <div className="places open">
-              <LocationAutocomplete
-                id="location"
-                name="location"
-                placeholder="Location"
-                locationType="(regions)"
-                googleAPIKey="AIzaSyAKQm69QiWowY9VPExD9xjJBN68FeAeEA0"
-                onDropdownSelect={(e) => onDropdownSelect(e)}
-              />
               { 
               isLoaded ? (
                 <>
+                {/* <LocationAutocomplete
+                  id="location"
+                  name="location"
+                  placeholder="Location"
+                  locationType="(regions)"
+                  googleAPIKey="AIzaSyAKQm69QiWowY9VPExD9xjJBN68FeAeEA0"
+                  onDropdownSelect={(e) => onDropdownSelect(e)}
+                /> */}
                   <GoogleMap
                     mapContainerStyle={containerStyle}
-                    center={{
-                      lat: parseFloat(sessionStorage.getItem('loc_lat')),
-                      lng: parseFloat(sessionStorage.getItem('loc_lng'))
-                    }}
-                    zoom={10}
+                    center={mapCenter}
+                    zoom={11}
                     onLoad={onLoad}
                     onUnmount={onUnmount}
                     options={mapOptions}
                   >
+                    <StandaloneSearchBox
+                      // onLoad={onSearchboxLoad}
+                      onPlacesChanged={onPlacesChanged}
+                      ref={searchBox}  
+                    >
+                      <input
+                        type="text"
+                        placeholder="Customized your placeholder"
+                        style={{
+                          boxSizing: `border-box`,
+                          border: `1px solid transparent`,
+                          width: `240px`,
+                          height: `32px`,
+                          padding: `0 12px`,
+                          borderRadius: `3px`,
+                          boxShadow: `0 2px 6px rgba(0, 0, 0, 0.3)`,
+                          fontSize: `14px`,
+                          outline: `none`,
+                          textOverflow: `ellipses`,
+                          position: "absolute",
+                          left: "50%",
+                          marginLeft: "-120px"
+                        }}
+                      />
+                    </StandaloneSearchBox>
                     {markers.map((marker, index) => {
                       return (
                         <Marker
@@ -750,10 +816,7 @@ export const Posters = ({user}) => {
                       onClick={() => console.log('clicked')}
                       onMouseDown={() => console.log('mouse down')}
                       // required
-                      center={{
-                        lat: parseFloat(sessionStorage.getItem('loc_lat')),
-                        lng: parseFloat(sessionStorage.getItem('loc_lng'))
-                      }}
+                      center={mapCenter}
                       // required
                       options={options}
                       radius={selectedRadius * 1000}
