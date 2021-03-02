@@ -248,8 +248,6 @@ form.small-form {
 
 .places {
   position: relative;
-  left: -3rem;
-  width: 119%;
   max-height: 0%;
   overflow: hidden;
   margin-bottom: 1.5rem;

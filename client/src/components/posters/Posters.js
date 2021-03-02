@@ -77,7 +77,7 @@ export const Posters = ({user}) => {
   }, []);
 
   const markerOptions = {
-    icon: 'https://i.imgur.com/bZwCrmW.png'
+    draggable: true
   }
 
   // Maps
@@ -91,100 +91,100 @@ export const Posters = ({user}) => {
     lng: 4.197716419667051
   };
 
-  const { isLoaded } = useJsApiLoader({
+  const { isLoaded, loadError } = useJsApiLoader({
     id: 'google-map-script',
-    libraries: 'places',
+    libraries: ['places'],
     googleMapsApiKey: 'AIzaSyAKQm69QiWowY9VPExD9xjJBN68FeAeEA0'
   })
 
-  const mapOptions = {
-    styles: [
-      { elementType: "geometry", stylers: [{ color: "#242f3e" }] },
-      { elementType: "labels.text.stroke", stylers: [{ color: "#242f3e" }] },
-      { elementType: "labels.text.fill", stylers: [{ color: "#746855" }] },
-      {
-        featureType: "administrative.locality",
-        elementType: "labels.text.fill",
-        stylers: [{ color: "#d59563" }],
-      },
-      { 
-        featureType: "poi",
-        elementType: "labels.text.fill",
-        stylers: [{ color: "#d59563" }],
-      },
-      {
-        featureType: "poi.park",
-        elementType: "geometry",
-        stylers: [{ color: "#263c3f" }],
-      },
-      {
-        featureType: "poi.park",
-        elementType: "labels.text.fill",
-        stylers: [{ color: "#6b9a76" }],
-      },
-      {
-        featureType: "road",
-        elementType: "geometry",
-        stylers: [{ color: "#38414e" }],
-      },
-      {
-        featureType: "road",
-        elementType: "geometry.stroke",
-        stylers: [{ color: "#212a37" }],
-      },
-      {
-        featureType: "road",
-        elementType: "labels.text.fill",
-        stylers: [{ color: "#9ca5b3" }],
-      },
-      {
-        featureType: "road.highway",
-        elementType: "geometry",
-        stylers: [{ color: "#746855" }],
-      },
-      {
-        featureType: "road.highway",
-        elementType: "geometry.stroke",
-        stylers: [{ color: "#1f2835" }],
-      },
-      {
-        featureType: "road.highway",
-        elementType: "labels.text.fill",
-        stylers: [{ color: "#f3d19c" }],
-      },
-      {
-        featureType: "transit",
-        elementType: "geometry",
-        stylers: [{ color: "#2f3948" }],
-      },
-      {
-        featureType: "transit.station",
-        elementType: "labels.text.fill",
-        stylers: [{ color: "#d59563" }],
-      },
-      {
-        featureType: "water",
-        elementType: "geometry",
-        stylers: [{ color: "#17263c" }],
-      },
-      {
-        featureType: "water",
-        elementType: "labels.text.fill",
-        stylers: [{ color: "#515c6d" }],
-      },
-      {
-        featureType: "water",
-        elementType: "labels.text.stroke",
-        stylers: [{ color: "#17263c" }],
-      },
-    ]
+  const mapOptions = { 
+    // styles: [
+    //   { elementType: "geometry", stylers: [{ color: "#242f3e" }] },
+    //   { elementType: "labels.text.stroke", stylers: [{ color: "#242f3e" }] },
+    //   { elementType: "labels.text.fill", stylers: [{ color: "#746855" }] },
+    //   {
+    //     featureType: "administrative.locality",
+    //     elementType: "labels.text.fill",
+    //     stylers: [{ color: "#d59563" }],
+    //   },
+    //   { 
+    //     featureType: "poi",
+    //     elementType: "labels.text.fill",
+    //     stylers: [{ color: "#d59563" }],
+    //   },
+    //   {
+    //     featureType: "poi.park",
+    //     elementType: "geometry",
+    //     stylers: [{ color: "#263c3f" }],
+    //   },
+    //   {
+    //     featureType: "poi.park",
+    //     elementType: "labels.text.fill",
+    //     stylers: [{ color: "#6b9a76" }],
+    //   },
+    //   {
+    //     featureType: "road",
+    //     elementType: "geometry",
+    //     stylers: [{ color: "#38414e" }],
+    //   },
+    //   {
+    //     featureType: "road",
+    //     elementType: "geometry.stroke",
+    //     stylers: [{ color: "#212a37" }],
+    //   },
+    //   {
+    //     featureType: "road",
+    //     elementType: "labels.text.fill",
+    //     stylers: [{ color: "#9ca5b3" }],
+    //   },
+    //   {
+    //     featureType: "road.highway",
+    //     elementType: "geometry",
+    //     stylers: [{ color: "#746855" }],
+    //   },
+    //   {
+    //     featureType: "road.highway",
+    //     elementType: "geometry.stroke",
+    //     stylers: [{ color: "#1f2835" }],
+    //   },
+    //   {
+    //     featureType: "road.highway",
+    //     elementType: "labels.text.fill",
+    //     stylers: [{ color: "#f3d19c" }],
+    //   },
+    //   {
+    //     featureType: "transit",
+    //     elementType: "geometry",
+    //     stylers: [{ color: "#2f3948" }],
+    //   },
+    //   {
+    //     featureType: "transit.station",
+    //     elementType: "labels.text.fill",
+    //     stylers: [{ color: "#d59563" }],
+    //   },
+    //   {
+    //     featureType: "water",
+    //     elementType: "geometry",
+    //     stylers: [{ color: "#17263c" }],
+    //   },
+    //   {
+    //     featureType: "water",
+    //     elementType: "labels.text.fill",
+    //     stylers: [{ color: "#515c6d" }],
+    //   },
+    //   {
+    //     featureType: "water",
+    //     elementType: "labels.text.stroke",
+    //     stylers: [{ color: "#17263c" }],
+    //   },
+    // ]
   }
 
   const options = {
-    strokeColor: '#FF0000',
+    strokeColor: '#3E5A91',
     strokeOpacity: 0.8,
     strokeWeight: 2,
-    fillColor: '#FF0000',
+    fillColor: '#3E5A91',
     fillOpacity: 0.35,
     clickable: false,
     draggable: true,
@@ -201,21 +201,43 @@ export const Posters = ({user}) => {
     console.log('Circle onUnmount circle: ', circle)
   }
 
-  const [map, setMap] = React.useState(null)
+  const [map, setMap] = useState(null);
   const [location, setLocation]  = useState({});
-  const [mapCenter, setMapCenter]  = useState({
-    lat: parseFloat(sessionStorage.getItem('loc_lat')),
-    lng: parseFloat(sessionStorage.getItem('loc_lng'))
-  });
 
-  const onLoad = React.useCallback(function callback(map) {
-    setMapCenter({
-      lat: parseFloat(sessionStorage.getItem('loc_lat')),
-      lng: parseFloat(sessionStorage.getItem('loc_lng'))
-    })
+  const [mapCenter, setMapCenter]  = useState({});
 
+  const centerTheMap = () => {
+    if (sessionStorage.getItem('loc_lat')) {
+      setMapCenter(
+        {
+          lat: parseFloat(sessionStorage.getItem('loc_lat')), 
+          lng: parseFloat(sessionStorage.getItem('loc_lng'))
+        });
+    } else {
+      setMapCenter(
+        {
+          lat: -3.745, 
+          lng: -38.523
+        }
+      );
+    }
+    setMapHasBeenCentered(true);
+  }
+
+  // const onLoad = React.useCallback(function callback(map) {
+  //   setMapCenter({
+  //     lat: parseFloat(sessionStorage.getItem('loc_lat')),
+  //     lng: parseFloat(sessionStorage.getItem('loc_lng'))
+  //   })
+
+  //   const bounds = new window.google.maps.LatLngBounds();
+  //   map.fitBounds(bounds);
+
+  // }, [])
+
+  const onLoad = useCallback(function callback(map) {
     const bounds = new window.google.maps.LatLngBounds();
-    // map.fitBounds(bounds);
+    map.fitBounds(bounds);
     setMap(map)
 
   }, [])
@@ -224,20 +246,7 @@ export const Posters = ({user}) => {
     setMap(null)
   }, [])
 
-
-
   const searchBox = useRef(null);
-
-  // useOutsideClick(searchBox, () => (
-  //   console.log('test')
-  // ));
-
-  // useOutsideClick(adminRef, () => (
-  //   toolsActive ? setToolsActive(false) : null 
-  // ));
-
-  // const onLoadSearchbox = ref => this.searchBox = ref;
-  // const searchBox = React.useRef<StandaloneSearchBox>(null);
 
   const onPlacesChanged = async () => {
     const place = searchBox.current.state.searchBox.gm_accessors_.places.Ke.formattedPrediction;
@@ -307,6 +316,7 @@ export const Posters = ({user}) => {
 
   const [userLocation, setUserLocation] = useState('');
   const [userLocationName, setUserLocationName] = useState('');
+  const [mapHasBeenCentered, setMapHasBeenCentered] = useState(false);
 
   const [loading, setLoading] = useState(false);
 
@@ -365,7 +375,19 @@ export const Posters = ({user}) => {
   };
 
   const handleOpenFilter = () => {
-    filterOpened ? setFilterOpen(false) : setFilterOpen(true)
+    mapHasBeenCentered === false ? (
+      centerTheMap()
+     ) : (
+       setMapHasBeenCentered(true)
+     )
+    
+    filterOpened ? (
+      setFilterOpen(false)
+     ) 
+     : 
+     ( 
+       setFilterOpen(true)
+     )
   }
 
   function valuetext(value) {
@@ -434,7 +456,6 @@ export const Posters = ({user}) => {
   //  END GEOLOCATION
 
   // ================
-
   const getDistance = (posterID, origin, destination, radius) => {
     let origins = origin;
     let destinations = destination;
@@ -443,6 +464,7 @@ export const Posters = ({user}) => {
     axios.post('/api/maps/distance', {origins, destinations})
       .then(res => res.data)
       .then(data => {
+        console.log(data);
         if (data < meters) {
           setLocationDistances(locationDistances => [...locationDistances, posterID]);
         }
@@ -450,7 +472,7 @@ export const Posters = ({user}) => {
       .catch(err => console.log(`unable to get distances, ${err}`))
   }
 
-  const getLocation = () => {
+  const getLocation = () => { 
     const latlng = sessionStorage.getItem("location");
 
     axios.post('/api/maps/location', {latlng})
@@ -732,98 +754,96 @@ export const Posters = ({user}) => {
           { locationPermission ?
           <>
             <div className="location-container">
-              <Typography id="label">Locations (km){ userLocationName ? ' - From ' + userLocationName : null }</Typography>
+              <Typography id="label">Radius (km){/*{ userLocationName ? ' - From ' + userLocationName : null }*/}</Typography>
               <PrettoSlider 
                 valueLabelDisplay="auto" 
                 aria-label="pretto slider" 
                 defaultValue={selectedRadius} 
                 getAriaValueText={valuetext}
                 onChangeCommitted={mouseUp}
+                onDrag={(e) => console.log(e)}
                 refs={filterRef}
               />
             </div>
             <div className="places open">
               { 
-              isLoaded ? (
-                <>
-                {/* <LocationAutocomplete
-                  id="location"
-                  name="location"
-                  placeholder="Location"
-                  locationType="(regions)"
-                  googleAPIKey="AIzaSyAKQm69QiWowY9VPExD9xjJBN68FeAeEA0"
-                  onDropdownSelect={(e) => onDropdownSelect(e)}
-                /> */}
-                  <GoogleMap
-                    mapContainerStyle={containerStyle}
-                    center={mapCenter}
-                    zoom={11}
-                    onLoad={onLoad}
-                    onUnmount={onUnmount}
-                    options={mapOptions}
-                  >
-                    <StandaloneSearchBox
-                      // onLoad={onSearchboxLoad}
-                      onPlacesChanged={onPlacesChanged}
-                      ref={searchBox}  
-                    >
-                      <input
-                        type="text"
-                        placeholder="Customized your placeholder"
-                        style={{
-                          boxSizing: `border-box`,
-                          border: `1px solid transparent`,
-                          width: `240px`,
-                          height: `32px`,
-                          padding: `0 12px`,
-                          borderRadius: `3px`,
-                          boxShadow: `0 2px 6px rgba(0, 0, 0, 0.3)`,
-                          fontSize: `14px`,
-                          outline: `none`,
-                          textOverflow: `ellipses`,
-                          position: "absolute",
-                          left: "50%",
-                          marginLeft: "-120px"
-                        }}
-                      />
-                    </StandaloneSearchBox>
-                    {markers.map((marker, index) => {
-                      return (
-                        <Marker
-                          position={{ lat: marker.lat, lng: marker.lng }}
-                          options={markerOptions}
-                          key={index}
-                          onClick={(e) => {
-                            console.log(e)
-                            console.log(marker.id)
-                            showPosterInfo(marker.id)
-                          }}
-                          title={marker.title}
-                        /> 
-                      )
-                    })}
-                    <Circle 
-                      // optional
-                      onLoad={onLoad2}
-                      // optional
-                      onUnmount={onUnmount2}
-                      onDrag={(e) => console.log(e)}
-                      onDragStart={(e) => console.log(e)}
-                      onDragEnd={() => console.log('test')}
-                      onRadiusChanged={(e) => {
-                        console.log('radius changed ', selectedRadius);
-                      }}
-                      onClick={() => console.log('clicked')}
-                      onMouseDown={() => console.log('mouse down')}
-                      // required
+                isLoaded ? (
+                  <>
+                    <GoogleMap
+                      mapContainerStyle={containerStyle}
                       center={mapCenter}
-                      // required
-                      options={options}
-                      radius={selectedRadius * 1000}
-                    />
-                  </GoogleMap>
-                </>
-              ) : <></> }
+                      // center={{
+                      //   lat: parseFloat(sessionStorage.getItem('loc_lat')),
+                      //   lng: parseFloat(sessionStorage.getItem('loc_lng'))
+                      // }}
+                      zoom={11}
+                      onLoad={onLoad}
+                      onUnmount={onUnmount}
+                      options={mapOptions}
+                    >
+                      <StandaloneSearchBox
+                        // onLoad={onSearchboxLoad}
+                        onPlacesChanged={onPlacesChanged}
+                        ref={searchBox}  
+                      >
+                        <input
+                          type="text"
+                          placeholder="Search..."
+                          style={{
+                            boxSizing: `border-box`,
+                            border: `1px solid transparent`,
+                            width: `240px`,
+                            height: `32px`,
+                            padding: `0 12px`,
+                            borderRadius: `3px`,
+                            boxShadow: `0 2px 6px rgba(0, 0, 0, 0.3)`,
+                            fontSize: `14px`,
+                            outline: `none`,
+                            textOverflow: `ellipses`,
+                            position: "absolute",
+                            left: "50%",
+                            marginLeft: "-120px"
+                          }}
+                        />
+                      </StandaloneSearchBox>
+                      {markers.map((marker, index) => {
+                        return (
+                          <Marker
+                            position={{ lat: marker.lat, lng: marker.lng }}
+                            options={markerOptions}
+                            key={index}
+                            onClick={(e) => {
+                              console.log(e)
+                              console.log(marker.id)
+                              showPosterInfo(marker.id)
+                            }}
+                            title={marker.title}
+                          /> 
+                        )
+                      })}
+                      <Circle 
+                        // optional
+                        onLoad={onLoad2}
+                        // optional
+                        onUnmount={onUnmount2}
+                        onDrag={(e) => console.log(e)}
+                        onDragStart={(e) => console.log(e)}
+                        onDragEnd={() => console.log('test')}
+                        onRadiusChanged={(e) => {
+                          console.log('radius changed ', selectedRadius);
+                        }}
+                        onClick={() => console.log('clicked')}
+                        onMouseDown={() => console.log('mouse down')}
+                        // required
+                        center={mapCenter}
+                        // required
+                        options={options}
+                        radius={selectedRadius * 1000}
+                      />
+                    </GoogleMap>
+                  </>
+                ) : <><h1>Test2</h1></>
+               }
             </div>
           </>
           :
@@ -838,7 +858,7 @@ export const Posters = ({user}) => {
                   defaultValue={selectedRadius} 
                   getAriaValueText={valuetext}
                   onChangeCommitted={mouseUp}
-                  refs={filterRef}
+                  refs={filterRef} 
                   disabled
                 />
               {/* </FormControl> */}

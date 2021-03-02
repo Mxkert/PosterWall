@@ -11,6 +11,8 @@ import './components/Modal.css';
 // Firebase
 import { firebase } from './config/firebase';
 
+import { Map } from './components/Map';
+
 import { Signup } from './components/account/Signup';
 import { Login } from './components/account/Login';
 import { Logout } from './components/account/Logout';
@@ -76,6 +78,7 @@ export const App = () => {
           : null }
 
           <Route path="/date" exact component={ Date } />
+          <Route path="/map" exact component={ Map } />
 
         </div>
       </BrowserRouter>
