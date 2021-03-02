@@ -11,8 +11,6 @@ import './components/Modal.css';
 // Firebase
 import { firebase } from './config/firebase';
 
-import { Map } from './components/Map';
-
 import { Signup } from './components/account/Signup';
 import { Login } from './components/account/Login';
 import { Logout } from './components/account/Logout';
@@ -20,8 +18,6 @@ import { Logout } from './components/account/Logout';
 import { Posters } from './components/posters/Posters'; 
 import { Review } from './components/posters/Review';
 import { Archive } from './components/posters/Archive';
-
-import { GeoLocation } from './components/GeoLocation';
 
 import { UserContext } from "./components/account/UserContext";
 
@@ -53,8 +49,6 @@ export const App = () => {
       <BrowserRouter>
         <div className="wrapper">
           
-          <Route path="/geolocation" exact component={ GeoLocation } />
-          
           <Route path="/signup" exact component={ Signup } />
           <Route path="/login" exact component={ Login } />
 
@@ -78,7 +72,6 @@ export const App = () => {
           : null }
 
           <Route path="/date" exact component={ Date } />
-          <Route path="/map" exact component={ Map } />
 
         </div>
       </BrowserRouter>

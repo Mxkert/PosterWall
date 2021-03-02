@@ -48,16 +48,16 @@ export const Review = ({user}) => {
   const [posterInfo, setPosterInfo] = useState({});
   const [posterDetailOpened, setPosterDetailOpened] = useState(false);
   
-  const [selectedDate, setDate] = useState(moment().format("YYYY-MM-DD"));
+  // const [selectedDate, setDate] = useState(moment().format("YYYY-MM-DD"));
   const [selectedStartTime, setSelectedStartTime] = useState(moment());
   const [selectedEndTime, setSelectedEndTime] = useState(moment());
   const [descriptionValue, setDescriptionValue] = useState('');
 
-  const onDateChange = (date, value) => {
-    setDate(date);
-    console.log(date);
-    console.log(value);
-  };
+  // const onDateChange = (date, value) => {
+  //   setDate(date);
+  //   console.log(date);
+  //   console.log(value);
+  // };
 
   const handleStartTime = (time) => {
     console.log(time);
@@ -257,7 +257,6 @@ export const Review = ({user}) => {
                           showTodayButton={true}
                           value={moment(posterInfo.date).format("YYYY-MM-DD")}
                           format="yyyy-MM-dd"
-                          onChange={onDateChange}
                           KeyboardButtonProps={{
                             'aria-label': 'change date',
                           }}

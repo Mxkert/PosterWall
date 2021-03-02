@@ -23,7 +23,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import InputLabel from '@material-ui/core/InputLabel';
 
 // Location slider
-import { withStyles, makeStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles';
 import Slider from '@material-ui/core/Slider';
 import Typography from '@material-ui/core/Typography';
 import Tooltip from '@material-ui/core/Tooltip';
@@ -31,7 +31,6 @@ import Tooltip from '@material-ui/core/Tooltip';
 import DateFnsUtils from '@date-io/date-fns';
 import {
   MuiPickersUtilsProvider,
-  KeyboardTimePicker,
   KeyboardDatePicker,
 } from '@material-ui/pickers';
 
@@ -85,13 +84,8 @@ export const Posters = ({user}) => {
     width: '100%',
     height: '400px'
   };
-  
-  const center = {
-    lat: 51.99585388647266,
-    lng: 4.197716419667051
-  };
 
-  const { isLoaded, loadError } = useJsApiLoader({
+  const { isLoaded } = useJsApiLoader({
     id: 'google-map-script',
     libraries: ['places'],
     googleMapsApiKey: 'AIzaSyAKQm69QiWowY9VPExD9xjJBN68FeAeEA0'
@@ -274,16 +268,6 @@ export const Posters = ({user}) => {
     500: 2
   };
 
-  function ValueLabelComponent(props) {
-    const { children, open, value } = props;
-  
-    return (
-      <Tooltip open={open} enterTouchDelay={0} placement="top" title={value}>
-        {children}
-      </Tooltip>
-    );
-  }
-
   const PrettoSlider = withStyles({
     root: {
       color: '#444',
@@ -314,7 +298,6 @@ export const Posters = ({user}) => {
     },
   })(Slider);
 
-  const [userLocation, setUserLocation] = useState('');
   const [userLocationName, setUserLocationName] = useState('');
   const [mapHasBeenCentered, setMapHasBeenCentered] = useState(false);
 
@@ -329,8 +312,6 @@ export const Posters = ({user}) => {
   
   const [posterDetailOpened, setPosterDetailOpened] = useState(false);
   const [filterOpened, setFilterOpen] = useState(false);
-
-  const [pickerOpen, setPickerOpen] = useState(false);
 
   // Google API
   const [locationDistances, setLocationDistances] = useState([]);
@@ -350,7 +331,6 @@ export const Posters = ({user}) => {
   const [selectedDateTo, setSelectedDateTo] = useState(moment().format("YYYY-MM-DD"));
 
   const [dateFilterChanged, setDateFilterChanged] = useState(false);
-  const [dateToChanged, setDateToChanged] = useState(false);
   const today = new Date();
 
   const handleChange = event => {
@@ -361,9 +341,6 @@ export const Posters = ({user}) => {
   };
   const handlePriceFilter = event => {
     setSelectedPrice(event.target.value);
-  };
-  function handleLocationFilter(value) {
-    setSelectedLocation(value);
   };
   const handleDateFromFilter = (date, value) => {
     setSelectedDateFrom(value);
@@ -437,12 +414,12 @@ export const Posters = ({user}) => {
       sessionStorage.setItem('location', crd.latitude + ',' + crd.longitude);
     }
 
-    setUserLocation(crd.latitude + ',' + crd.longitude);
+    // setUserLocation(crd.latitude + ',' + crd.longitude);
 
-    setLocation({
-      lat: crd.latitude,
-      lng: crd.longitude
-    })
+    // setLocation({
+    //   lat: crd.latitude,
+    //   lng: crd.longitude
+    // })
   }
   
   function errors(err) {
@@ -505,7 +482,6 @@ export const Posters = ({user}) => {
     axios.post('/api/maps/location', {latlng})
       .then(res => res.data)
       .then(data => {
-        const userLocation = data;
         setUserLocationName(data);
       })
       .catch(err => console.log(`unable to get distances, ${err}`))
@@ -563,15 +539,8 @@ export const Posters = ({user}) => {
     posterDetailOpened ? setPosterDetailOpened(false) : null 
   ));
 
-  // useOutsideClick(filterRef, () => (
-  //   pickerOpen || filterOpened === false ?
-  //     null
-  //   : filterOpened ? setFilterOpen(false) : null 
-  // ));
-
   const mouseUp = (event, value) => {
     setChangingLocation(2);
-    setSelectedLocation(value);
     setSelectedRadius(value);
   }
 

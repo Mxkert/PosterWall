@@ -39,7 +39,6 @@ export const SubmitForm = (props) => {
   const [pictureURL, setPictureURL] = useState('');
 
   const [success, setSuccess] = useState(false);
-  const [error, setError] = useState(null);
   const [uploadError, setUploadError] = useState(null);
   const [posterError, setPosterError] = useState(null);
   const [descriptionValue, setDescriptionValue] = useState('');
@@ -218,7 +217,6 @@ export const SubmitForm = (props) => {
             <div className="icon-screen">
               <SuccessIcon />
               <p>The event has succesfully been submitted.</p>
-              { error ? error : null }
             </div>
           :
           <div className="detail-container">

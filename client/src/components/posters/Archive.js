@@ -7,7 +7,6 @@ import 'moment/locale/nl';
 import './Posters.css';
 
 import Container from '@material-ui/core/Container';
-import Grid from '@material-ui/core/Grid';
 
 import Masonry from 'react-masonry-css'
 
