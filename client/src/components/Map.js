@@ -16,7 +16,7 @@ export const Map = () => {
   const { isLoaded } = useJsApiLoader({
     id: 'google-map-script',
     googleMapsApiKey: "AIzaSyAKQm69QiWowY9VPExD9xjJBN68FeAeEA0",
-    libraries: 'places'
+    libraries: ['places']
   })
 
   const [map, setMap] = React.useState(null)
@@ -31,29 +31,29 @@ export const Map = () => {
     setMap(null)
   }, [])
 
-  // const searchBox = useRef(null);
+  const searchBox = useRef(null);
 
-  // const onPlacesChanged = async () => {
-  //   const place = searchBox.current.state.searchBox.gm_accessors_.places.Ke.formattedPrediction;
-  //   console.log(place);
+  const onPlacesChanged = async () => {
+    const place = searchBox.current.state.searchBox.gm_accessors_.places.Ke.formattedPrediction;
+    console.log(place);
     
-  //   // Get latitude and longitude using the Google Geocoding API
-  //   let locationDetails = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${place}&key=AIzaSyAKQm69QiWowY9VPExD9xjJBN68FeAeEA0`);
-  //   const locationLat = locationDetails.data.results[0].geometry.location.lat
-  //   const locationLng = locationDetails.data.results[0].geometry.location.lng
+    // Get latitude and longitude using the Google Geocoding API
+    let locationDetails = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${place}&key=AIzaSyAKQm69QiWowY9VPExD9xjJBN68FeAeEA0`);
+    const locationLat = locationDetails.data.results[0].geometry.location.lat
+    const locationLng = locationDetails.data.results[0].geometry.location.lng
 
-  //   console.log(locationLat);
-  //   console.log(locationLng);
+    console.log(locationLat);
+    console.log(locationLng);
 
-  //   setMapCenter({
-  //     lat: locationLat,
-  //     lng: locationLng
-  //   })
-  // };
+    setMapCenter({
+      lat: locationLat,
+      lng: locationLng
+    })
+  };
   
-  // function handleLoad() {
-  //   console.log('test');
-  // }
+  function handleLoad() {
+    console.log('test');
+  }
 
   const centerTheMap = () => {
     setCenterMap({lat: -3.745, lng: -38.523});
@@ -64,12 +64,11 @@ export const Map = () => {
       <GoogleMap
         mapContainerStyle={containerStyle}
         center={centerMap} 
-        zoom={10}
+        zoom={13}
         onLoad={onLoad}
         onUnmount={onUnmount}
       >
-        {/* <StandaloneSearchBox
-          onLoad={handleLoad}
+        <StandaloneSearchBox
           onPlacesChanged={onPlacesChanged}
           ref={searchBox}  
         >
@@ -92,7 +91,7 @@ export const Map = () => {
               marginLeft: "-120px"
             }}
           />
-        </StandaloneSearchBox> */}
+        </StandaloneSearchBox>
         { /* Child components, such as markers, info windows, etc. */ }
         <></>
       </GoogleMap>

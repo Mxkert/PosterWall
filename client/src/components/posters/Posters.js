@@ -344,7 +344,7 @@ export const Posters = ({user}) => {
   const [selectedGenre, setSelectedGenre] = useState("");
   const [selectedPrice, setSelectedPrice] = useState("");
   const [selectedLocation, setSelectedLocation] = useState(null);
-  const [selectedRadius, setSelectedRadius] = useState(0);
+  const [selectedRadius, setSelectedRadius] = useState(1);
   const [changingLocation, setChangingLocation] = useState(0);
   const [selectedDateFrom, setSelectedDateFrom] = useState(moment().format("YYYY-MM-DD"));
   const [selectedDateTo, setSelectedDateTo] = useState(moment().format("YYYY-MM-DD"));
@@ -389,6 +389,33 @@ export const Posters = ({user}) => {
        setFilterOpen(true)
      )
   }
+
+  const marks = [
+    {
+      value: 0,
+      label: '0km',
+    },
+    {
+      value: 5,
+      label: '5km',
+    },
+    {
+      value: 10,
+      label: '10km',
+    },
+    {
+      value: 20,
+      label: '20 km',
+    },
+    {
+      value: 50,
+      label: '50 km',
+    },
+    {
+      value: 100,
+      label: '100 km',
+    },
+  ];
 
   function valuetext(value) {
     return `${value} km`;
@@ -758,11 +785,15 @@ export const Posters = ({user}) => {
               <PrettoSlider 
                 valueLabelDisplay="auto" 
                 aria-label="pretto slider" 
-                defaultValue={selectedRadius} 
                 getAriaValueText={valuetext}
                 onChangeCommitted={mouseUp}
                 onDrag={(e) => console.log(e)}
                 refs={filterRef}
+                defaultValue={selectedRadius} 
+                step={0.5}
+                marks
+                min={0}
+                max={30}
               />
             </div>
             <div className="places open">
@@ -772,11 +803,7 @@ export const Posters = ({user}) => {
                     <GoogleMap
                       mapContainerStyle={containerStyle}
                       center={mapCenter}
-                      // center={{
-                      //   lat: parseFloat(sessionStorage.getItem('loc_lat')),
-                      //   lng: parseFloat(sessionStorage.getItem('loc_lng'))
-                      // }}
-                      zoom={11}
+                      zoom={13}
                       onLoad={onLoad}
                       onUnmount={onUnmount}
                       options={mapOptions}
@@ -856,6 +883,11 @@ export const Posters = ({user}) => {
                   valueLabelDisplay="auto" 
                   aria-label="pretto slider" 
                   defaultValue={selectedRadius} 
+                  step={0.5}
+                  marks
+                  min={0}
+                  max={30}
+                  marks={marks}
                   getAriaValueText={valuetext}
                   onChangeCommitted={mouseUp}
                   refs={filterRef} 
