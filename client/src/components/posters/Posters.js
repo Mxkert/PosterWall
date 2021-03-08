@@ -688,6 +688,12 @@ export const Posters = ({user}) => {
           <div className="body-click" onClick={handleOpenFilter}></div>
           <div className="filters">
 
+            <div className="filter-results">
+              <h3 style={{ marginTop: '0' }}>
+                {searchResultsAmount} {searchResultsAmount === 1 ? 'event' : 'events'} matched your filters
+              </h3>
+            </div>
+
             {/* Title filter */}
             <FormControl variant="outlined">
               <TextField 
@@ -908,9 +914,6 @@ export const Posters = ({user}) => {
             </MuiPickersUtilsProvider>
           </div>
 
-          </div>
-          <div className="filter-results">
-            <h3>{searchResultsAmount} events matched your filters</h3>
           </div>
         </div>
         

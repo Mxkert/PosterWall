@@ -188,7 +188,7 @@ form.small-form {
 
 @media (max-width: 500px) {
   .filter-container {
-    width: 75%;
+    width: 100%;
   }
 }
 
@@ -197,6 +197,20 @@ form.small-form {
   transform: translateX(0);
   transition: all 0.5s;
   box-shadow: -5px 0px 10px 1px rgba(0, 0, 0, 0.7);
+}
+
+@media (max-width: 500px) {
+  .filter-icon {
+    right: 1rem !important;
+  }
+  .upload-icon {
+    right: 1rem !important;
+    bottom: 1rem !important;
+  }
+  .admin-tools {
+    left: 1rem !important;
+    bottom: 1rem !important;
+  }
 }
 
 .filters {
