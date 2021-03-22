@@ -271,7 +271,7 @@ export const Review = ({user}) => {
                           ampm={false}
                           id="start_time"
                           name="start_time"
-                          value={selectedStartTime}
+                          value={moment(new Date(moment(posterInfo.date).format('YYYY-MM-DD') + " " + posterInfo.start_time), 'hh:mm A')}
                           onChange={handleStartTime}
                           KeyboardButtonProps={{
                             'aria-label': 'change time',
@@ -287,7 +287,7 @@ export const Review = ({user}) => {
                           ampm={false}
                           id="end_time"
                           name="end_time"
-                          value={selectedEndTime}
+                          value={moment(new Date(moment(posterInfo.date).format('YYYY-MM-DD') + " " + posterInfo.end_time), 'hh:mm A')}
                           onChange={handleEndTime}
                           KeyboardButtonProps={{
                             'aria-label': 'change time',

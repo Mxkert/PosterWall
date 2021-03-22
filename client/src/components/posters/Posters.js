@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
 import axios from 'axios';
-import { FaTimes, FaSearch } from 'react-icons/fa';
+import { FaTimes, FaSearch, FaExpand } from 'react-icons/fa';
 import moment from 'moment';
 import 'moment/locale/nl';
 
@@ -76,7 +76,8 @@ export const Posters = ({user}) => {
   }, []);
 
   const markerOptions = {
-    draggable: true
+    draggable: false,
+    icon: 'https://i.imgur.com/9EvQep5.png'
   }
 
   // Maps
@@ -92,86 +93,86 @@ export const Posters = ({user}) => {
   })
 
   const mapOptions = { 
-    // styles: [
-    //   { elementType: "geometry", stylers: [{ color: "#242f3e" }] },
-    //   { elementType: "labels.text.stroke", stylers: [{ color: "#242f3e" }] },
-    //   { elementType: "labels.text.fill", stylers: [{ color: "#746855" }] },
-    //   {
-    //     featureType: "administrative.locality",
-    //     elementType: "labels.text.fill",
-    //     stylers: [{ color: "#d59563" }],
-    //   },
-    //   { 
-    //     featureType: "poi",
-    //     elementType: "labels.text.fill",
-    //     stylers: [{ color: "#d59563" }],
-    //   },
-    //   {
-    //     featureType: "poi.park",
-    //     elementType: "geometry",
-    //     stylers: [{ color: "#263c3f" }],
-    //   },
-    //   {
-    //     featureType: "poi.park",
-    //     elementType: "labels.text.fill",
-    //     stylers: [{ color: "#6b9a76" }],
-    //   },
-    //   {
-    //     featureType: "road",
-    //     elementType: "geometry",
-    //     stylers: [{ color: "#38414e" }],
-    //   },
-    //   {
-    //     featureType: "road",
-    //     elementType: "geometry.stroke",
-    //     stylers: [{ color: "#212a37" }],
-    //   },
-    //   {
-    //     featureType: "road",
-    //     elementType: "labels.text.fill",
-    //     stylers: [{ color: "#9ca5b3" }],
-    //   },
-    //   {
-    //     featureType: "road.highway",
-    //     elementType: "geometry",
-    //     stylers: [{ color: "#746855" }],
-    //   },
-    //   {
-    //     featureType: "road.highway",
-    //     elementType: "geometry.stroke",
-    //     stylers: [{ color: "#1f2835" }],
-    //   },
-    //   {
-    //     featureType: "road.highway",
-    //     elementType: "labels.text.fill",
-    //     stylers: [{ color: "#f3d19c" }],
-    //   },
-    //   {
-    //     featureType: "transit",
-    //     elementType: "geometry",
-    //     stylers: [{ color: "#2f3948" }],
-    //   },
-    //   {
-    //     featureType: "transit.station",
-    //     elementType: "labels.text.fill",
-    //     stylers: [{ color: "#d59563" }],
-    //   },
-    //   {
-    //     featureType: "water",
-    //     elementType: "geometry",
-    //     stylers: [{ color: "#17263c" }],
-    //   },
-    //   {
-    //     featureType: "water",
-    //     elementType: "labels.text.fill",
-    //     stylers: [{ color: "#515c6d" }],
-    //   },
-    //   {
-    //     featureType: "water",
-    //     elementType: "labels.text.stroke",
-    //     stylers: [{ color: "#17263c" }],
-    //   },
-    // ]
+    styles: [
+      { elementType: "geometry", stylers: [{ color: "#242f3e" }] },
+      { elementType: "labels.text.stroke", stylers: [{ color: "#242f3e" }] },
+      { elementType: "labels.text.fill", stylers: [{ color: "#746855" }] },
+      {
+        featureType: "administrative.locality",
+        elementType: "labels.text.fill",
+        stylers: [{ color: "#d59563" }]
+      },
+      {
+        featureType: "poi",
+        elementType: "labels.text.fill",
+        stylers: [{ color: "#d59563" }]
+      },
+      {
+        featureType: "poi.park",
+        elementType: "geometry",
+        stylers: [{ color: "#263c3f" }]
+      },
+      {
+        featureType: "poi.park",
+        elementType: "labels.text.fill",
+        stylers: [{ color: "#6b9a76" }]
+      },
+      {
+        featureType: "road",
+        elementType: "geometry",
+        stylers: [{ color: "#38414e" }]
+      },
+      {
+        featureType: "road",
+        elementType: "geometry.stroke",
+        stylers: [{ color: "#212a37" }]
+      },
+      {
+        featureType: "road",
+        elementType: "labels.text.fill",
+        stylers: [{ color: "#9ca5b3" }]
+      },
+      {
+        featureType: "road.highway",
+        elementType: "geometry",
+        stylers: [{ color: "blue" }]
+      },
+      {
+        featureType: "road.highway",
+        elementType: "geometry.stroke",
+        stylers: [{ color: "blue" }]
+      },
+      {
+        featureType: "road.highway",
+        elementType: "labels.text.fill",
+        stylers: [{ color: "blue" }]
+      },
+      {
+        featureType: "transit",
+        elementType: "geometry",
+        stylers: [{ color: "#2f3948" }]
+      },
+      {
+        featureType: "transit.station",
+        elementType: "labels.text.fill",
+        stylers: [{ color: "#d59563" }]
+      },
+      {
+        featureType: "water",
+        elementType: "geometry",
+        stylers: [{ color: "#17263c" }]
+      },
+      {
+        featureType: "water",
+        elementType: "labels.text.fill",
+        stylers: [{ color: "#515c6d" }]
+      },
+      {
+        featureType: "water",
+        elementType: "labels.text.stroke",
+        stylers: [{ color: "#17263c" }]
+      }
+    ]
   }
 
   const options = {
@@ -243,8 +244,8 @@ export const Posters = ({user}) => {
   const searchBox = useRef(null);
 
   const onPlacesChanged = async () => {
-    const place = searchBox.current.state.searchBox.gm_accessors_.places.Ke.formattedPrediction;
-    console.log(place);
+    const place = searchBox.current.state.searchBox.gm_accessors_.places.De.formattedPrediction;
+    console.log(searchBox);
     
     // Get latitude and longitude using the Google Geocoding API
     let locationDetails = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${place}&key=AIzaSyAKQm69QiWowY9VPExD9xjJBN68FeAeEA0`);
@@ -302,6 +303,7 @@ export const Posters = ({user}) => {
   const [mapHasBeenCentered, setMapHasBeenCentered] = useState(false);
 
   const [loading, setLoading] = useState(false);
+  const [expandMap, setExpandMap] = useState(false);
 
   const [posters, setPosters] = useState([]);
   const [allGenres, setAllGenres] = useState([]);
@@ -325,7 +327,7 @@ export const Posters = ({user}) => {
   const [selectedGenre, setSelectedGenre] = useState("");
   const [selectedPrice, setSelectedPrice] = useState("");
   const [selectedLocation, setSelectedLocation] = useState(null);
-  const [selectedRadius, setSelectedRadius] = useState(1);
+  const [selectedRadius, setSelectedRadius] = useState(10);
   const [changingLocation, setChangingLocation] = useState(0);
   const [selectedDateFrom, setSelectedDateFrom] = useState(moment().format("YYYY-MM-DD"));
   const [selectedDateTo, setSelectedDateTo] = useState(moment().format("YYYY-MM-DD"));
@@ -684,7 +686,9 @@ export const Posters = ({user}) => {
         </>
         }
         
-        <div className={filterOpened ? 'filter-container active' : 'filter-container'}>
+        <div 
+          className={ filterOpened ? expandMap ? 'filter-container active expanded' : 'filter-container active' : 'filter-container' }
+        >
           <div className="body-click" onClick={handleOpenFilter}></div>
           <div className="filters">
 
@@ -778,11 +782,12 @@ export const Posters = ({user}) => {
                     <GoogleMap
                       mapContainerStyle={containerStyle}
                       center={mapCenter}
-                      zoom={13}
+                      zoom={15}
                       onLoad={onLoad}
                       onUnmount={onUnmount}
                       options={mapOptions}
                     >
+                      <div class="widen-map" onClick={() => setExpandMap(!expandMap)}><FaExpand /></div>
                       <StandaloneSearchBox
                         // onLoad={onSearchboxLoad}
                         onPlacesChanged={onPlacesChanged}

@@ -135,7 +135,7 @@ form.small-form {
 .filter-container {
   position: fixed;
   right: 0;
-  width: 32.5%;
+  width: 42.5%;
   background: rgba(0,0,0,0);
   top: 0;
   height: 100vh;
@@ -146,6 +146,28 @@ form.small-form {
   transform: translateX(100%);
   transition: all 0.5s;
   overflow-y: scroll;
+}
+
+.filter-container.expanded {
+  width: 87.5%;
+}
+
+.filter-container .places > div {
+  height: 400px !important;
+  transition: all 0.5s;
+}
+
+.filter-container.expanded .places > div {
+  height: 600px !important;
+  transition: all 0.5s;
+}
+
+.places .gm-control-active.gm-fullscreen-control {
+  display: none;
+}
+
+.places .gm-style-mtc {
+  display: none;
 }
 
 /* Hide scrollbar for Chrome, Safari and Opera */
@@ -210,6 +232,30 @@ form.small-form {
   .admin-tools {
     left: 1rem !important;
     bottom: 1rem !important;
+  }
+}
+
+.widen-map {
+  position: absolute;
+  right: 5px;
+  top: 5px;
+  color: #333;
+  z-index: 999;
+  font-size: 24px;
+  padding: 2.5px 10px;
+  background: rgba(255,255,2555,1);
+  cursor: pointer;
+  transition: all 0.5s;
+}
+
+.widen-map:hover {
+  color: #000;
+  transition: all 0.5s;
+}
+
+@media (max-width: 500px) {
+  .widen-map {
+    display: none;
   }
 }
 
