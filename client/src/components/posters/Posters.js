@@ -244,13 +244,22 @@ export const Posters = ({user}) => {
   const searchBox = useRef(null);
 
   const onPlacesChanged = async () => {
-    const place = searchBox.current.state.searchBox.gm_accessors_.places.De.formattedPrediction;
-    console.log(searchBox);
+    let place = searchBox.current.state.searchBox.gm_accessors_.places;
+
+    let x = 0;
+    for(var k in place) {
+      if (x < 1) {
+        place = place[k].formattedPrediction;
+      }
+      x++;
+    }
     
     // Get latitude and longitude using the Google Geocoding API
     let locationDetails = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${place}&key=AIzaSyAKQm69QiWowY9VPExD9xjJBN68FeAeEA0`);
     const locationLat = locationDetails.data.results[0].geometry.location.lat
     const locationLng = locationDetails.data.results[0].geometry.location.lng
+
+    console.log(locationDetails);
 
     console.log(locationLat);
     console.log(locationLng);

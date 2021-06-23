@@ -5,7 +5,11 @@ import axios from 'axios';
 import moment from 'moment';
 // import 'moment/locale/nl';
 
-import LocationAutocomplete from 'location-autocomplete';
+// import LocationAutocomplete from 'location-autocomplete';
+import LocationField from '../LocationAutocomplete';
+
+// Google Maps
+import { GoogleMap, useJsApiLoader, Circle, Marker, StandaloneSearchBox } from '@react-google-maps/api';
 
 import Grid from '@material-ui/core/Grid';
 import '../forms/SubmitForm.css';
@@ -54,6 +58,29 @@ export const SubmitForm = (props) => {
 
   const [selectedLocation, setSelectedLocation] = useState('');
 
+  const searchBox = useRef(null);
+
+  const onPlacesChanged = async () => {
+    let place = searchBox.current.state.searchBox.gm_accessors_.places;
+
+    let x = 0;
+    for(var k in place) {
+      if (x < 1) {
+        place = place[k].formattedPrediction;
+      }
+      x++;
+    }
+
+    console.log(place);
+    setSelectedLocation(place);
+  }; 
+
+  const { isLoaded } = useJsApiLoader({
+    id: 'google-map-script',
+    libraries: ['places'],
+    googleMapsApiKey: 'AIzaSyAKQm69QiWowY9VPExD9xjJBN68FeAeEA0'
+  })
+
   const onDateChange = (date, value) => {
     setDate(date);
     console.log(date);
@@ -80,6 +107,7 @@ export const SubmitForm = (props) => {
 
   const handleDescription = (event) => {
     setDescriptionValue(event.target.value);
+    console.log(event.target.value);
   };
 
   // Set modal opened
@@ -140,6 +168,8 @@ export const SubmitForm = (props) => {
         
         var currentDate =  moment().locale('nl').add(1, 'hours').format("YYYY-MM-DD HH:mm:ss");
         var eventDate =  moment(data.date).format("YYYY-MM-DD HH:mm:ss");
+
+        console.log(descriptionValue);
 
         const newPoster = {
           image: result.data.url,
@@ -236,6 +266,7 @@ export const SubmitForm = (props) => {
               </div>
               
               <img className="submitImg" src={picture} alt="" />
+                  <small style={{ color: `#fff`, fontSize: `18px` }}>Max. file size is 10MB</small>
             </div>
             <div className="poster-content">
               <form noValidate onSubmit={handleSubmit(addPoster)}>
@@ -341,14 +372,52 @@ export const SubmitForm = (props) => {
                   
                   <Grid item xs={12}>
                     <div>
-                      <LocationAutocomplete
+                      {/* <LocationAutocomplete
                         id="location"
                         name="location"
                         placeholder="Location"
                         locationType="(regions)"
                         googleAPIKey="AIzaSyAKQm69QiWowY9VPExD9xjJBN68FeAeEA0"
                         onDropdownSelect={(e) => onDropdownSelect(e)}
-                      />
+                      /> */}
+                      {/* <LocationField
+                        locationType="regions"
+                        onDropdownSelect={(e) => onDropdownSelect(e)}
+                      /> */}
+                 { isLoaded ? (
+                   <>
+                      <StandaloneSearchBox
+                        // onLoad={onSearchboxLoad}
+                        onPlacesChanged={onPlacesChanged}
+                        ref={searchBox}  
+                      >
+                        <input
+                          type="text"
+                          placeholder="Location"
+                          style={{
+                            boxSizing: `border-box`,
+                            border: `1px solid transparent`,
+                            padding: `0px 12px`,
+                            borderRadius: `3px`,
+                            boxShadow: `rgb(0 0 0 / 30%) 0px 2px 6px`,
+                            fontSize: `14px`,
+                            outline: `none`,
+                            padding: `28px 14px !important`,
+                            height: `1.1876em`,
+                            marginRight: `0 !important`,
+                            boxShadow: `0px 14px 24px rgb(0 0 0 / 70%)`,
+                            background: `rgba(0,0,0,0.75) !important`,
+                            borderRadius: `6px`,
+                            padding: `20px 14px !important`,
+                            border: `1px solid rgba(255,255,255,0.25) !important`,
+                            borderColor: `rgba(255,255,255,0.25) !important`,
+                            height: `60px`,
+                            width: `100%`
+                          }}
+                        />
+                      </StandaloneSearchBox>
+                      </>
+                 ) : null }
                     </div>
                   </Grid>
 
